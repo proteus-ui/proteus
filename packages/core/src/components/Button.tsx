@@ -44,5 +44,10 @@ function createButton(variant: ButtonVariant) {
 }
 
 export const Button = createButton("solid");
+Button.displayName = "Button";
+
 export const OutlineButton = createButton("outline");
+OutlineButton.displayName = "OutlineButton";
+
 export const IconButton = createButton("solid");
+IconButton.displayName = "IconButton";
