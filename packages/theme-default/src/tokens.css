@@ -1,0 +1,21 @@
+/* Default values seeded from the extraction-analysis palette (Visualizer/
+   flow-observer): brand pink #ec4899, semantic neutrals, feedback red. */
+:root {
+  --pr-color-surface: #ffffff;
+  --pr-color-text: #111827;
+  --pr-color-text-muted: #6b7280;
+  --pr-color-border: #e5e7eb;
+  --pr-color-action-primary: #ec4899;
+  --pr-color-on-action-primary: #ffffff;
+  --pr-color-feedback-error: #ef4444;
+  --pr-color-on-feedback-error: #ffffff;
+  --pr-radius-sm: 6px;
+  --pr-radius-md: 8px;
+  --pr-space-1: 4px;
+  --pr-space-2: 8px;
+  --pr-space-3: 16px;
+  --pr-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
+  --pr-font-size-sm: 12px;
+  --pr-font-size-md: 14px;
+}

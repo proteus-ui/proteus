@@ -1,0 +1,13 @@
+{
+  "name": "@proteus-ui/theme-default",
+  "version": "0.0.0",
+  "type": "module",
+  "sideEffects": ["*.css"],
+  "exports": {
+    "./tokens.css": "./src/tokens.css",
+    "./theme.css": "./src/theme.css"
+  },
+  "files": ["src"],
+  "publishConfig": { "access": "public" },
+  "scripts": { "build": "echo \"no build step (static css)\" && exit 0" }
+}
