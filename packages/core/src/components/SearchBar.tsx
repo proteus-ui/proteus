@@ -36,7 +36,11 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(function S
   });
 
   return (
-    <div className={cn("pr-search", classNames?.root)}>
+    <div
+      className={cn("pr-search", classNames?.root)}
+      data-disabled={disabled ? "true" : undefined}
+      data-readonly={readOnly ? "true" : undefined}
+    >
       <input
         ref={ref}
         {...rest}

@@ -20,4 +20,20 @@ describe("SearchBar", () => {
     render(<SearchBar aria-label="search" defaultValue="" />);
     expect(screen.queryByRole("button", { name: /clear/i })).toBeNull();
   });
+
+  it("hides clear button and emits data-disabled when disabled", () => {
+    render(<SearchBar aria-label="search" defaultValue="abc" disabled />);
+    expect(screen.queryByRole("button", { name: /clear/i })).toBeNull();
+    const root = document.querySelector(".pr-search");
+    expect(root).toHaveAttribute("data-disabled", "true");
+    expect(root).not.toHaveAttribute("data-readonly");
+  });
+
+  it("hides clear button and emits data-readonly when readOnly", () => {
+    render(<SearchBar aria-label="search" defaultValue="abc" readOnly />);
+    expect(screen.queryByRole("button", { name: /clear/i })).toBeNull();
+    const root = document.querySelector(".pr-search");
+    expect(root).toHaveAttribute("data-readonly", "true");
+    expect(root).not.toHaveAttribute("data-disabled");
+  });
 });
