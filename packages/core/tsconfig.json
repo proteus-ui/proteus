@@ -1,4 +1,12 @@
 {
   "extends": "../../tsconfig.base.json",
-  "include": ["src"]
+  "include": ["src"],
+  "references": [{ "path": "../tokens" }],
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "emitDeclarationOnly": true,
+    "types": ["vitest/globals", "@testing-library/jest-dom"]
+  }
 }

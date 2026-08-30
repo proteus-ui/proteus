@@ -38,6 +38,10 @@
 .pr-button[data-disabled] {
   opacity: 0.5;
 }
+.pr-button:focus-visible {
+  outline: 2px solid var(--pr-color-action-primary);
+  outline-offset: 2px;
+}
 
 .pr-input,
 .pr-search {
@@ -49,6 +53,11 @@
 }
 .pr-input[data-invalid] {
   border-color: var(--pr-color-feedback-error);
+}
+.pr-input:focus-within,
+.pr-search:focus-within {
+  outline: 2px solid var(--pr-color-action-primary);
+  outline-offset: 2px;
 }
 .pr-input__field,
 .pr-search__field {
