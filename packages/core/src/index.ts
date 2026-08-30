@@ -10,3 +10,7 @@ export type {
   ButtonVariant,
   ButtonSlot,
 } from "./components/Button";
+export { TextInput } from "./components/TextInput";
+export type { TextInputProps, TextInputSlot } from "./components/TextInput";
+export { SearchBar } from "./components/SearchBar";
+export type { SearchBarProps, SearchBarSlot } from "./components/SearchBar";
