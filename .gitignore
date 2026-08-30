@@ -1,6 +1,9 @@
 node_modules/
 dist/
 .turbo/
+*.tsbuildinfo
+packages/*/src/**/*.js
+packages/*/src/**/*.d.ts
 .DS_Store
 *.log
 coverage

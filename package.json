@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "pnpm -r build",
+    "clean": "rm -rf packages/*/dist packages/*/*.tsbuildinfo tsconfig.tsbuildinfo && find packages -path '*/src/*' \\( -name '*.js' -o -name '*.d.ts' \\) -delete",
     "pretest": "pnpm build",
     "test": "vitest run",
     "test:watch": "vitest",
