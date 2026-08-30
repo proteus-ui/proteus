@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "pnpm -r build",
+    "pretest": "pnpm build",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc -b --pretty"

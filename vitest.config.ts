@@ -6,5 +6,8 @@ export default defineConfig({
     globals: true,
     setupFiles: ["./vitest.setup.ts"],
     include: ["packages/**/src/**/*.test.{ts,tsx}"],
+    environmentMatchGlobs: [
+      ["packages/core/src/build.test.ts", "node"],
+    ],
   },
 });
