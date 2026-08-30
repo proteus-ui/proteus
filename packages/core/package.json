@@ -1,0 +1,29 @@
+{
+  "name": "@proteus-ui/core",
+  "version": "0.0.0",
+  "type": "module",
+  "sideEffects": ["*.css"],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./styles.css": "./src/styles.css"
+  },
+  "files": ["dist", "src/styles.css"],
+  "publishConfig": { "access": "public" },
+  "scripts": { "build": "tsup" },
+  "peerDependencies": {
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19"
+  },
+  "dependencies": {
+    "@proteus-ui/tokens": "workspace:*",
+    "@react-aria/focus": "^3.19.0",
+    "@react-aria/overlays": "^3.24.0"
+  }
+}

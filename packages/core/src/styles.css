@@ -1,0 +1,3 @@
+/* Minimal structural defaults. Appearance lives in @proteus-ui/theme-default. */
+.pr-button { font: inherit; cursor: pointer; }
+.pr-button[data-disabled] { cursor: not-allowed; }
