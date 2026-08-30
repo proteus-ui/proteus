@@ -1,0 +1,25 @@
+{
+  "name": "@proteus-ui/tokens",
+  "version": "0.0.0",
+  "type": "module",
+  "sideEffects": ["*.css"],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./tokens.css": "./src/tokens.css"
+  },
+  "files": ["dist", "src/tokens.css"],
+  "publishConfig": { "access": "public" },
+  "scripts": {
+    "build": "tsup"
+  },
+  "dependencies": {
+    "csstype": "^3.1.3"
+  }
+}

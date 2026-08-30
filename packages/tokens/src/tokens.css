@@ -1,0 +1,18 @@
+:root {
+  --pr-color-surface: #ffffff;
+  --pr-color-text: #111111;
+  --pr-color-text-muted: #6b7280;
+  --pr-color-border: #d4d4d8;
+  --pr-color-action-primary: #2563eb;
+  --pr-color-on-action-primary: #ffffff;
+  --pr-color-feedback-error: #dc2626;
+  --pr-color-on-feedback-error: #ffffff;
+  --pr-radius-sm: 4px;
+  --pr-radius-md: 8px;
+  --pr-space-1: 4px;
+  --pr-space-2: 8px;
+  --pr-space-3: 16px;
+  --pr-font-sans: system-ui, sans-serif;
+  --pr-font-size-sm: 13px;
+  --pr-font-size-md: 15px;
+}
