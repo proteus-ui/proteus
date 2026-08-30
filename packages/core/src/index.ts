@@ -14,3 +14,5 @@ export { TextInput } from "./components/TextInput";
 export type { TextInputProps, TextInputSlot } from "./components/TextInput";
 export { SearchBar } from "./components/SearchBar";
 export type { SearchBarProps, SearchBarSlot } from "./components/SearchBar";
+export { Dialog } from "./components/Dialog";
+export type { DialogProps, DialogSlot } from "./components/Dialog";
