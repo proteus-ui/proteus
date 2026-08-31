@@ -50,4 +50,6 @@ export type {
   SpinnerSize,
   SpinnerSlot,
 } from "./components/Spinner";
+export { ErrorBoundary } from "./components/ErrorBoundary";
+export type { ErrorBoundaryProps } from "./components/ErrorBoundary";
 
