@@ -2,6 +2,8 @@ export { cn } from "./utils/cn";
 export { useControllableState } from "./hooks/useControllableState";
 export { useCloseOnEscape } from "./hooks/useCloseOnEscape";
 export { useCloseOnOutsideClick } from "./hooks/useCloseOnOutsideClick";
+export { useInlineEdit } from "./hooks/useInlineEdit";
+export type { UseInlineEditReturn } from "./hooks/useInlineEdit";
 export { Button, IconButton, OutlineButton } from "./components/Button";
 export type {
   ButtonProps,
@@ -35,4 +37,9 @@ export type {
 } from "./components/CollapsibleSection";
 export { Toolbar, ToolbarButton } from "./components/Toolbar";
 export type { ToolbarButtonProps, ToolbarProps, ToolbarSlot } from "./components/Toolbar";
+export { InlineEditControls } from "./components/InlineEditControls";
+export type {
+  InlineEditControlsProps,
+  InlineEditControlsSlot,
+} from "./components/InlineEditControls";
 
