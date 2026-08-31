@@ -22,6 +22,8 @@ export { TextInput } from "./components/TextInput";
 export type { TextInputProps, TextInputSlot } from "./components/TextInput";
 export { SearchBar } from "./components/SearchBar";
 export type { SearchBarProps, SearchBarSlot } from "./components/SearchBar";
+export { Combobox } from "./components/Combobox";
+export type { Suggestion, ComboboxSlot, ComboboxProps } from "./components/Combobox";
 export { Dialog } from "./components/Dialog";
 export type { DialogProps, DialogSlot } from "./components/Dialog";
 export { Badge, Pill } from "./components/Badge";
