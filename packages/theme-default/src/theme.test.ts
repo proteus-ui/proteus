@@ -10,6 +10,7 @@ describe("@proteus-ui/theme-default", () => {
     const css = read("./tokens.css");
     expect(css).toMatch(/--pr-color-action-primary:\s*[^;]+;/);
     expect(css).toMatch(/--pr-radius-md:\s*[^;]+;/);
+    expect(css).toMatch(/--pr-font-sans:\s*Inter,/);
   });
 
   it("styles core slots via low-specificity single-class + data-* selectors", () => {
