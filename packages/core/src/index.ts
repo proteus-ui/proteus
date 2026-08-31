@@ -33,4 +33,6 @@ export type {
   CollapsibleSectionProps,
   CollapsibleSectionSlot,
 } from "./components/CollapsibleSection";
+export { Toolbar, ToolbarButton } from "./components/Toolbar";
+export type { ToolbarButtonProps, ToolbarProps, ToolbarSlot } from "./components/Toolbar";
 
