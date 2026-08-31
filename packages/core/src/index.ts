@@ -30,6 +30,8 @@ export { SearchBar } from "./components/SearchBar";
 export type { SearchBarProps, SearchBarSlot } from "./components/SearchBar";
 export { Combobox } from "./components/Combobox";
 export type { Suggestion, ComboboxSlot, ComboboxProps } from "./components/Combobox";
+export { EntitySelector } from "./components/EntitySelector";
+export type { EntitySelectorProps } from "./components/EntitySelector";
 export { Select } from "./components/Select";
 export type { SelectOption, SelectProps } from "./components/Select";
 export { Dialog } from "./components/Dialog";
