@@ -24,7 +24,7 @@ function decimalPlaces(step: number): number {
   if (!Number.isFinite(step)) return 0;
   const text = step.toString().toLowerCase();
   if (text.includes("e-")) {
-    const [base, exp] = text.split("e-");
+    const [base = "", exp = "0"] = text.split("e-");
     return Number(exp) + (base.split(".")[1] ?? "").length;
   }
   return (text.split(".")[1] ?? "").length;
