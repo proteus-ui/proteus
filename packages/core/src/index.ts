@@ -18,3 +18,7 @@ export { Dialog } from "./components/Dialog";
 export type { DialogProps, DialogSlot } from "./components/Dialog";
 export { Badge, Pill } from "./components/Badge";
 export type { BadgeProps, BadgeIntent, BadgeSlot, BadgeVariant } from "./components/Badge";
+export { Card } from "./components/Card";
+export type { CardProps, CardSlot } from "./components/Card";
+export { Section } from "./components/Section";
+export type { SectionProps, SectionSlot } from "./components/Section";
