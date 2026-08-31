@@ -45,6 +45,12 @@ export function Select({
     setQuery(labelForId(selectedId, options));
   };
 
+  const handleClear = () => {
+    isTypingRef.current = false;
+    setQuery("");
+    setSelectedId("");
+  };
+
   useEffect(() => {
     if (isTypingRef.current) return;
     setQuery(labelForId(selectedId, options));
@@ -80,7 +86,7 @@ export function Select({
         placeholder={placeholder}
         classNames={classNames}
         onSuggestionSelect={handleSuggestionSelect}
-        onClear={restoreQuery}
+        onClear={handleClear}
       />
     </div>
   );

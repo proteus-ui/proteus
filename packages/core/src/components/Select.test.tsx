@@ -29,4 +29,13 @@ describe("Select", () => {
     expect(onValueChange).not.toHaveBeenCalled();
     expect(screen.getByRole("option", { name: "Germany" })).toBeInTheDocument();
   });
+
+  it("clears the selected value via Clear search", async () => {
+    const onValueChange = vi.fn();
+    render(<Select options={options} defaultValue="pl" onValueChange={onValueChange} label="Country" />);
+    expect(screen.getByRole("combobox")).toHaveValue("Poland");
+    await userEvent.click(screen.getByRole("button", { name: "Clear search" }));
+    expect(screen.getByRole("combobox")).toHaveValue("");
+    expect(onValueChange).toHaveBeenCalledWith("");
+  });
 });
