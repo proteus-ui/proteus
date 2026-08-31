@@ -29,7 +29,13 @@ describe("@proteus-ui/theme-default", () => {
     expect(css).toContain(".pr-collapse");
     expect(css).toContain(".pr-toolbar");
     expect(css).toContain('.pr-toolbar__button[data-intent="primary"]');
+    expect(css).toContain(".pr-checkbox");
+    expect(css).toContain(".pr-checkbox__input");
+    expect(css).toContain(".pr-textarea");
+    expect(css).toContain(".pr-textarea__field");
     expect(css).toContain(".pr-spinner");
+    expect(css).toContain(".pr-page-loader");
+    expect(css).toContain(".pr-page-loader__label");
     expect(css).toContain(".pr-error-boundary");
     expect(css).toContain(".pr-select");
     expect(css).toContain(".pr-select__field");

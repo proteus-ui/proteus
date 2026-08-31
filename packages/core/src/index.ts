@@ -20,6 +20,10 @@ export type {
 } from "./components/Button";
 export { TextInput } from "./components/TextInput";
 export type { TextInputProps, TextInputSlot } from "./components/TextInput";
+export { Textarea } from "./components/Textarea";
+export type { TextareaProps, TextareaSlot } from "./components/Textarea";
+export { Checkbox } from "./components/Checkbox";
+export type { CheckboxProps, CheckboxSlot } from "./components/Checkbox";
 export { NumberStepper } from "./components/NumberStepper";
 export type { NumberStepperProps, NumberStepperSlot } from "./components/NumberStepper";
 export { TimeInput } from "./components/TimeInput";

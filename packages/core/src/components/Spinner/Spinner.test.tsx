@@ -13,6 +13,7 @@ describe("Spinner", () => {
   it("PageLoader wraps a spinner", () => {
     render(<PageLoader label="Please wait" />);
     expect(document.querySelector(".pr-page-loader")).not.toBeNull();
-    expect(screen.getByRole("status", { name: "Please wait" })).toHaveClass("pr-spinner");
+    expect(screen.getByText("Please wait")).toBeVisible();
+    expect(screen.getByRole("status", { name: "Please wait" })).toHaveClass("pr-page-loader");
   });
 });

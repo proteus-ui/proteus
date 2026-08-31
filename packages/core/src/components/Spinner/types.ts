@@ -3,7 +3,7 @@ import type { SlotClassNames } from "@proteus-ui/tokens";
 
 export type SpinnerSize = "sm" | "md";
 export type SpinnerSlot = "root";
-export type PageLoaderSlot = "root";
+export type PageLoaderSlot = "root" | "label";
 
 export interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {
   size?: SpinnerSize;

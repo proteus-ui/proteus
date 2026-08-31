@@ -11,10 +11,10 @@ This document defines the architectural standard, component interface principles
 3. **Strict Separation of Concerns:**
    - `variant`: Defines container rendering and structural style (`solid`, `outline`, `ghost`, `link`).
    - `size`: Defines universal scale (`xs`, `sm`, `md`, `lg`, `xl`) consistently across **all** system components.
-   - `colorScheme`: Defines semantic color tokens (`primary`, `neutral`, `danger`, `success`).
+   - `intent`: Defines semantic color tokens (`primary`, `neutral`, `danger`, `success`).
 4. **Layout Hygiene:** Components control internal padding and border geometry. Components **never** apply external margins (`margin`, `top`, `bottom`). All outer spacing is governed by layout primitives (`<Stack>`, `<Grid>`).
 5. **Headless Core + Dual State Control:** Abstract state machines (via Zag.js / pure JS primitives) to power multi-framework wrappers (React, Vue, Web Components). Support both controlled (`value`/`onChange`) and uncontrolled (`defaultValue`) modes natively.
-6. **Self-Hosted Zero-Flake QA Pipeline:** 100% visual, accessibility, and responsive regression testing using **Storybook**, **Playwright**, and **Docker**—completely eliminating reliance on paid SaaS solutions like Chromatic.
+6. **Self-Hosted Zero-Flake QA Pipeline:** Fast **Vitest** (tokens, hooks, DOM/ARIA) gates every change. Visual, accessibility, and responsive regression then run via **Storybook**, **Playwright**, and **Docker**—no paid SaaS (Chromatic).
 
 ---
 
@@ -30,7 +30,7 @@ import React, { ButtonHTMLAttributes, ReactNode, ReactElement } from 'react';
 // Common visual tokens shared across all button primitives
 export interface BaseButtonProps {
   variant?: 'solid' | 'outline' | 'ghost' | 'link';
-  colorScheme?: 'primary' | 'secondary' | 'neutral' | 'danger' | 'success';
+  intent?: 'primary' | 'secondary' | 'neutral' | 'danger' | 'success';
   size?: 'sm' | 'md' | 'lg';
   isDisabled?: boolean;
   isLoading?: boolean;
@@ -137,7 +137,74 @@ export const Text = Object.assign(ParagraphText, {
 // Usage: import { ParagraphText } from '@my-ds/react';
 ```
 
-## 3. Playwright + Storybook Testing Architecture
+## 3. Design System Testing Pyramid
+
+```
+┌──────────────────────────────────────────────────────────┐
+│ Playwright + Storybook                                   │
+│ Visual snapshots, CSS layout, responsive matrix          │  Heavy (real browser / Docker)
+│ CI vs Vercel preview URL                                 │
+├──────────────────────────────────────────────────────────┤
+│ Vitest + RTL                                             │
+│ Component DOM attributes, ARIA, React hooks              │  Fast (jsdom)
+├──────────────────────────────────────────────────────────┤
+│ Vitest                                                   │
+│ Design tokens, type assertions, pure utilities           │  Instant (Node)
+└──────────────────────────────────────────────────────────┘
+```
+
+No double-testing: Vitest asserts behavior (`data-intent`, class merge, hook state). Storybook + Playwright assert appearance (token color at that attribute, wrap at 375px).
+
+### Responsibility matrix
+
+| Scope | Tool | Example in this repo | Environment | Speed |
+| --- | --- | --- | --- | --- |
+| Token verification & types | Vitest | `packages/tokens/src/index.test.ts` (`expectTypeOf`, token namespace) | Node | ~10ms |
+| Custom React hooks | Vitest + RTL | `packages/core/src/hooks/useAsyncOperation/useAsyncOperation.test.ts` (`renderHook`, `act`) | jsdom | ~50ms |
+| Component micro-DOM / ARIA | Vitest + RTL | `packages/core/src/components/Badge/Badge.test.tsx` (`data-intent`, `data-variant`, `classNames`) | jsdom | ~100ms |
+| Visual & cross-browser layout | Storybook + Playwright | `apps/storybook` + Docker against the Vercel preview URL | Chromium (Docker) | ~2–5s |
+
+**Dev loop:** `pnpm test:unit:watch` while editing hooks or primitives — sub-second feedback. Do not wait on Docker or a preview URL for logic.
+
+---
+
+## 4. Root Vitest monorepo configuration
+
+Root `vitest.config.ts` already runs `packages/**/src/**/*.test.{ts,tsx}` under jsdom. Target: Vitest workspaces so `pnpm test:unit` executes `packages/core`, `packages/tokens`, `packages/theme-default` (and later `apps/*` logic tests) in parallel.
+
+`vitest.workspace.ts` at the monorepo root:
+
+```ts
+import { defineWorkspace } from "vitest/config";
+
+export default defineWorkspace(["packages/*", "apps/*"]);
+```
+
+Root `vitest.config.ts` (shared defaults):
+
+```ts
+import { defineConfig } from "vitest/config";
+
+export default defineConfig({
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: ["./vitest.setup.ts"],
+    include: ["packages/**/*.{test,spec}.{ts,tsx}"],
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "json", "html"],
+      exclude: ["**/node_modules/**", "**/dist/**", "**/*.stories.tsx"],
+    },
+  },
+});
+```
+
+Keep Node environment overrides for token / build tests (today: `environmentMatchGlobs` for `packages/core/src/build.test.ts`).
+
+---
+
+## 5. Playwright + Storybook Testing Architecture
 
 By configuring @storybook/test-runner alongside Playwright, we replicate and exceed Chromatic’s testing features: executing story play interaction functions, scanning WCAG accessibility, and taking pixel-diff visual snapshots.
 
@@ -182,7 +249,7 @@ const config: TestRunnerConfig = {
 
   async preRender(page) {
     // 1. Emulate standard media environment
-    await page.emulateMedia({ colorScheme: 'light', media: 'screen' });
+    await page.emulateMedia({ colorScheme: "light", media: "screen" });
 
     // 2. Freeze timers & dates to prevent dynamic diff flakiness
     await page.clock.setFixedTime(new Date('2026-01-01T12:00:00Z'));
@@ -260,7 +327,7 @@ const config: TestRunnerConfig = {
 export default config;
 ```
 
-## 4. Responsive Design Testing Specification
+## 6. Responsive Design Testing Specification
 
 ### A. Centralized Breakpoint Tokens
 
@@ -320,7 +387,7 @@ export const ResponsiveNavbar: StoryObj = {
 };
 ```
 
-## 5. Docker Infrastructure setup for Operating System Equality
+## 7. Docker Infrastructure setup for Operating System Equality
 
 To eliminate sub-pixel font rendering differences between macOS, Windows, and Linux CI runners, all tests are executed inside Playwright’s standardized Linux Docker container.
 
@@ -346,74 +413,116 @@ EXPOSE 6006
 CMD ["pnpm", "test:visual:container"]
 ```
 
-### B. Package Scripts for Local & CI Parity
+### B. Package scripts — unit vs visual
+
+Root `package.json`. Vitest is the default local test. Playwright never runs unless asked (`test:visual` / `test:all`).
 
 ```json
 {
-  "name": "@my-ds/monorepo",
+  "name": "proteus-monorepo",
   "private": true,
   "scripts": {
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
+    "storybook": "pnpm --filter @proteus-ui/storybook storybook",
+    "build-storybook": "pnpm --filter @proteus-ui/storybook build-storybook",
+
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+
     "test:visual": "docker run --rm -v $(pwd):/app -w /app mcr.microsoft.com/playwright:v1.41.0-jammy pnpm test:visual:container",
-    "test:visual:container": "concurrently -k -s first \"pnpm build-storybook && npx http-server storybook-static -p 6006 --silent\" \"wait-on tcp:6006 && test-storybook\"",
-    "test:visual:update": "docker run --rm -v $(pwd):/app -w /app mcr.microsoft.com/playwright:v1.41.0-jammy pnpm test-storybook --updateSnapshot"
+    "test:visual:container": "concurrently -k -s first \"npx http-server apps/storybook/storybook-static -p 6006 --silent\" \"wait-on tcp:6006 && pnpm --filter @proteus-ui/storybook test-storybook\"",
+    "test:visual:update": "docker run --rm -v $(pwd):/app -w /app mcr.microsoft.com/playwright:v1.41.0-jammy pnpm --filter @proteus-ui/storybook test-storybook --updateSnapshot",
+
+    "test:all": "pnpm test:unit && pnpm test:visual"
   }
 }
 ```
 
-## 6. Continuous Integration (GitHub Actions) & Diff Reporting
+Today `pnpm test` / `pnpm test:watch` are the Vitest aliases. When this split lands, keep `test` as `test:unit` or a thin alias so existing muscle memory still hits jsdom, not Docker.
 
-When a visual or accessibility test fails in CI, Playwright generates a detailed HTML report containing side-by-side image diff sliders and axe-core violation traces. This artifact is published automatically to GitHub Actions artifacts.
+---
+
+## 8. Continuous Integration (GitHub Actions) & Diff Reporting
+
+Run Vitest first. It finishes in a few seconds; a broken hook or `data-*` contract fails the build before Vercel wait or Docker/Playwright. Visual QA is `needs: unit-tests` and hits the **Vercel preview URL**, not a locally built Storybook, so CI sees the same CSS the preview serves.
+
+When visual or a11y fails, Playwright’s HTML report (side-by-side diffs, axe traces) uploads as a GitHub Actions artifact.
 
 ```yaml
-# .github/workflows/ui-quality-gate.yml
-name: Design System Quality Gate
+# .github/workflows/ci.yml
+name: CI Quality Gate
 
 on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+    types: [opened, synchronize, reopened]
 
 jobs:
-  quality-gate:
+  unit-tests:
+    name: Unit & DOM Logic (Vitest)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
       - uses: pnpm/action-setup@v3
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
-
+          cache: pnpm
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
+      - name: Run Vitest Suite (All Packages)
+        run: pnpm test:unit
 
-      - name: Execute Visual, A11y & Responsive Tests (via Docker)
-        run: pnpm test:visual
-
-      - name: Upload Failure Artifacts (Playwright Diff Report)
+  visual-qa:
+    name: Visual & Responsive QA (Playwright)
+    needs: unit-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait for Vercel Preview Deployment
+        uses: patrickedqvist/wait-for-vercel-preview@v1.3.0
+        id: vercel_preview
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          max_timeout: 300
+      - uses: pnpm/action-setup@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Execute Dockerized Playwright against Vercel URL
+        run: |
+          docker run --rm \
+            -v $(pwd):/app \
+            -w /app \
+            mcr.microsoft.com/playwright:v1.41.0-jammy \
+            pnpm --filter @proteus-ui/storybook test-storybook --url ${{ steps.vercel_preview.outputs.url }}
+      - name: Upload Visual Diff Artifacts on Failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-visual-diff-report
+          name: playwright-visual-diffs
           path: |
-            __snapshots__/__diff_output__/
-            storybook-static/
-          retention-days: 14
+            apps/storybook/__snapshots__/__diff_output__/
+          retention-days: 7
 ```
 
-## 7. Operational Summary & Verification Matrix
+---
+
+## 9. Operational Summary & Verification Matrix
 
 | Domain | Architectural Rule | Verification Tool |
 | --- | --- | --- |
+| Tokens & types | Semantic token names and TypeScript contract stay valid. | Vitest (Node) — `packages/tokens`. |
+| Hooks | Controlled/uncontrolled and async state machines behave. | Vitest + RTL (`renderHook`) — `packages/core/src/hooks`. |
+| Component DOM / ARIA | Slots, `data-*`, class merge, accessible names. | Vitest + RTL (jsdom) — e.g. `Badge.test.tsx`. |
 | Component Tree-Shaking | Export standalone functions + namespace objects (Text.Paragraph & ParagraphText). | Rollup / esbuild bundle analysis. |
 | API Consistency | Universal size scale (xs-xl) across all primitives; variant restricted to visual styling. | TypeScript interface inspection. |
-| Layout Safety | Zero outer margins on primitives. Spacing governed by layout wrappers (`<Stack>`). | Visual regression testing. |
+| Layout Safety | Zero outer margins on primitives. Spacing governed by layout wrappers (`<Stack>`). | Playwright visual regression. |
 | Accessibility (a11y) | 100% WCAG 2.1 AA compliance; automated ID linkage via `useId()`. | axe-playwright in Storybook test-runner. |
 | Visual Stability | CSS animation zeroing, caret hiding, font readiness locks, and frozen system clocks. | Playwright screenshot diff engine. |
 | Cross-Platform Parity | Local & CI visual snapshots executed strictly inside Linux Docker containers. | Docker / GitHub Actions runner. |
+| CI cost | Logic failures never start Docker or wait on Vercel. | `visual-qa` `needs: unit-tests`. |

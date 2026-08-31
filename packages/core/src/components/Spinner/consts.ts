@@ -11,6 +11,7 @@ export const SPINNER_CLASS = {
 
 export const PAGE_LOADER_CLASS = {
   root: "pr-page-loader",
+  label: "pr-page-loader__label",
 } as const;
 
 export const SPINNER_LABEL = {

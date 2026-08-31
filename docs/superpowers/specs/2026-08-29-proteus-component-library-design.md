@@ -134,7 +134,7 @@ Iteration 1 covers the **full set of genuinely shared, low-coupling primitives**
 - `Button`, `IconButton`, `OutlineButton`
 - `Badge` / `Pill`
 - `Card`, `Section`, `LinkCard`, `PageFrame`
-- `Input` / `TextInput`, `SearchBar`, `NumberStepper`, `TimeInput`, `Select`
+- `Input` / `TextInput`, `Textarea`, `SearchBar`, `NumberStepper`, `TimeInput`, `Select`, `Checkbox`
 - `Modal` / `Dialog` (generalized from the three ad-hoc copies in `git-timelines` + `ConfirmationModal` in flow-observer)
 - `Tooltip`
 - `CollapsibleSection`
