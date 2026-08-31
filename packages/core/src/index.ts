@@ -34,6 +34,8 @@ export { Select } from "./components/Select";
 export type { SelectOption, SelectProps } from "./components/Select";
 export { Dialog } from "./components/Dialog";
 export type { DialogProps, DialogSlot } from "./components/Dialog";
+export { Tooltip } from "./components/Tooltip";
+export type { TooltipPlacement, TooltipProps, TooltipSlot } from "./components/Tooltip";
 export { Badge, Pill } from "./components/Badge";
 export type { BadgeProps, BadgeIntent, BadgeSlot, BadgeVariant } from "./components/Badge";
 export { Card } from "./components/Card";
