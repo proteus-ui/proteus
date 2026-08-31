@@ -31,6 +31,21 @@ describe("@proteus-ui/theme-default", () => {
     expect(css).toContain('.pr-toolbar__button[data-intent="primary"]');
     expect(css).toContain(".pr-spinner");
     expect(css).toContain(".pr-error-boundary");
+    expect(css).toContain(".pr-combobox");
+    expect(css).toContain(".pr-combobox__field");
+    expect(css).toContain(".pr-combobox__list");
+    expect(css).toContain(".pr-combobox__option");
+    expect(css).toContain('.pr-combobox__option[data-highlighted="true"]');
+    expect(css).toContain('.pr-combobox[data-state="open"]');
+    expect(css).toContain('.pr-combobox[data-invalid]');
+    expect(css).toContain('.pr-combobox[data-empty]');
+    expect(css).toContain(".pr-combobox__announcer");
+    expect(css).toContain(".pr-stepper");
+    expect(css).toContain(".pr-time");
+    expect(css).toContain(".pr-otp");
+    expect(css).toContain(".pr-otp__cell");
+    expect(css).toContain(".pr-tooltip");
+    expect(css).toContain(".pr-entity-select");
     // guardrail: no !important, no descendant nesting of pr- classes
     expect(css).not.toContain("!important");
   });
