@@ -42,4 +42,12 @@ export type {
   InlineEditControlsProps,
   InlineEditControlsSlot,
 } from "./components/InlineEditControls";
+export { PageLoader, Spinner } from "./components/Spinner";
+export type {
+  PageLoaderProps,
+  PageLoaderSlot,
+  SpinnerProps,
+  SpinnerSize,
+  SpinnerSlot,
+} from "./components/Spinner";
 
