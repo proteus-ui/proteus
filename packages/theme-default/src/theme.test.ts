@@ -34,6 +34,7 @@ describe("@proteus-ui/theme-default", () => {
     expect(css).toContain(".pr-combobox");
     expect(css).toContain(".pr-combobox__field");
     expect(css).toContain(".pr-combobox__list");
+    expect(css).toMatch(/\.pr-combobox__list\s*\{[^}]*position:\s*absolute/);
     expect(css).toContain(".pr-combobox__option");
     expect(css).toContain('.pr-combobox__option[data-highlighted="true"]');
     expect(css).toContain('.pr-combobox[data-state="open"]');

@@ -399,6 +399,14 @@
   font-weight: 600;
   margin-bottom: var(--pr-space-1);
 }
+.pr-combobox__control {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  flex: 1 1 100%;
+  min-width: 0;
+}
 .pr-combobox__field {
   flex: 1 1 auto;
   min-width: 0;
@@ -429,8 +437,11 @@
   clip: rect(0 0 0 0);
 }
 .pr-combobox__list {
-  flex-basis: 100%;
+  position: absolute;
+  top: 100%;
+  left: 0;
   width: 100%;
+  z-index: 1;
   margin: var(--pr-space-1) 0 0;
   padding: var(--pr-space-1) 0;
   list-style: none;

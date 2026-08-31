@@ -264,6 +264,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
           {label}
         </label>
       )}
+      <div className="pr-combobox__control">
       <input
         ref={setInputRefs}
         id={inputId}
@@ -276,7 +277,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
         aria-expanded={showList}
         aria-haspopup="listbox"
         aria-autocomplete="list"
-        aria-controls={showList ? listboxId : undefined}
+        aria-controls={showList && suggestions.length > 0 ? listboxId : undefined}
         aria-activedescendant={activeDescendantId}
         aria-labelledby={label ? labelId : undefined}
         aria-invalid={invalid ? "true" : undefined}
@@ -334,7 +335,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
       >
         {announcerText}
       </div>
-      {showList && (
+      {showList && suggestions.length > 0 && (
         <ul
           id={listboxId}
           role="listbox"
@@ -360,6 +361,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
           })}
         </ul>
       )}
+      </div>
       {showNoResults && <div role="status">{noResultsText}</div>}
       {errorMessage ? (
         <div id={errorId} role="alert" className={cn("pr-combobox__error", classNames?.error)}>
