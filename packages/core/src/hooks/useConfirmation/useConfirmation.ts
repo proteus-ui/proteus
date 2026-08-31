@@ -1,11 +1,7 @@
 import { useCallback, useRef, useState } from "react";
+import type { UseConfirmationReturn } from "./types";
 
-export function useConfirmation(): {
-  open: boolean;
-  ask: () => Promise<boolean>;
-  confirm: () => void;
-  cancel: () => void;
-} {
+export function useConfirmation(): UseConfirmationReturn {
   const [open, setOpen] = useState(false);
   const resolverRef = useRef<((value: boolean) => void) | null>(null);
 

@@ -1,16 +1,7 @@
-import type { SlotClassNames } from "@proteus-ui/tokens";
 import { cn } from "../../utils/cn";
 import { Button, OutlineButton } from "../Button";
-
-export type InlineEditControlsSlot = "root";
-
-export interface InlineEditControlsProps {
-  editing: boolean;
-  onEdit: () => void;
-  onSave: () => void;
-  onCancel: () => void;
-  classNames?: SlotClassNames<"root">;
-}
+import { INLINE_EDIT_CLASS, INLINE_EDIT_LABEL } from "./consts";
+import type { InlineEditControlsProps } from "./types";
 
 export function InlineEditControls({
   editing,
@@ -20,14 +11,14 @@ export function InlineEditControls({
   classNames,
 }: InlineEditControlsProps) {
   return (
-    <div className={cn("pr-inline-edit", classNames?.root)}>
+    <div className={cn(INLINE_EDIT_CLASS.root, classNames?.root)}>
       {editing ? (
         <>
-          <Button onClick={onSave}>Save</Button>
-          <OutlineButton onClick={onCancel}>Cancel</OutlineButton>
+          <Button onClick={onSave}>{INLINE_EDIT_LABEL.Save}</Button>
+          <OutlineButton onClick={onCancel}>{INLINE_EDIT_LABEL.Cancel}</OutlineButton>
         </>
       ) : (
-        <Button onClick={onEdit}>Edit</Button>
+        <Button onClick={onEdit}>{INLINE_EDIT_LABEL.Edit}</Button>
       )}
     </div>
   );

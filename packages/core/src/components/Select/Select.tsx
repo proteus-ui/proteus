@@ -1,25 +1,10 @@
 import { useEffect, useRef, useState, type FocusEvent } from "react";
 import { useControllableState } from "../../hooks/useControllableState";
-import type { ComboboxProps, Suggestion } from "../Combobox";
+import type { Suggestion } from "../Combobox";
 import { Combobox } from "../Combobox";
-
-export type SelectOption = { value: string; label: string };
-
-export interface SelectProps {
-  options: readonly SelectOption[];
-  value?: string;
-  defaultValue?: string;
-  onValueChange?: (value: string) => void;
-  disabled?: boolean;
-  invalid?: boolean;
-  label?: string;
-  placeholder?: string;
-  classNames?: ComboboxProps["classNames"];
-}
-
-function labelForId(id: string, options: readonly SelectOption[]): string {
-  return options.find((option) => option.value === id)?.label ?? "";
-}
+import { SELECT_DEFAULT, SELECT_MIN_CHARS, SELECT_SYMBOL } from "./consts";
+import type { SelectProps } from "./types";
+import { labelForId } from "./utils";
 
 export function Select({
   options,
@@ -34,11 +19,13 @@ export function Select({
 }: SelectProps) {
   const [selectedId, setSelectedId] = useControllableState({
     value,
-    defaultValue: defaultValue ?? "",
+    defaultValue: defaultValue ?? SELECT_DEFAULT.value,
     onChange: onValueChange,
   });
   const isTypingRef = useRef(false);
-  const [query, setQuery] = useState(() => labelForId(value ?? defaultValue ?? "", options));
+  const [query, setQuery] = useState(() =>
+    labelForId(value ?? defaultValue ?? SELECT_DEFAULT.value, options),
+  );
 
   const restoreQuery = () => {
     isTypingRef.current = false;
@@ -47,8 +34,8 @@ export function Select({
 
   const handleClear = () => {
     isTypingRef.current = false;
-    setQuery("");
-    setSelectedId("");
+    setQuery(SELECT_DEFAULT.value);
+    setSelectedId(SELECT_DEFAULT.value);
   };
 
   useEffect(() => {
@@ -78,8 +65,8 @@ export function Select({
         value={query}
         onValueChange={handleQueryChange}
         suggestions={options}
-        minCharsToSearch={0}
-        toggleIcon="▾"
+        minCharsToSearch={SELECT_MIN_CHARS}
+        toggleIcon={SELECT_SYMBOL.Toggle}
         disabled={disabled}
         invalid={invalid}
         label={label}

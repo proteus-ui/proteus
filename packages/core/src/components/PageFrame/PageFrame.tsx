@@ -1,29 +1,20 @@
 import { forwardRef } from "react";
-import type { HTMLAttributes, ReactNode } from "react";
-import type { SlotClassNames } from "@proteus-ui/tokens";
 import { cn } from "../../utils/cn";
-
-export type PageFrameSlot = "root" | "header" | "main" | "footer";
-
-export interface PageFrameProps extends HTMLAttributes<HTMLDivElement> {
-  header?: ReactNode;
-  footer?: ReactNode;
-  classNames?: SlotClassNames<PageFrameSlot>;
-  children?: ReactNode;
-}
+import { PAGE_FRAME_CLASS } from "./consts";
+import type { PageFrameProps } from "./types";
 
 export const PageFrame = forwardRef<HTMLDivElement, PageFrameProps>(function PageFrame(
   { header, footer, classNames, className, children, ...rest },
   ref,
 ) {
   return (
-    <div ref={ref} className={cn("pr-page-frame", classNames?.root, className)} {...rest}>
+    <div ref={ref} className={cn(PAGE_FRAME_CLASS.root, classNames?.root, className)} {...rest}>
       {header != null && (
-        <header className={cn("pr-page-frame__header", classNames?.header)}>{header}</header>
+        <header className={cn(PAGE_FRAME_CLASS.header, classNames?.header)}>{header}</header>
       )}
-      <main className={cn("pr-page-frame__main", classNames?.main)}>{children}</main>
+      <main className={cn(PAGE_FRAME_CLASS.main, classNames?.main)}>{children}</main>
       {footer != null && (
-        <footer className={cn("pr-page-frame__footer", classNames?.footer)}>{footer}</footer>
+        <footer className={cn(PAGE_FRAME_CLASS.footer, classNames?.footer)}>{footer}</footer>
       )}
     </div>
   );

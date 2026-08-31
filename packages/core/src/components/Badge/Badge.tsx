@@ -1,27 +1,17 @@
 import { forwardRef } from "react";
-import type { HTMLAttributes, ReactNode } from "react";
-import type { SlotClassNames } from "@proteus-ui/tokens";
 import { cn } from "../../utils/cn";
-
-export type BadgeIntent = "neutral" | "primary" | "danger";
-export type BadgeSlot = "root";
-export type BadgeVariant = "badge" | "pill";
-
-export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
-  intent?: BadgeIntent;
-  classNames?: SlotClassNames<BadgeSlot>;
-  children?: ReactNode;
-}
+import { BADGE_CLASS, BADGE_DEFAULT, BADGE_DISPLAY_NAME, BADGE_VARIANT } from "./consts";
+import type { BadgeProps, BadgeVariant } from "./types";
 
 function createBadge(variant: BadgeVariant) {
   return forwardRef<HTMLSpanElement, BadgeProps>(function ProteusBadge(
-    { intent = "neutral", classNames, className, children, ...rest },
+    { intent = BADGE_DEFAULT.intent, classNames, className, children, ...rest },
     ref,
   ) {
     return (
       <span
         ref={ref}
-        className={cn("pr-badge", classNames?.root, className)}
+        className={cn(BADGE_CLASS.root, classNames?.root, className)}
         data-intent={intent}
         data-variant={variant}
         {...rest}
@@ -32,8 +22,8 @@ function createBadge(variant: BadgeVariant) {
   });
 }
 
-export const Badge = createBadge("badge");
-Badge.displayName = "Badge";
+export const Badge = createBadge(BADGE_VARIANT.Badge);
+Badge.displayName = BADGE_DISPLAY_NAME.Badge;
 
-export const Pill = createBadge("pill");
-Pill.displayName = "Pill";
+export const Pill = createBadge(BADGE_VARIANT.Pill);
+Pill.displayName = BADGE_DISPLAY_NAME.Pill;

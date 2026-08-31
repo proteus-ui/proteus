@@ -1,14 +1,5 @@
 import { useCallback, useState } from "react";
-
-export interface UseInlineEditReturn {
-  editing: boolean;
-  draft: string;
-  setDraft: (v: string) => void;
-  start: () => void;
-  commit: () => string;
-  cancel: () => void;
-  value: string;
-}
+import type { UseInlineEditReturn } from "./types";
 
 export function useInlineEdit(initial: string): UseInlineEditReturn {
   const [value, setValue] = useState(initial);

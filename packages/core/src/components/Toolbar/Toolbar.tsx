@@ -1,36 +1,25 @@
 import { forwardRef } from "react";
-import type { HTMLAttributes } from "react";
-import type { SlotClassNames } from "@proteus-ui/tokens";
 import { cn } from "../../utils/cn";
-import type { ButtonIntent, ButtonProps, ButtonSize } from "../Button";
-
-export type ToolbarSlot = "root";
-
-export interface ToolbarProps extends HTMLAttributes<HTMLDivElement> {
-  classNames?: SlotClassNames<ToolbarSlot>;
-}
-
-export interface ToolbarButtonProps extends ButtonProps {
-  pressed?: boolean;
-}
+import { DATA_TRUE, TOOLBAR_CLASS, TOOLBAR_DEFAULT, TOOLBAR_DISPLAY_NAME } from "./consts";
+import type { ToolbarButtonProps, ToolbarProps } from "./types";
 
 export const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(function Toolbar(
   { classNames, className, children, ...rest },
   ref,
 ) {
   return (
-    <div ref={ref} role="toolbar" className={cn("pr-toolbar", classNames?.root, className)} {...rest}>
+    <div ref={ref} role="toolbar" className={cn(TOOLBAR_CLASS.root, classNames?.root, className)} {...rest}>
       {children}
     </div>
   );
 });
-Toolbar.displayName = "Toolbar";
+Toolbar.displayName = TOOLBAR_DISPLAY_NAME.Toolbar;
 
 export const ToolbarButton = forwardRef<HTMLButtonElement, ToolbarButtonProps>(
   function ToolbarButton(
     {
-      intent = "neutral" satisfies ButtonIntent,
-      size = "md" satisfies ButtonSize,
+      intent = TOOLBAR_DEFAULT.intent,
+      size = TOOLBAR_DEFAULT.size,
       icon,
       classNames,
       className,
@@ -44,18 +33,18 @@ export const ToolbarButton = forwardRef<HTMLButtonElement, ToolbarButtonProps>(
     return (
       <button
         ref={ref}
-        className={cn("pr-toolbar__button", classNames?.root, className)}
+        className={cn(TOOLBAR_CLASS.button, classNames?.root, className)}
         data-intent={intent}
         data-size={size}
-        data-disabled={disabled ? "true" : undefined}
+        data-disabled={disabled ? DATA_TRUE : undefined}
         disabled={disabled}
         type="button"
         {...rest}
-        data-pressed={pressed ? "true" : undefined}
+        data-pressed={pressed ? DATA_TRUE : undefined}
         aria-pressed={pressed !== undefined ? pressed : undefined}
       >
         {icon != null && (
-          <span className={cn("pr-button__icon", classNames?.icon)} aria-hidden="true">
+          <span className={cn(TOOLBAR_CLASS.icon, classNames?.icon)} aria-hidden="true">
             {icon}
           </span>
         )}
@@ -64,4 +53,4 @@ export const ToolbarButton = forwardRef<HTMLButtonElement, ToolbarButtonProps>(
     );
   },
 );
-ToolbarButton.displayName = "ToolbarButton";
+ToolbarButton.displayName = TOOLBAR_DISPLAY_NAME.ToolbarButton;

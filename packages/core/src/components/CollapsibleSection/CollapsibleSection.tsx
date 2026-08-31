@@ -1,50 +1,20 @@
 import { useEffect, useRef } from "react";
-import type { ReactNode } from "react";
-import type { SlotClassNames } from "@proteus-ui/tokens";
 import { cn } from "../../utils/cn";
 import { useControllableState } from "../../hooks/useControllableState";
-
-export type CollapsibleItem = {
-  id: string;
-  title: ReactNode;
-  children: ReactNode;
-  defaultOpen?: boolean;
-};
-
-export type CollapsibleMode = "single" | "multiple";
-
-export type CollapsibleSectionSlot = "root" | "item" | "trigger" | "panel";
-
-export interface CollapsibleSectionProps {
-  items: readonly CollapsibleItem[];
-  mode?: CollapsibleMode;
-  openIds?: string[];
-  onOpenChange?: (ids: string[]) => void;
-  classNames?: SlotClassNames<CollapsibleSectionSlot>;
-}
-
-function nextIds(mode: CollapsibleMode, current: string[], id: string): string[] {
-  const isOpen = current.includes(id);
-  if (mode === "single") return isOpen ? [] : [id];
-  return isOpen ? current.filter((x) => x !== id) : [...current, id];
-}
-
-function defaultOpenIds(items: readonly CollapsibleItem[]): string[] {
-  return items.filter((i) => i.defaultOpen).map((i) => i.id);
-}
-
-function resolveOpenIds(mode: CollapsibleMode, ids: string[]): string[] {
-  if (mode === "single" && ids.length > 1) return ids.slice(0, 1);
-  return ids;
-}
-
-function sameIds(a: string[], b: string[]): boolean {
-  return a.length === b.length && a.every((id, i) => id === b[i]);
-}
+import {
+  COLLAPSIBLE_CLASS,
+  COLLAPSIBLE_DEFAULT,
+  COLLAPSIBLE_ID,
+  COLLAPSIBLE_ITEM_KEY_SEP,
+  COLLAPSIBLE_STATE,
+  COLLAPSIBLE_SYMBOL,
+} from "./consts";
+import type { CollapsibleSectionProps } from "./types";
+import { defaultOpenIds, nextIds, resolveOpenIds, sameIds } from "./utils";
 
 export function CollapsibleSection({
   items,
-  mode = "single",
+  mode = COLLAPSIBLE_DEFAULT.mode,
   openIds,
   onOpenChange,
   classNames,
@@ -56,7 +26,7 @@ export function CollapsibleSection({
   });
   const openList = resolveOpenIds(mode, current);
 
-  const itemKey = items.map((i) => i.id).join("\0");
+  const itemKey = items.map((i) => i.id).join(COLLAPSIBLE_ITEM_KEY_SEP);
   const prevKeyRef = useRef(itemKey);
 
   useEffect(() => {
@@ -66,7 +36,7 @@ export function CollapsibleSection({
     }
     let next = current;
     if (prevKeyRef.current !== itemKey) {
-      const prevIds = prevKeyRef.current.split("\0").filter(Boolean);
+      const prevIds = prevKeyRef.current.split(COLLAPSIBLE_ITEM_KEY_SEP).filter(Boolean);
       prevKeyRef.current = itemKey;
       const existing = new Set(items.map((i) => i.id));
       const prevSet = new Set(prevIds);
@@ -79,31 +49,31 @@ export function CollapsibleSection({
   }, [itemKey, items, openIds, current, set, mode]);
 
   return (
-    <div className={cn("pr-collapse", classNames?.root)}>
+    <div className={cn(COLLAPSIBLE_CLASS.root, classNames?.root)}>
       {items.map((item) => {
         const open = openList.includes(item.id);
-        const triggerId = `accordion-trigger-${item.id}`;
-        const panelId = `accordion-panel-${item.id}`;
+        const triggerId = `${COLLAPSIBLE_ID.TriggerPrefix}${item.id}`;
+        const panelId = `${COLLAPSIBLE_ID.PanelPrefix}${item.id}`;
         return (
-          <div key={item.id} className={cn("pr-collapse__item", classNames?.item)}>
+          <div key={item.id} className={cn(COLLAPSIBLE_CLASS.item, classNames?.item)}>
             <button
               type="button"
               id={triggerId}
-              className={cn("pr-collapse__trigger", classNames?.trigger)}
+              className={cn(COLLAPSIBLE_CLASS.trigger, classNames?.trigger)}
               aria-expanded={open}
               aria-controls={panelId}
               onClick={() => set(nextIds(mode, openList, item.id))}
             >
               {item.title}
-              <span aria-hidden="true">▾</span>
+              <span aria-hidden="true">{COLLAPSIBLE_SYMBOL.Chevron}</span>
             </button>
             <div
               id={panelId}
               role="region"
               aria-labelledby={triggerId}
-              data-state={open ? "open" : "closed"}
+              data-state={open ? COLLAPSIBLE_STATE.Open : COLLAPSIBLE_STATE.Closed}
               hidden={!open}
-              className={cn("pr-collapse__panel", classNames?.panel)}
+              className={cn(COLLAPSIBLE_CLASS.panel, classNames?.panel)}
             >
               {item.children}
             </div>

@@ -1,39 +1,33 @@
 import { forwardRef } from "react";
-import type { ButtonHTMLAttributes, ReactNode } from "react";
-import type { SlotClassNames } from "@proteus-ui/tokens";
 import { cn } from "../../utils/cn";
-
-export type ButtonIntent = "neutral" | "primary" | "danger";
-export type ButtonSize = "sm" | "md";
-export type ButtonVariant = "solid" | "outline";
-export type ButtonSlot = "root" | "icon";
-
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  intent?: ButtonIntent;
-  size?: ButtonSize;
-  icon?: ReactNode;
-  classNames?: SlotClassNames<ButtonSlot>;
-}
+import {
+  BUTTON_CLASS,
+  BUTTON_DEFAULT,
+  BUTTON_DISPLAY_NAME,
+  BUTTON_VARIANT,
+  DATA_TRUE,
+} from "./consts";
+import type { ButtonProps, ButtonVariant } from "./types";
 
 function createButton(variant: ButtonVariant) {
   return forwardRef<HTMLButtonElement, ButtonProps>(function ProteusButton(
-    { intent = "neutral", size = "md", icon, classNames, className, children, disabled, ...rest },
+    { intent = BUTTON_DEFAULT.intent, size = BUTTON_DEFAULT.size, icon, classNames, className, children, disabled, ...rest },
     ref,
   ) {
     return (
       <button
         ref={ref}
-        className={cn("pr-button", classNames?.root, className)}
+        className={cn(BUTTON_CLASS.root, classNames?.root, className)}
         data-intent={intent}
         data-size={size}
         data-variant={variant}
-        data-disabled={disabled ? "true" : undefined}
+        data-disabled={disabled ? DATA_TRUE : undefined}
         disabled={disabled}
         type="button"
         {...rest}
       >
         {icon != null && (
-          <span className={cn("pr-button__icon", classNames?.icon)} aria-hidden="true">
+          <span className={cn(BUTTON_CLASS.icon, classNames?.icon)} aria-hidden="true">
             {icon}
           </span>
         )}
@@ -43,11 +37,11 @@ function createButton(variant: ButtonVariant) {
   });
 }
 
-export const Button = createButton("solid");
-Button.displayName = "Button";
+export const Button = createButton(BUTTON_VARIANT.Solid);
+Button.displayName = BUTTON_DISPLAY_NAME.Button;
 
-export const OutlineButton = createButton("outline");
-OutlineButton.displayName = "OutlineButton";
+export const OutlineButton = createButton(BUTTON_VARIANT.Outline);
+OutlineButton.displayName = BUTTON_DISPLAY_NAME.OutlineButton;
 
-export const IconButton = createButton("solid");
-IconButton.displayName = "IconButton";
+export const IconButton = createButton(BUTTON_VARIANT.Solid);
+IconButton.displayName = BUTTON_DISPLAY_NAME.IconButton;

@@ -1,54 +1,26 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
-import type { SlotClassNames } from "@proteus-ui/tokens";
 import { useControllableState } from "../../hooks/useControllableState";
 import { cn } from "../../utils/cn";
 import { KEYBOARD_KEYS } from "../../utils/keyboard";
-
-export type NumberStepperSlot = "root" | "input" | "inc" | "dec";
-
-export interface NumberStepperProps {
-  value?: number;
-  defaultValue?: number;
-  onValueChange?: (n: number) => void;
-  min?: number;
-  max?: number;
-  step?: number;
-  disabled?: boolean;
-  invalid?: boolean;
-  label?: string;
-  classNames?: SlotClassNames<NumberStepperSlot>;
-}
-
-function decimalPlaces(step: number): number {
-  if (!Number.isFinite(step)) return 0;
-  const text = step.toString().toLowerCase();
-  if (text.includes("e-")) {
-    const [base = "", exp = "0"] = text.split("e-");
-    return Number(exp) + (base.split(".")[1] ?? "").length;
-  }
-  return (text.split(".")[1] ?? "").length;
-}
-
-function add(n: number, delta: number, step: number): number {
-  const places = Math.max(decimalPlaces(n), decimalPlaces(delta), decimalPlaces(step));
-  return Number((n + delta).toFixed(places));
-}
-
-function parseDraft(draft: string): number | undefined {
-  if (draft.trim() === "") return undefined;
-  const parsed = Number(draft);
-  return Number.isNaN(parsed) ? undefined : parsed;
-}
+import {
+  DATA_TRUE,
+  NUMBER_STEPPER_CLASS,
+  NUMBER_STEPPER_DEFAULT,
+  NUMBER_STEPPER_LABEL,
+  NUMBER_STEPPER_SYMBOL,
+} from "./consts";
+import type { NumberStepperProps } from "./types";
+import { add, parseDraft } from "./utils";
 
 export const NumberStepper = forwardRef<HTMLInputElement, NumberStepperProps>(function NumberStepper(
   {
     value,
-    defaultValue = 0,
+    defaultValue = NUMBER_STEPPER_DEFAULT.value,
     onValueChange,
     min,
     max,
-    step = 1,
+    step = NUMBER_STEPPER_DEFAULT.step,
     disabled,
     invalid,
     label,
@@ -94,13 +66,13 @@ export const NumberStepper = forwardRef<HTMLInputElement, NumberStepperProps>(fu
         e.preventDefault();
         commit(add(liveValue(), -step, step));
         return;
-      case "Home":
+      case KEYBOARD_KEYS.HOME:
         if (min !== undefined) {
           e.preventDefault();
           commit(min);
         }
         return;
-      case "End":
+      case KEYBOARD_KEYS.END:
         if (max !== undefined) {
           e.preventDefault();
           commit(max);
@@ -113,34 +85,34 @@ export const NumberStepper = forwardRef<HTMLInputElement, NumberStepperProps>(fu
 
   return (
     <div
-      className={cn("pr-stepper", classNames?.root)}
+      className={cn(NUMBER_STEPPER_CLASS.root, classNames?.root)}
       role="group"
       aria-label={label}
-      data-invalid={invalid ? "true" : undefined}
-      data-disabled={disabled ? "true" : undefined}
+      data-invalid={invalid ? DATA_TRUE : undefined}
+      data-disabled={disabled ? DATA_TRUE : undefined}
     >
       <button
         type="button"
-        aria-label="Decrease value"
-        className={cn("pr-stepper__dec", classNames?.dec)}
+        aria-label={NUMBER_STEPPER_LABEL.Decrease}
+        className={cn(NUMBER_STEPPER_CLASS.dec, classNames?.dec)}
         disabled={disabled}
         onPointerDown={(e) => e.preventDefault()}
         onClick={() => commit(add(liveValue(), -step, step))}
       >
-        −
+        {NUMBER_STEPPER_SYMBOL.Decrease}
       </button>
       <input
         ref={ref}
         type="text"
         inputMode="numeric"
         role="spinbutton"
-        className={cn("pr-stepper__field", classNames?.input)}
+        className={cn(NUMBER_STEPPER_CLASS.field, classNames?.input)}
         value={draft}
         disabled={disabled}
         aria-valuenow={current}
         aria-valuemin={min}
         aria-valuemax={max}
-        aria-invalid={invalid ? "true" : undefined}
+        aria-invalid={invalid ? DATA_TRUE : undefined}
         onFocus={() => {
           editingRef.current = true;
         }}
@@ -158,13 +130,13 @@ export const NumberStepper = forwardRef<HTMLInputElement, NumberStepperProps>(fu
       />
       <button
         type="button"
-        aria-label="Increase value"
-        className={cn("pr-stepper__inc", classNames?.inc)}
+        aria-label={NUMBER_STEPPER_LABEL.Increase}
+        className={cn(NUMBER_STEPPER_CLASS.inc, classNames?.inc)}
         disabled={disabled}
         onPointerDown={(e) => e.preventDefault()}
         onClick={() => commit(add(liveValue(), step, step))}
       >
-        +
+        {NUMBER_STEPPER_SYMBOL.Increase}
       </button>
     </div>
   );

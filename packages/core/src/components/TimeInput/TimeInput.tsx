@@ -1,27 +1,19 @@
 import { forwardRef, useEffect, useId, useRef, useState } from "react";
-import type { SlotClassNames } from "@proteus-ui/tokens";
 import { useControllableState } from "../../hooks/useControllableState";
 import { cn } from "../../utils/cn";
-
-export type TimeInputSlot = "root" | "input" | "error";
-
-export interface TimeInputProps {
-  value?: string;
-  defaultValue?: string;
-  onValueChange?: (v: string) => void;
-  disabled?: boolean;
-  invalid?: boolean;
-  errorMessage?: string;
-  label?: string;
-  classNames?: SlotClassNames<TimeInputSlot>;
-}
-
-const TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
+import {
+  DATA_TRUE,
+  TIME_INPUT_CLASS,
+  TIME_INPUT_DEFAULT,
+  TIME_INPUT_PLACEHOLDER,
+  TIME_RE,
+} from "./consts";
+import type { TimeInputProps } from "./types";
 
 export const TimeInput = forwardRef<HTMLInputElement, TimeInputProps>(function TimeInput(
   {
     value,
-    defaultValue = "",
+    defaultValue = TIME_INPUT_DEFAULT.value,
     onValueChange,
     disabled,
     invalid,
@@ -49,22 +41,22 @@ export const TimeInput = forwardRef<HTMLInputElement, TimeInputProps>(function T
 
   return (
     <div
-      className={cn("pr-time", classNames?.root)}
-      data-invalid={invalid ? "true" : undefined}
-      data-disabled={disabled ? "true" : undefined}
-      data-empty={isEmpty ? "true" : undefined}
+      className={cn(TIME_INPUT_CLASS.root, classNames?.root)}
+      data-invalid={invalid ? DATA_TRUE : undefined}
+      data-disabled={disabled ? DATA_TRUE : undefined}
+      data-empty={isEmpty ? DATA_TRUE : undefined}
     >
       <input
         ref={ref}
         type="text"
         inputMode="numeric"
-        placeholder="HH:MM"
+        placeholder={TIME_INPUT_PLACEHOLDER}
         autoComplete="off"
         disabled={disabled}
         aria-label={label}
-        aria-invalid={invalid ? "true" : undefined}
+        aria-invalid={invalid ? DATA_TRUE : undefined}
         aria-describedby={errorMessage ? errorId : undefined}
-        className={cn("pr-time__field", classNames?.input)}
+        className={cn(TIME_INPUT_CLASS.field, classNames?.input)}
         value={draft}
         onChange={(e) => setDraft(e.target.value)}
         onFocus={() => {
@@ -82,7 +74,7 @@ export const TimeInput = forwardRef<HTMLInputElement, TimeInputProps>(function T
         }}
       />
       {errorMessage ? (
-        <div id={errorId} role="alert" className={cn("pr-time__error", classNames?.error)}>
+        <div id={errorId} role="alert" className={cn(TIME_INPUT_CLASS.error, classNames?.error)}>
           {errorMessage}
         </div>
       ) : null}

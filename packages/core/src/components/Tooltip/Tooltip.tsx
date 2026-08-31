@@ -1,68 +1,16 @@
 import { cloneElement, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { ReactElement, ReactNode, Ref } from "react";
-import { flip, offset, shift, useFloating, type Middleware } from "@floating-ui/react";
+import { flip, offset, shift, useFloating } from "@floating-ui/react";
 import { useTooltip, useTooltipTrigger } from "@react-aria/tooltip";
-import type { SlotClassNames } from "@proteus-ui/tokens";
 import { cn } from "../../utils/cn";
-
-function skipWithoutLayout(middleware: Middleware): Middleware {
-  return {
-    ...middleware,
-    async fn(state) {
-      const { width, height } = state.rects.reference;
-      if (width === 0 && height === 0) return {};
-      return middleware.fn(state);
-    },
-  };
-}
-
-export type TooltipPlacement = "top" | "bottom" | "left" | "right";
-export type TooltipSlot = "root";
-
-export interface TooltipProps {
-  content: ReactNode;
-  children: ReactElement;
-  placement?: TooltipPlacement;
-  delay?: number;
-  classNames?: SlotClassNames<"root">;
-}
-
-type TooltipTriggerState = {
-  isOpen: boolean;
-  shouldSkipAnimation: boolean;
-  open: (immediate?: boolean) => void;
-  close: (immediate?: boolean) => void;
-};
-
-function childTriggerRef(children: ReactElement): Ref<HTMLElement> | undefined {
-  const propsRef = (children.props as { ref?: Ref<HTMLElement> }).ref;
-  if (propsRef != null) return propsRef;
-  return "ref" in children ? (children.ref as Ref<HTMLElement> | undefined) : undefined;
-}
-
-function mergeTriggerProps(
-  childProps: Record<string, unknown>,
-  triggerProps: Record<string, unknown>,
-): Record<string, unknown> {
-  const merged: Record<string, unknown> = { ...triggerProps };
-  for (const [key, value] of Object.entries(triggerProps)) {
-    if (key === "ref") continue;
-    const existing = childProps[key];
-    if (typeof existing === "function" && typeof value === "function") {
-      merged[key] = (...args: unknown[]) => {
-        (existing as (...a: unknown[]) => void)(...args);
-        (value as (...a: unknown[]) => void)(...args);
-      };
-    }
-  }
-  return merged;
-}
+import { TOOLTIP_CLASS, TOOLTIP_DEFAULT } from "./consts";
+import type { TooltipProps, TooltipTriggerState } from "./types";
+import { childTriggerRef, mergeTriggerProps, skipWithoutLayout } from "./utils";
 
 export function Tooltip({
   content,
   children,
-  placement = "top",
-  delay = 1500,
+  placement = TOOLTIP_DEFAULT.placement,
+  delay = TOOLTIP_DEFAULT.delay,
   classNames,
 }: TooltipProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -116,7 +64,7 @@ export function Tooltip({
 
   const triggerRef = useRef<HTMLElement | null>(null);
   const middleware = useMemo(
-    () => [offset(8), skipWithoutLayout(flip()), skipWithoutLayout(shift())],
+    () => [offset(TOOLTIP_DEFAULT.offset), skipWithoutLayout(flip()), skipWithoutLayout(shift())],
     [],
   );
   const { refs, floatingStyles, placement: resolvedPlacement } = useFloating({
@@ -158,7 +106,7 @@ export function Tooltip({
           {...tooltipProps}
           ref={refs.setFloating}
           style={floatingStyles}
-          className={cn("pr-tooltip", classNames?.root)}
+          className={cn(TOOLTIP_CLASS.root, classNames?.root)}
           data-placement={resolvedPlacement}
         >
           {content}

@@ -1,24 +1,19 @@
 import { forwardRef } from "react";
-import type { InputHTMLAttributes } from "react";
-import type { SlotClassNames } from "@proteus-ui/tokens";
 import { cn } from "../../utils/cn";
 import { useControllableState } from "../../hooks/useControllableState";
-
-export type SearchBarSlot = "root" | "input" | "clear";
-
-export interface SearchBarProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "value" | "defaultValue" | "onChange"> {
-  value?: string;
-  defaultValue?: string;
-  onValueChange?: (next: string) => void;
-  onClear?: () => void;
-  classNames?: SlotClassNames<SearchBarSlot>;
-}
+import {
+  DATA_TRUE,
+  SEARCH_BAR_CLASS,
+  SEARCH_BAR_DEFAULT,
+  SEARCH_BAR_LABEL,
+  SEARCH_BAR_SYMBOL,
+} from "./consts";
+import type { SearchBarProps } from "./types";
 
 export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(function SearchBar(
   {
     value,
-    defaultValue = "",
+    defaultValue = SEARCH_BAR_DEFAULT.value,
     onValueChange,
     onClear,
     classNames,
@@ -37,9 +32,9 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(function S
 
   return (
     <div
-      className={cn("pr-search", classNames?.root)}
-      data-disabled={disabled ? "true" : undefined}
-      data-readonly={readOnly ? "true" : undefined}
+      className={cn(SEARCH_BAR_CLASS.root, classNames?.root)}
+      data-disabled={disabled ? DATA_TRUE : undefined}
+      data-readonly={readOnly ? DATA_TRUE : undefined}
     >
       <input
         ref={ref}
@@ -47,21 +42,21 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(function S
         type="search"
         disabled={disabled}
         readOnly={readOnly}
-        className={cn("pr-search__field", classNames?.input, className)}
+        className={cn(SEARCH_BAR_CLASS.field, classNames?.input, className)}
         value={current}
         onChange={(e) => setCurrent(e.target.value)}
       />
-      {current !== "" && !disabled && !readOnly && (
+      {current !== SEARCH_BAR_DEFAULT.value && !disabled && !readOnly && (
         <button
           type="button"
-          aria-label="Clear search"
-          className={cn("pr-search__clear", classNames?.clear)}
+          aria-label={SEARCH_BAR_LABEL.Clear}
+          className={cn(SEARCH_BAR_CLASS.clear, classNames?.clear)}
           onClick={() => {
-            setCurrent("");
+            setCurrent(SEARCH_BAR_DEFAULT.value);
             onClear?.();
           }}
         >
-          ×
+          {SEARCH_BAR_SYMBOL.Clear}
         </button>
       )}
     </div>

@@ -1,15 +1,6 @@
 import { Component } from "react";
-import type { ReactNode } from "react";
-
-export interface ErrorBoundaryProps {
-  children?: ReactNode;
-  fallback?: ReactNode;
-  onError?: (error: Error) => void;
-}
-
-interface ErrorBoundaryState {
-  error: Error | null;
-}
+import { ERROR_BOUNDARY_CLASS, ERROR_BOUNDARY_MESSAGE } from "./consts";
+import type { ErrorBoundaryProps, ErrorBoundaryState } from "./types";
 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   state: ErrorBoundaryState = { error: null };
@@ -26,8 +17,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     if (this.state.error) {
       return (
         this.props.fallback ?? (
-          <div className="pr-error-boundary" role="alert">
-            Something went wrong
+          <div className={ERROR_BOUNDARY_CLASS.root} role="alert">
+            {ERROR_BOUNDARY_MESSAGE}
           </div>
         )
       );

@@ -1,75 +1,38 @@
 import { forwardRef, useCallback, useEffect, useId, useRef, useState } from "react";
-import type { CSSProperties, KeyboardEvent, ReactNode } from "react";
-import type { SlotClassNames } from "@proteus-ui/tokens";
+import type { KeyboardEvent } from "react";
 import { useCloseOnOutsideClick } from "../../hooks/useCloseOnOutsideClick";
+import { AUTO_CLOSE } from "../../hooks/useCloseOnOutsideClick/consts";
 import { useControllableState } from "../../hooks/useControllableState";
 import { cn } from "../../utils/cn";
-import { KEYBOARD_KEYS, NAVIGATION_KEYS } from "../../utils/keyboard";
-
-export type Suggestion = { value: string; label: string; data?: unknown };
-export type ComboboxSlot =
-  | "root"
-  | "input"
-  | "label"
-  | "list"
-  | "option"
-  | "clear"
-  | "toggle"
-  | "announcer"
-  | "error"
-  | "hint";
-
-export interface ComboboxProps {
-  value?: string;
-  defaultValue?: string;
-  onValueChange?: (value: string) => void;
-  suggestions?: readonly Suggestion[];
-  isLoading?: boolean;
-  disabled?: boolean;
-  onlyDigits?: boolean;
-  placeholder?: string;
-  noResultsText?: string;
-  minCharsToSearch?: number;
-  invalid?: boolean;
-  errorMessage?: string;
-  hintMessage?: string;
-  label?: string;
-  onSuggestionSelect?: (s: Suggestion) => void;
-  onClear?: () => void;
-  classNames?: SlotClassNames<ComboboxSlot>;
-  toggleIcon?: ReactNode;
-}
-
-type NavigationKey = (typeof NAVIGATION_KEYS)[number];
-
-const announcerStyle: CSSProperties = {
-  position: "absolute",
-  width: 1,
-  height: 1,
-  padding: 0,
-  margin: -1,
-  overflow: "hidden",
-  clip: "rect(0, 0, 0, 0)",
-  whiteSpace: "nowrap",
-  border: 0,
-};
-
-function isNavigationKey(key: string): key is NavigationKey {
-  return (NAVIGATION_KEYS as readonly string[]).includes(key);
-}
+import { KEYBOARD_KEYS } from "../../utils/keyboard";
+import {
+  ANNOUNCER_STYLE,
+  COMBOBOX_CLASS,
+  COMBOBOX_DEFAULT,
+  COMBOBOX_LABEL,
+  COMBOBOX_OPTION_ID_SUFFIX,
+  COMBOBOX_PATTERN,
+  COMBOBOX_STATE,
+  COMBOBOX_SUGGESTION_KEY_SEP,
+  COMBOBOX_SYMBOL,
+  COMBOBOX_DISPLAY_NAME,
+  DATA_TRUE,
+} from "./consts";
+import type { ComboboxProps, Suggestion } from "./types";
+import { formatSuggestionCount, isNavigationKey } from "./utils";
 
 export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Combobox(
   {
     value: valueProp,
-    defaultValue = "",
+    defaultValue = COMBOBOX_DEFAULT.value,
     onValueChange,
     suggestions = [],
-    isLoading = false,
-    disabled = false,
-    onlyDigits = false,
+    isLoading = COMBOBOX_DEFAULT.isLoading,
+    disabled = COMBOBOX_DEFAULT.disabled,
+    onlyDigits = COMBOBOX_DEFAULT.onlyDigits,
     placeholder,
-    noResultsText = "No results found",
-    minCharsToSearch = 2,
+    noResultsText = COMBOBOX_DEFAULT.noResultsText,
+    minCharsToSearch = COMBOBOX_DEFAULT.minCharsToSearch,
     invalid,
     errorMessage,
     hintMessage,
@@ -109,13 +72,15 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
     (value.length >= minCharsToSearch || (openedByToggle && suggestions.length > 0));
   const canOpen =
     !disabled && !isLoading && (value.length >= minCharsToSearch || suggestions.length > 0);
-  const suggestionValuesKey = suggestions.map((s) => s.value).join("\0");
+  const suggestionValuesKey = suggestions.map((s) => s.value).join(COMBOBOX_SUGGESTION_KEY_SEP);
   const resolvedHighlight =
     showList && highlightedIndex >= 0 && highlightedIndex < suggestions.length
       ? highlightedIndex
       : -1;
   const activeDescendantId =
-    resolvedHighlight >= 0 ? `${listboxId}-option-${resolvedHighlight}` : undefined;
+    resolvedHighlight >= 0
+      ? `${listboxId}-${COMBOBOX_OPTION_ID_SUFFIX}-${resolvedHighlight}`
+      : undefined;
 
   const close = useCallback(() => {
     setIsOpen(false);
@@ -133,7 +98,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
 
   useCloseOnOutsideClick(showList || isOpen, rootRef, close, {
     togglerRef,
-    mode: "outside",
+    mode: AUTO_CLOSE.Outside,
   });
 
   const focusInput = () => {
@@ -150,7 +115,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
 
   const applyInputValue = (next: string) => {
     if (disabled) return;
-    const filtered = onlyDigits ? next.replace(/\D+/g, "") : next;
+    const filtered = onlyDigits ? next.replace(COMBOBOX_PATTERN.NonDigits, "") : next;
     setValue(filtered);
     setIsOpen(true);
     setOpenedByToggle(false);
@@ -170,7 +135,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
 
   const handleClear = () => {
     if (disabled || isLoading) return;
-    setValue("");
+    setValue(COMBOBOX_DEFAULT.value);
     close();
     onClear?.();
     focusInput();
@@ -235,7 +200,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
 
   const announcerText =
     showList && suggestions.length > 0
-      ? `${suggestions.length} suggestion${suggestions.length === 1 ? "" : "s"} available`
+      ? formatSuggestionCount(suggestions.length)
       : showList && suggestions.length === 0 && value.length > 0
         ? noResultsText
         : "";
@@ -253,23 +218,23 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
   return (
     <div
       ref={rootRef}
-      className={cn("pr-combobox", classNames?.root)}
-      data-empty={isEmpty ? "true" : undefined}
-      data-invalid={invalid ? "true" : undefined}
-      data-state={showList ? "open" : "closed"}
-      data-disabled={disabled ? "true" : undefined}
+      className={cn(COMBOBOX_CLASS.root, classNames?.root)}
+      data-empty={isEmpty ? DATA_TRUE : undefined}
+      data-invalid={invalid ? DATA_TRUE : undefined}
+      data-state={showList ? COMBOBOX_STATE.Open : COMBOBOX_STATE.Closed}
+      data-disabled={disabled ? DATA_TRUE : undefined}
     >
       {label != null && label !== "" && (
-        <label htmlFor={inputId} id={labelId} className={cn("pr-combobox__label", classNames?.label)}>
+        <label htmlFor={inputId} id={labelId} className={cn(COMBOBOX_CLASS.label, classNames?.label)}>
           {label}
         </label>
       )}
-      <div className="pr-combobox__control">
+      <div className={COMBOBOX_CLASS.control}>
       <input
         ref={setInputRefs}
         id={inputId}
         role="combobox"
-        className={cn("pr-combobox__field", classNames?.input)}
+        className={cn(COMBOBOX_CLASS.field, classNames?.input)}
         value={value}
         placeholder={placeholder}
         disabled={disabled}
@@ -280,10 +245,10 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
         aria-controls={showList && suggestions.length > 0 ? listboxId : undefined}
         aria-activedescendant={activeDescendantId}
         aria-labelledby={label ? labelId : undefined}
-        aria-invalid={invalid ? "true" : undefined}
+        aria-invalid={invalid ? DATA_TRUE : undefined}
         aria-describedby={describedBy || undefined}
         inputMode={onlyDigits ? "numeric" : undefined}
-        pattern={onlyDigits ? "[0-9]*" : undefined}
+        pattern={onlyDigits ? COMBOBOX_PATTERN.Digits : undefined}
         onChange={(e) => applyInputValue(e.target.value)}
         onFocus={() => {
           setIsFocused(true);
@@ -299,20 +264,20 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
       {showClear && (
         <button
           type="button"
-          className={cn("pr-combobox__clear", classNames?.clear)}
-          aria-label="Clear search"
+          className={cn(COMBOBOX_CLASS.clear, classNames?.clear)}
+          aria-label={COMBOBOX_LABEL.Clear}
           tabIndex={-1}
           onClick={handleClear}
         >
-          ×
+          {COMBOBOX_SYMBOL.Clear}
         </button>
       )}
       {showToggle && (
         <button
           ref={togglerRef}
           type="button"
-          className={cn("pr-combobox__toggle", classNames?.toggle)}
-          aria-label={showList ? "Close suggestions" : "Open suggestions"}
+          className={cn(COMBOBOX_CLASS.toggle, classNames?.toggle)}
+          aria-label={showList ? COMBOBOX_LABEL.CloseSuggestions : COMBOBOX_LABEL.OpenSuggestions}
           aria-expanded={showList}
           tabIndex={-1}
           onPointerDown={(e) => e.preventDefault()}
@@ -322,16 +287,16 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
         </button>
       )}
       {isLoading && (
-        <div role="status" aria-label="Loading suggestions">
-          Loading suggestions
+        <div role="status" aria-label={COMBOBOX_LABEL.Loading}>
+          {COMBOBOX_LABEL.Loading}
         </div>
       )}
       <div
-        className={cn("pr-combobox__announcer", classNames?.announcer)}
+        className={cn(COMBOBOX_CLASS.announcer, classNames?.announcer)}
         role="status"
         aria-live="polite"
         aria-atomic="true"
-        style={announcerStyle}
+        style={ANNOUNCER_STYLE}
       >
         {announcerText}
       </div>
@@ -339,19 +304,19 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
         <ul
           id={listboxId}
           role="listbox"
-          aria-label="Suggestions"
-          className={cn("pr-combobox__list", classNames?.list)}
+          aria-label={COMBOBOX_LABEL.Suggestions}
+          className={cn(COMBOBOX_CLASS.list, classNames?.list)}
         >
           {suggestions.map((suggestion, i) => {
             const selected = i === resolvedHighlight;
             return (
               <li
                 key={suggestion.value}
-                id={`${listboxId}-option-${i}`}
+                id={`${listboxId}-${COMBOBOX_OPTION_ID_SUFFIX}-${i}`}
                 role="option"
-                className={cn("pr-combobox__option", classNames?.option)}
+                className={cn(COMBOBOX_CLASS.option, classNames?.option)}
                 aria-selected={selected}
-                data-highlighted={selected ? "true" : undefined}
+                data-highlighted={selected ? DATA_TRUE : undefined}
                 onPointerDown={(e) => e.preventDefault()}
                 onClick={() => selectSuggestion(suggestion)}
               >
@@ -364,12 +329,12 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
       </div>
       {showNoResults && <div role="status">{noResultsText}</div>}
       {errorMessage ? (
-        <div id={errorId} role="alert" className={cn("pr-combobox__error", classNames?.error)}>
+        <div id={errorId} role="alert" className={cn(COMBOBOX_CLASS.error, classNames?.error)}>
           {errorMessage}
         </div>
       ) : null}
       {hintMessage ? (
-        <div id={hintId} className={cn("pr-combobox__hint", classNames?.hint)}>
+        <div id={hintId} className={cn(COMBOBOX_CLASS.hint, classNames?.hint)}>
           {hintMessage}
         </div>
       ) : null}
@@ -377,4 +342,4 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
   );
 });
 
-Combobox.displayName = "Combobox";
+Combobox.displayName = COMBOBOX_DISPLAY_NAME;

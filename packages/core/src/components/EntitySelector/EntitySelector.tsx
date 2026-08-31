@@ -1,11 +1,8 @@
 import { forwardRef } from "react";
-import { Combobox, type ComboboxProps, type Suggestion } from "../Combobox";
+import { Combobox } from "../Combobox";
 import { cn } from "../../utils/cn";
-
-export interface EntitySelectorProps extends Omit<ComboboxProps, "label"> {
-  label: string;
-  onEntitySelect?: (s: Suggestion) => void;
-}
+import { ENTITY_SELECTOR_CLASS } from "./consts";
+import type { EntitySelectorProps } from "./types";
 
 export const EntitySelector = forwardRef<HTMLInputElement, EntitySelectorProps>(
   function EntitySelector(
@@ -18,7 +15,7 @@ export const EntitySelector = forwardRef<HTMLInputElement, EntitySelectorProps>(
         label={label}
         classNames={{
           ...classNames,
-          root: cn("pr-entity-select", classNames?.root),
+          root: cn(ENTITY_SELECTOR_CLASS.root, classNames?.root),
         }}
         onSuggestionSelect={(s) => {
           onEntitySelect?.(s);

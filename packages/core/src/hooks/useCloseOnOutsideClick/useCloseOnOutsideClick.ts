@@ -1,17 +1,15 @@
 import { useEffect, type RefObject } from "react";
-
-export type AutoClose = "outside" | "inside" | true | false;
+import { AUTO_CLOSE_DEFAULT, CLICK_EVENT } from "./consts";
+import type { UseCloseOnOutsideClickOptions } from "./types";
+import { shouldCloseOnTarget } from "./utils";
 
 export function useCloseOnOutsideClick(
   enabled: boolean,
   panelRef: RefObject<HTMLElement | null>,
   onClose: () => void,
-  opts?: {
-    togglerRef?: RefObject<HTMLElement | null>;
-    mode?: AutoClose;
-  },
+  opts?: UseCloseOnOutsideClickOptions,
 ): void {
-  const mode = opts?.mode ?? "outside";
+  const mode = opts?.mode ?? AUTO_CLOSE_DEFAULT;
   const togglerRef = opts?.togglerRef;
 
   useEffect(() => {
@@ -25,15 +23,10 @@ export function useCloseOnOutsideClick(
       const toggler = togglerRef?.current ?? null;
       const inPanel = Boolean(panel?.contains(target));
       const inToggler = Boolean(toggler?.contains(target));
-
-      let shouldClose = false;
-      if (mode === "outside") shouldClose = !inPanel && !inToggler;
-      else if (mode === "inside") shouldClose = inPanel;
-      else if (mode === true) shouldClose = !inToggler;
-      if (shouldClose) onClose();
+      if (shouldCloseOnTarget(mode, inPanel, inToggler)) onClose();
     };
 
-    document.addEventListener("click", handler, true);
-    return () => document.removeEventListener("click", handler, true);
+    document.addEventListener(CLICK_EVENT, handler, true);
+    return () => document.removeEventListener(CLICK_EVENT, handler, true);
   }, [enabled, panelRef, onClose, mode, togglerRef]);
 }

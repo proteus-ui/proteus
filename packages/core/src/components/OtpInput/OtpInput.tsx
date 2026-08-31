@@ -1,61 +1,34 @@
-import {
-  forwardRef,
-  useEffect,
-  useId,
-  useRef,
-  useState,
-} from "react";
+import { forwardRef, useEffect, useId, useRef, useState } from "react";
 import type { ChangeEvent, ClipboardEvent, KeyboardEvent } from "react";
-import type { SlotClassNames } from "@proteus-ui/tokens";
 import { cn } from "../../utils/cn";
 import { KEYBOARD_KEYS } from "../../utils/keyboard";
-
-export type OtpInputSlot = "root" | "cell" | "error";
-
-export interface OtpInputProps {
-  value?: string;
-  defaultValue?: string;
-  onChange?: (value: string) => void;
-  onComplete?: (value: string) => void;
-  onBlur?: () => void;
-  onValidate?: (value: string, index?: number) => boolean;
-  otpLength?: number;
-  disabled?: boolean;
-  shouldAutoFocus?: boolean;
-  invalid?: boolean;
-  errorMessage?: string;
-  ariaLabel?: string;
-  className?: string;
-  classNames?: SlotClassNames<OtpInputSlot>;
-}
-
-function toCells(joined: string, length: number): string[] {
-  const cells = joined.split("").slice(0, length);
-  while (cells.length < length) cells.push("");
-  return cells;
-}
-
-function resizeCells(cells: string[], length: number): string[] {
-  if (cells.length === length) return cells;
-  const next = cells.slice(0, length);
-  while (next.length < length) next.push("");
-  return next;
-}
+import {
+  DATA_TRUE,
+  OTP_CELL_ID_SUFFIX,
+  OTP_DIGIT_RE,
+  OTP_ERROR_ID_SUFFIX,
+  OTP_INPUT_CLASS,
+  OTP_INPUT_DEFAULT,
+  OTP_NON_DIGIT_RE,
+  OTP_CELL_PATTERN,
+} from "./consts";
+import type { OtpInputProps } from "./types";
+import { resizeCells, toCells } from "./utils";
 
 export const OtpInput = forwardRef<HTMLDivElement, OtpInputProps>(function OtpInput(
   {
     value,
-    defaultValue = "",
+    defaultValue = OTP_INPUT_DEFAULT.value,
     onChange,
     onComplete,
     onBlur,
     onValidate,
-    otpLength = 6,
-    disabled = false,
-    shouldAutoFocus = true,
-    invalid = false,
+    otpLength = OTP_INPUT_DEFAULT.length,
+    disabled = OTP_INPUT_DEFAULT.disabled,
+    shouldAutoFocus = OTP_INPUT_DEFAULT.shouldAutoFocus,
+    invalid = OTP_INPUT_DEFAULT.invalid,
     errorMessage,
-    ariaLabel = "One-time code",
+    ariaLabel = OTP_INPUT_DEFAULT.ariaLabel,
     className,
     classNames,
   },
@@ -64,7 +37,7 @@ export const OtpInput = forwardRef<HTMLDivElement, OtpInputProps>(function OtpIn
   const [cells, setCells] = useState(() => toCells(value ?? defaultValue, otpLength));
   const [validationFailed, setValidationFailed] = useState(false);
   const uid = useId();
-  const errorId = `${uid}-error`;
+  const errorId = `${uid}-${OTP_ERROR_ID_SUFFIX}`;
   const groupRef = useRef<HTMLDivElement | null>(null);
   const cellRefs = useRef<Array<HTMLInputElement | null>>([]);
   const shouldRedirectFocus = useRef(true);
@@ -136,7 +109,7 @@ export const OtpInput = forwardRef<HTMLDivElement, OtpInputProps>(function OtpIn
   const handleChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
     let next = e.target.value;
     if (next.length > 1) next = next.slice(-1);
-    if (next !== "" && !/^\d$/.test(next)) return;
+    if (next !== "" && !OTP_DIGIT_RE.test(next)) return;
 
     const nextCells = cells.map((c, i) => (i === index ? next : c));
     commit(nextCells, index);
@@ -149,7 +122,7 @@ export const OtpInput = forwardRef<HTMLDivElement, OtpInputProps>(function OtpIn
 
   const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const digits = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, otpLength);
+    const digits = e.clipboardData.getData("text").replace(OTP_NON_DIGIT_RE, "").slice(0, otpLength);
     const nextCells = cells.map((c, i) => (i < digits.length ? digits[i]! : c));
     commit(nextCells);
     shouldRedirectFocus.current = false;
@@ -205,24 +178,24 @@ export const OtpInput = forwardRef<HTMLDivElement, OtpInputProps>(function OtpIn
       role="group"
       aria-label={ariaLabel}
       aria-describedby={errorMessage ? errorId : undefined}
-      className={cn("pr-otp", classNames?.root, className)}
-      data-invalid={isInvalid ? "true" : undefined}
-      data-disabled={disabled ? "true" : undefined}
+      className={cn(OTP_INPUT_CLASS.root, classNames?.root, className)}
+      data-invalid={isInvalid ? DATA_TRUE : undefined}
+      data-disabled={disabled ? DATA_TRUE : undefined}
     >
       {cells.map((cell, index) => (
         <input
-          key={`${uid}-cell-${index}`}
-          id={`${uid}-cell-${index}`}
+          key={`${uid}-${OTP_CELL_ID_SUFFIX}-${index}`}
+          id={`${uid}-${OTP_CELL_ID_SUFFIX}-${index}`}
           ref={(node) => {
             cellRefs.current[index] = node;
           }}
           type="tel"
           inputMode="numeric"
-          pattern="[0-9]*"
+          pattern={OTP_CELL_PATTERN}
           maxLength={1}
           disabled={disabled}
-          aria-invalid={isInvalid ? "true" : undefined}
-          className={cn("pr-otp__cell", classNames?.cell)}
+          aria-invalid={isInvalid ? DATA_TRUE : undefined}
+          className={cn(OTP_INPUT_CLASS.cell, classNames?.cell)}
           value={cell}
           onChange={(e) => handleChange(index, e)}
           onPaste={handlePaste}
@@ -232,7 +205,7 @@ export const OtpInput = forwardRef<HTMLDivElement, OtpInputProps>(function OtpIn
         />
       ))}
       {errorMessage ? (
-        <div id={errorId} role="alert" className={cn("pr-otp__error", classNames?.error)}>
+        <div id={errorId} role="alert" className={cn(OTP_INPUT_CLASS.error, classNames?.error)}>
           {errorMessage}
         </div>
       ) : null}

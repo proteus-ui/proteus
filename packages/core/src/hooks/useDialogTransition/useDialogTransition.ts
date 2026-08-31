@@ -1,7 +1,7 @@
 import { useEffect, useState, type RefObject } from "react";
 import { getTransitionDurationMs } from "../../utils/transition";
-
-export type DialogPhase = "open" | "closed";
+import { DIALOG_PHASE } from "./consts";
+import type { DialogPhase, UseDialogTransitionReturn } from "./types";
 
 // Two-phase mount/visibility: separates user intent (`open`) from the
 // transition phase exposed as `data-state`. Enter: mount → rAF → "open".
@@ -9,17 +9,17 @@ export type DialogPhase = "open" | "closed";
 export function useDialogTransition(
   open: boolean,
   ref: RefObject<HTMLElement | null>,
-): { mounted: boolean; phase: DialogPhase } {
+): UseDialogTransitionReturn {
   const [mounted, setMounted] = useState(open);
-  const [phase, setPhase] = useState<DialogPhase>(open ? "open" : "closed");
+  const [phase, setPhase] = useState<DialogPhase>(open ? DIALOG_PHASE.Open : DIALOG_PHASE.Closed);
 
   useEffect(() => {
     if (open) {
       setMounted(true);
-      const raf = requestAnimationFrame(() => setPhase("open"));
+      const raf = requestAnimationFrame(() => setPhase(DIALOG_PHASE.Open));
       return () => cancelAnimationFrame(raf);
     }
-    setPhase("closed");
+    setPhase(DIALOG_PHASE.Closed);
     const timeout = window.setTimeout(
       () => setMounted(false),
       getTransitionDurationMs(ref.current),

@@ -1,22 +1,7 @@
 import { forwardRef } from "react";
-import type { HTMLAttributes } from "react";
-import type { SlotClassNames } from "@proteus-ui/tokens";
 import { cn } from "../../utils/cn";
-
-export type SpinnerSize = "sm" | "md";
-export type SpinnerSlot = "root";
-export type PageLoaderSlot = "root";
-
-export interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {
-  size?: SpinnerSize;
-  label?: string;
-  classNames?: SlotClassNames<SpinnerSlot>;
-}
-
-export interface PageLoaderProps extends HTMLAttributes<HTMLDivElement> {
-  label?: string;
-  classNames?: SlotClassNames<PageLoaderSlot>;
-}
+import { PAGE_LOADER_CLASS, SPINNER_CLASS, SPINNER_DEFAULT } from "./consts";
+import type { PageLoaderProps, SpinnerProps } from "./types";
 
 export const Spinner = forwardRef<HTMLSpanElement, SpinnerProps>(function Spinner(
   { size, label, classNames, className, ...rest },
@@ -25,10 +10,10 @@ export const Spinner = forwardRef<HTMLSpanElement, SpinnerProps>(function Spinne
   return (
     <span
       ref={ref}
-      className={cn("pr-spinner", classNames?.root, className)}
+      className={cn(SPINNER_CLASS.root, classNames?.root, className)}
       {...rest}
       role="status"
-      aria-label={label ?? "Loading"}
+      aria-label={label ?? SPINNER_DEFAULT.label}
       data-size={size}
     />
   );
@@ -39,8 +24,8 @@ export const PageLoader = forwardRef<HTMLDivElement, PageLoaderProps>(function P
   ref,
 ) {
   return (
-    <div ref={ref} className={cn("pr-page-loader", classNames?.root, className)} {...rest}>
-      <Spinner size="md" label={label} />
+    <div ref={ref} className={cn(PAGE_LOADER_CLASS.root, classNames?.root, className)} {...rest}>
+      <Spinner size={SPINNER_DEFAULT.size} label={label} />
     </div>
   );
 });

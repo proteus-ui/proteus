@@ -1,10 +1,9 @@
 import { useCallback, useState } from "react";
+import type { UseControllableStateOptions, UseControllableStateReturn } from "./types";
 
-export function useControllableState<T>(opts: {
-  value?: T;
-  defaultValue: T;
-  onChange?: (next: T) => void;
-}): [T, (next: T) => void] {
+export function useControllableState<T>(
+  opts: UseControllableStateOptions<T>,
+): UseControllableStateReturn<T> {
   const { value, defaultValue, onChange } = opts;
   const [internal, setInternal] = useState<T>(defaultValue);
   const isControlled = value !== undefined;

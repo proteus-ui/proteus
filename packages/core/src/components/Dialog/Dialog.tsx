@@ -1,27 +1,13 @@
 import { useEffect, useId, useRef, useState } from "react";
-import type { MouseEvent, ReactNode } from "react";
+import type { MouseEvent } from "react";
 import { createPortal } from "react-dom";
 import { FocusScope } from "@react-aria/focus";
 import { ariaHideOutside, usePreventScroll } from "@react-aria/overlays";
-import type { SlotClassNames } from "@proteus-ui/tokens";
 import { cn } from "../../utils/cn";
 import { useCloseOnEscape } from "../../hooks/useCloseOnEscape";
 import { useDialogTransition } from "../../hooks/useDialogTransition";
-
-export type DialogSlot = "overlay" | "panel" | "title" | "body" | "actions";
-
-export interface DialogProps {
-  open: boolean;
-  onClose: () => void;
-  title?: ReactNode;
-  actions?: ReactNode;
-  ariaLabel?: string;
-  ariaDescribedBy?: string;
-  closeOnOverlayClick?: boolean;
-  closeOnEscape?: boolean;
-  classNames?: SlotClassNames<DialogSlot>;
-  children?: ReactNode;
-}
+import { DIALOG_ARIA_MODAL, DIALOG_CLASS, DIALOG_DEFAULT, DIALOG_TEST_ID } from "./consts";
+import type { DialogProps } from "./types";
 
 export function Dialog({
   open,
@@ -30,8 +16,8 @@ export function Dialog({
   actions,
   ariaLabel,
   ariaDescribedBy,
-  closeOnOverlayClick = true,
-  closeOnEscape = true,
+  closeOnOverlayClick = DIALOG_DEFAULT.closeOnOverlayClick,
+  closeOnEscape = DIALOG_DEFAULT.closeOnEscape,
   classNames,
   children,
 }: DialogProps) {
@@ -69,31 +55,31 @@ export function Dialog({
   // trigger on unmount, `autoFocus` focuses the first focusable on open.
   return createPortal(
     <div
-      data-testid="pr-dialog-overlay"
+      data-testid={DIALOG_TEST_ID.Overlay}
       data-state={phase}
-      className={cn("pr-dialog-overlay", classNames?.overlay)}
+      className={cn(DIALOG_CLASS.overlay, classNames?.overlay)}
       onMouseDown={onOverlayMouseDown}
     >
       <FocusScope contain restoreFocus autoFocus>
         <div
           ref={panelRef}
           role="dialog"
-          aria-modal="true"
+          aria-modal={DIALOG_ARIA_MODAL}
           aria-label={ariaLabel}
           aria-labelledby={labelledBy}
           aria-describedby={ariaDescribedBy}
           data-state={phase}
           tabIndex={-1}
-          className={cn("pr-dialog", classNames?.panel)}
+          className={cn(DIALOG_CLASS.panel, classNames?.panel)}
         >
           {title != null && (
-            <div id={titleId} className={cn("pr-dialog__title", classNames?.title)}>
+            <div id={titleId} className={cn(DIALOG_CLASS.title, classNames?.title)}>
               {title}
             </div>
           )}
-          <div className={cn("pr-dialog__body", classNames?.body)}>{children}</div>
+          <div className={cn(DIALOG_CLASS.body, classNames?.body)}>{children}</div>
           {actions != null && (
-            <div className={cn("pr-dialog__actions", classNames?.actions)}>{actions}</div>
+            <div className={cn(DIALOG_CLASS.actions, classNames?.actions)}>{actions}</div>
           )}
         </div>
       </FocusScope>
