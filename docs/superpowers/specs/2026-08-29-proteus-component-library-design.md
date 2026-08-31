@@ -272,7 +272,7 @@ type ModalStackContextValue = {
 
 ### css-foundation harvest
 
-The source repo is gone. **Canonical implementable brief:** [`2026-08-29-css-foundation-harvest.md`](./2026-08-29-css-foundation-harvest.md) — full props, reducers, keyboard maps, ARIA tables, edge cases, tests, skip list, and source bugs to fix. Remaining iteration-1 work is [`2026-08-31-behavior-heavy-inputs.md`](../plans/2026-08-31-behavior-heavy-inputs.md). Do not hunt for css-foundation.
+The source repo is gone. **Canonical implementable brief:** [`2026-08-29-css-foundation-harvest.md`](./2026-08-29-css-foundation-harvest.md) — full props, reducers, keyboard maps, ARIA tables, edge cases, tests, skip list, and source bugs to fix. Iteration-1 plans are shipped on `main`; `-like` themes / `createTheme` / modal stack stay on the [Roadmap](#roadmap-post-iteration-1). Do not hunt for css-foundation.
 
 ## Resolved decisions
 
