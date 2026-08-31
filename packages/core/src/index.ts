@@ -22,3 +22,7 @@ export { Card } from "./components/Card";
 export type { CardProps, CardSlot } from "./components/Card";
 export { Section } from "./components/Section";
 export type { SectionProps, SectionSlot } from "./components/Section";
+export { LinkCard } from "./components/LinkCard";
+export type { LinkCardProps, LinkCardSlot } from "./components/LinkCard";
+export { PageFrame } from "./components/PageFrame";
+export type { PageFrameProps, PageFrameSlot } from "./components/PageFrame";
