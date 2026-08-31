@@ -20,6 +20,15 @@ describe("@proteus-ui/theme-default", () => {
     // data-state drives the enter/exit animation (two-phase transition)
     expect(css).toContain('.pr-dialog[data-state="open"]');
     expect(css).toContain("prefers-reduced-motion");
+    expect(css).toContain(".pr-badge");
+    expect(css).toContain(".pr-card");
+    expect(css).toContain(".pr-section");
+    expect(css).toContain(".pr-link-card");
+    expect(css).toContain(".pr-page-frame");
+    expect(css).toContain(".pr-collapse");
+    expect(css).toContain(".pr-toolbar");
+    expect(css).toContain(".pr-spinner");
+    expect(css).toContain(".pr-error-boundary");
     // guardrail: no !important, no descendant nesting of pr- classes
     expect(css).not.toContain("!important");
   });
