@@ -24,6 +24,8 @@ export { NumberStepper } from "./components/NumberStepper";
 export type { NumberStepperProps, NumberStepperSlot } from "./components/NumberStepper";
 export { TimeInput } from "./components/TimeInput";
 export type { TimeInputProps, TimeInputSlot } from "./components/TimeInput";
+export { OtpInput } from "./components/OtpInput";
+export type { OtpInputProps, OtpInputSlot } from "./components/OtpInput";
 export { SearchBar } from "./components/SearchBar";
 export type { SearchBarProps, SearchBarSlot } from "./components/SearchBar";
 export { Combobox } from "./components/Combobox";
