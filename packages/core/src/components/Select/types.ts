@@ -1,6 +1,19 @@
-import type { ComboboxProps } from "../Combobox";
+import type { SlotClassNames } from "@proteus-ui/tokens";
+import type { NavigationKey } from "../../utils/keyboard";
+
+export type { NavigationKey };
 
 export type SelectOption = { value: string; label: string };
+
+export type SelectSlot =
+  | "root"
+  | "input"
+  | "label"
+  | "list"
+  | "option"
+  | "clear"
+  | "toggle"
+  | "announcer";
 
 export interface SelectProps {
   options: readonly SelectOption[];
@@ -11,5 +24,5 @@ export interface SelectProps {
   invalid?: boolean;
   label?: string;
   placeholder?: string;
-  classNames?: ComboboxProps["classNames"];
+  classNames?: SlotClassNames<SelectSlot>;
 }

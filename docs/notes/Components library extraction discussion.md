@@ -24,7 +24,7 @@ Components that actually recur across repos:
 - Tooltip — flow-observer/Visualizer (Radix wrapper)
 - Search / text inputs — flow-observer `SearchBar`, git-timelines `AppInput`/`NumberStepper`/`TimeInput`, id-page gaps
 - Card / Section / LinkCard / PageFrame — id-page (generic), flow-observer (domain cards)
-- CollapsibleSection, ToolbarButton, InlineEditControls, EntitySelector, PageLoader, ErrorBoundary — flow-observer/Visualizer
+- CollapsibleSection, ToolbarButton, InlineEditControls, Select, PageLoader, ErrorBoundary — flow-observer/Visualizer
 - Hooks — `useCloseOnEscape`, `useCloseOnOutsideClick`, `useModalCloseHandlers`, `useInlineEdit`, `useSearchFilter`, `useConfirmation`, `useAsyncOperation` (identical set in flow-observer/Visualizer, reusable everywhere)
 - `cn()` — only id-page has it; everything else needs it
 
@@ -55,7 +55,7 @@ A single scoped package, published to a GitHub repo, e.g. `@tomaszm/ui`:
 
 │ # Input, NumberStepper, CollapsibleSection, ToolbarButton,
 
-│ # InlineEditControls, EntitySelector, PageLoader, ErrorBoundary
+│ # InlineEditControls, Select, PageLoader, ErrorBoundary
 
 ├── hooks/ # useCloseOnEscape, useCloseOnOutsideClick, useInlineEdit,
 

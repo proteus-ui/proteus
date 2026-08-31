@@ -74,7 +74,7 @@ export const OtpInput = forwardRef<HTMLDivElement, OtpInputProps>(function OtpIn
     const firstEmpty = cells.findIndex((c) => c === "");
     const target = firstEmpty === -1 ? 0 : firstEmpty;
     cellRefs.current[target]?.focus();
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- harvest autofocus is mount-only
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- autofocus is mount-only
   }, []);
 
   useEffect(() => {
