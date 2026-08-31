@@ -46,6 +46,7 @@ function mergeTriggerProps(
 ): Record<string, unknown> {
   const merged: Record<string, unknown> = { ...triggerProps };
   for (const [key, value] of Object.entries(triggerProps)) {
+    if (key === "ref") continue;
     const existing = childProps[key];
     if (typeof existing === "function" && typeof value === "function") {
       merged[key] = (...args: unknown[]) => {
