@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 export interface UseInlineEditReturn {
   editing: boolean;
@@ -15,21 +15,25 @@ export function useInlineEdit(initial: string): UseInlineEditReturn {
   const [draft, setDraft] = useState(initial);
   const [editing, setEditing] = useState(false);
 
-  const start = () => {
+  const setDraftValue = useCallback((v: string) => {
+    setDraft(v);
+  }, []);
+
+  const start = useCallback(() => {
     setDraft(value);
     setEditing(true);
-  };
+  }, [value]);
 
-  const commit = () => {
+  const commit = useCallback(() => {
     setValue(draft);
     setEditing(false);
     return draft;
-  };
+  }, [draft]);
 
-  const cancel = () => {
+  const cancel = useCallback(() => {
     setDraft(value);
     setEditing(false);
-  };
+  }, [value]);
 
-  return { editing, draft, setDraft, start, commit, cancel, value };
+  return { editing, draft, setDraft: setDraftValue, start, commit, cancel, value };
 }

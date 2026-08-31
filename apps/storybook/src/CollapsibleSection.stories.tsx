@@ -27,5 +27,10 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const Open: Story = {
-  args: { openIds: ["a"] },
+  args: {
+    items: [
+      { id: "a", title: "First", children: "Panel A", defaultOpen: true },
+      { id: "b", title: "Second", children: "Panel B" },
+    ],
+  },
 };

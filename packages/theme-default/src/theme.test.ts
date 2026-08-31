@@ -27,6 +27,7 @@ describe("@proteus-ui/theme-default", () => {
     expect(css).toContain(".pr-page-frame");
     expect(css).toContain(".pr-collapse");
     expect(css).toContain(".pr-toolbar");
+    expect(css).toContain('.pr-toolbar__button[data-intent="primary"]');
     expect(css).toContain(".pr-spinner");
     expect(css).toContain(".pr-error-boundary");
     // guardrail: no !important, no descendant nesting of pr- classes

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 export function useAsyncOperation(): {
   status: "idle" | "pending" | "success" | "error";
@@ -11,7 +11,7 @@ export function useAsyncOperation(): {
   const [error, setError] = useState<Error | null>(null);
   const generation = useRef(0);
 
-  const run = async (fn: () => Promise<void>) => {
+  const run = useCallback(async (fn: () => Promise<void>) => {
     const gen = ++generation.current;
     setStatus("pending");
     setError(null);
@@ -24,7 +24,7 @@ export function useAsyncOperation(): {
       setError(e instanceof Error ? e : new Error(String(e)));
       setStatus("error");
     }
-  };
+  }, []);
 
   return { status, error, run };
 }

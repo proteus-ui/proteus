@@ -292,6 +292,20 @@
   color: var(--pr-color-on-action-primary);
   border-color: transparent;
 }
+.pr-toolbar__button[data-intent="primary"] {
+  background: var(--pr-color-action-primary);
+  color: var(--pr-color-on-action-primary);
+  border-color: transparent;
+}
+.pr-toolbar__button[data-intent="danger"] {
+  background: var(--pr-color-feedback-error);
+  color: var(--pr-color-on-feedback-error);
+  border-color: transparent;
+}
+.pr-toolbar__button[data-size="sm"] {
+  padding: var(--pr-space-1) var(--pr-space-2);
+  font-size: var(--pr-font-size-sm);
+}
 .pr-toolbar__button[data-disabled] {
   opacity: 0.5;
 }

@@ -34,4 +34,72 @@ describe("CollapsibleSection", () => {
     expect(document.getElementById("accordion-panel-a")).toHaveAttribute("hidden");
     expect(document.getElementById("accordion-panel-a")).toHaveAttribute("data-state", "closed");
   });
+
+  it("items-sync: removing an open id drops that panel and keeps remaining open ids", () => {
+    const bothOpen = [
+      { id: "a", title: "A", children: "Panel A", defaultOpen: true },
+      { id: "b", title: "B", children: "Panel B", defaultOpen: true },
+    ];
+    const { rerender } = render(<CollapsibleSection mode="multiple" items={bothOpen} />);
+    expect(screen.getByText("Panel A")).toBeVisible();
+    expect(screen.getByText("Panel B")).toBeVisible();
+    rerender(
+      <CollapsibleSection
+        mode="multiple"
+        items={[{ id: "b", title: "B", children: "Panel B", defaultOpen: true }]}
+      />,
+    );
+    expect(screen.queryByText("Panel A")).not.toBeInTheDocument();
+    expect(screen.getByText("Panel B")).toBeVisible();
+  });
+
+  it("items-sync: adding an item with defaultOpen opens it (uncontrolled)", () => {
+    const { rerender } = render(
+      <CollapsibleSection
+        mode="multiple"
+        items={[{ id: "a", title: "A", children: "Panel A", defaultOpen: true }]}
+      />,
+    );
+    expect(screen.getByText("Panel A")).toBeVisible();
+    rerender(
+      <CollapsibleSection
+        mode="multiple"
+        items={[
+          { id: "a", title: "A", children: "Panel A", defaultOpen: true },
+          { id: "b", title: "B", children: "Panel B", defaultOpen: true },
+        ]}
+      />,
+    );
+    expect(screen.getByText("Panel A")).toBeVisible();
+    expect(screen.getByText("Panel B")).toBeVisible();
+  });
+
+  it("items-sync: controlled openIds ignores item defaultOpen changes", () => {
+    const { rerender } = render(
+      <CollapsibleSection
+        mode="multiple"
+        openIds={["a"]}
+        items={[
+          { id: "a", title: "A", children: "Panel A" },
+          { id: "b", title: "B", children: "Panel B" },
+        ]}
+      />,
+    );
+    expect(screen.getByText("Panel A")).toBeVisible();
+    expect(screen.queryByText("Panel B")).not.toBeVisible();
+    rerender(
+      <CollapsibleSection
+        mode="multiple"
+        openIds={["a"]}
+        items={[
+          { id: "a", title: "A", children: "Panel A" },
+          { id: "b", title: "B", children: "Panel B", defaultOpen: true },
+          { id: "c", title: "C", children: "Panel C", defaultOpen: true },
+        ]}
+      />,
+    );
+    expect(screen.getByText("Panel A")).toBeVisible();
+    expect(screen.queryByText("Panel B")).not.toBeVisible();
+    expect(screen.queryByText("Panel C")).not.toBeVisible();
+  });
 });

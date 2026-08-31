@@ -26,10 +26,10 @@ export const Spinner = forwardRef<HTMLSpanElement, SpinnerProps>(function Spinne
     <span
       ref={ref}
       className={cn("pr-spinner", classNames?.root, className)}
+      {...rest}
       role="status"
       aria-label={label ?? "Loading"}
       data-size={size}
-      {...rest}
     />
   );
 });
