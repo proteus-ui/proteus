@@ -24,6 +24,8 @@ export { SearchBar } from "./components/SearchBar";
 export type { SearchBarProps, SearchBarSlot } from "./components/SearchBar";
 export { Combobox } from "./components/Combobox";
 export type { Suggestion, ComboboxSlot, ComboboxProps } from "./components/Combobox";
+export { Select } from "./components/Select";
+export type { SelectOption, SelectProps } from "./components/Select";
 export { Dialog } from "./components/Dialog";
 export type { DialogProps, DialogSlot } from "./components/Dialog";
 export { Badge, Pill } from "./components/Badge";
