@@ -1,6 +1,8 @@
 .pr-button {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  text-align: center;
   gap: var(--pr-space-1);
   padding: var(--pr-space-2) var(--pr-space-3);
   border: 1px solid var(--pr-color-border);
