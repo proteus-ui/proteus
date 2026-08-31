@@ -4,6 +4,10 @@ export { useCloseOnEscape } from "./hooks/useCloseOnEscape";
 export { useCloseOnOutsideClick } from "./hooks/useCloseOnOutsideClick";
 export { useInlineEdit } from "./hooks/useInlineEdit";
 export type { UseInlineEditReturn } from "./hooks/useInlineEdit";
+export { useModalCloseHandlers } from "./hooks/useModalCloseHandlers";
+export { useSearchFilter } from "./hooks/useSearchFilter";
+export { useConfirmation } from "./hooks/useConfirmation";
+export { useAsyncOperation } from "./hooks/useAsyncOperation";
 export { Button, IconButton, OutlineButton } from "./components/Button";
 export type {
   ButtonProps,
