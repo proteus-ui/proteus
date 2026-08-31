@@ -1,3 +1,5 @@
+"use client";
+
 export { cn } from "./utils/cn";
 export { KEYBOARD_KEYS, NAVIGATION_KEYS } from "./utils/keyboard";
 export { useControllableState } from "./hooks/useControllableState";

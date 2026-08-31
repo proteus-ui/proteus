@@ -1,24 +1,30 @@
-# Enterprise Design System Architecture & Testing Specification
+# PROTEUS Design System: Architecture & Testing Specification
 
 ## 1. Executive Summary & Design System Philosophy
 
-This document defines the architectural standard, component interface principles, and testing pipeline for an enterprise-grade, framework-agnostic design system.
+This document defines the architectural standard, component interface principles, and zero-flake quality assurance pipeline for the **PROTEUS** enterprise monorepo design system.
 
 ### Core System Principles
 
-1. **Specialized Components Over Monolithic Flags:** Avoid "God Components" that use complex boolean flags (`isIconButton`, `variant="code"`). Use self-documenting, specialized primitives (`<IconButton>`, `<Text.Paragraph>`, `<Text.Code>`).
-2. **Dual Export Strategy:** Support clean DX via dot-notation namespaces (`<Text.Paragraph>`) while exporting standalone primitives (`ParagraphText`) to guarantee 100% build-time tree-shaking.
+1. **Specialized Components Over Monolithic Flags:** Avoid "God Components" that use complex boolean flags (`isIconButton`, `variant="code"`). Use self-documenting, specialized primitives (`<IconButton>`, `<ParagraphText>`, `<CodeText>`, `<Text.Paragraph>`).
+2. **Dual Export Strategy for Perfect Tree-Shaking:** Support clean DX via dot-notation namespaces (`<Text.Paragraph>`) while providing standalone named exports (`ParagraphText`) to guarantee 100% build-time tree-shaking.
 3. **Strict Separation of Concerns:**
-   - `variant`: Defines container rendering and structural style (`solid`, `outline`, `ghost`, `link`).
-   - `size`: Defines universal scale (`xs`, `sm`, `md`, `lg`, `xl`) consistently across **all** system components.
-   - `intent`: Defines semantic color tokens (`primary`, `neutral`, `danger`, `success`).
+  - `variant`: Defines container rendering and structural style (`solid`, `outline`, `ghost`, `link`).
+  - `size`: Defines universal scale (`xs`, `sm`, `md`, `lg`, `xl`) consistently across **all** system components.
+  - `intent`: Defines semantic color tokens (`primary`, `neutral`, `danger`, `success`).
 4. **Layout Hygiene:** Components control internal padding and border geometry. Components **never** apply external margins (`margin`, `top`, `bottom`). All outer spacing is governed by layout primitives (`<Stack>`, `<Grid>`).
 5. **Headless Core + Dual State Control:** Abstract state machines (via Zag.js / pure JS primitives) to power multi-framework wrappers (React, Vue, Web Components). Support both controlled (`value`/`onChange`) and uncontrolled (`defaultValue`) modes natively.
-6. **Self-Hosted Zero-Flake QA Pipeline:** Fast **Vitest** (tokens, hooks, DOM/ARIA) gates every change. Visual, accessibility, and responsive regression then run via **Storybook**, **Playwright**, and **Docker**—no paid SaaS (Chromatic).
+6. **Cloud-Native Zero-Flake QA:** Fast **Vitest** (tokens, hooks, DOM/ARIA) gates every change. Storybook is hosted on **Vercel**. GitHub Actions runs Dockerized **Playwright** against live Vercel Preview URLs—no paid SaaS (Chromatic).
 
 ---
 
-## 2. Component API & Interface Architecture
+
+
+## 2. Component API & Tree-Shaking Architecture
+
+To reconcile clean compound-component DX with modern bundler tree-shaking limitations, components use a **Dual Export Strategy**: standalone named exports plus a namespace object.
+
+
 
 ### A. The Button & IconButton Specification
 
@@ -58,11 +64,14 @@ export interface IconButtonProps
 }
 ```
 
+
+
 ### B. The Text Subcomponent & Tree-Shakable Export Architecture
 
 To achieve clean DX without sacrificing tree-shaking, components are authored as standalone functions, combined into namespaces via Object.assign, and exported both ways.
 
 ```typescript
+// packages/core/src/components/Text/index.ts
 import React, { HTMLAttributes, ReactNode } from 'react';
 
 export interface BaseTextProps {
@@ -137,7 +146,9 @@ export const Text = Object.assign(ParagraphText, {
 // Usage: import { ParagraphText } from '@my-ds/react';
 ```
 
-## 3. Design System Testing Pyramid
+
+
+## 3. The 3-Tier Testing Pyramid
 
 ```
 ┌──────────────────────────────────────────────────────────┐
@@ -157,16 +168,37 @@ No double-testing: Vitest asserts behavior (`data-intent`, class merge, hook sta
 
 ### Responsibility matrix
 
-| Scope | Tool | Example in this repo | Environment | Speed |
-| --- | --- | --- | --- | --- |
-| Token verification & types | Vitest | `packages/tokens/src/index.test.ts` (`expectTypeOf`, token namespace) | Node | ~10ms |
-| Custom React hooks | Vitest + RTL | `packages/core/src/hooks/useAsyncOperation/useAsyncOperation.test.ts` (`renderHook`, `act`) | jsdom | ~50ms |
-| Component micro-DOM / ARIA | Vitest + RTL | `packages/core/src/components/Badge/Badge.test.tsx` (`data-intent`, `data-variant`, `classNames`) | jsdom | ~100ms |
-| Visual & cross-browser layout | Storybook + Playwright | `apps/storybook` + Docker against the Vercel preview URL | Chromium (Docker) | ~2–5s |
+
+| Scope                         | Tool                   | Example in this repo                                                                              | Environment       | Speed  |
+| ----------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------- | ----------------- | ------ |
+| Token verification & types    | Vitest                 | `packages/tokens/src/index.test.ts` (`expectTypeOf`, token namespace)                             | Node              | ~10ms  |
+| Custom React hooks            | Vitest + RTL           | `packages/core/src/hooks/useAsyncOperation/useAsyncOperation.test.ts` (`renderHook`, `act`)       | jsdom             | ~50ms  |
+| Component micro-DOM / ARIA    | Vitest + RTL           | `packages/core/src/components/Badge/Badge.test.tsx` (`data-intent`, `data-variant`, `classNames`) | jsdom             | ~100ms |
+| Visual & cross-browser layout | Storybook + Playwright | `apps/storybook` + Docker against the Vercel preview URL                                          | Chromium (Docker) | ~2–5s  |
+
 
 **Dev loop:** `pnpm test:unit:watch` while editing hooks or primitives — sub-second feedback. Do not wait on Docker or a preview URL for logic.
 
+### Example unit test (`packages/core/src/components/Badge/Badge.test.tsx`)
+
+```typescript
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import { Badge } from "../../../index";
+
+describe("Badge", () => {
+  it("renders badge with default intent and variant", () => {
+    render(<Badge>New</Badge>);
+    const el = screen.getByText("New");
+    expect(el).toHaveClass("pr-badge");
+    expect(el).toHaveAttribute("data-intent", "neutral");
+  });
+});
+```
+
 ---
+
+
 
 ## 4. Root Vitest monorepo configuration
 
@@ -204,6 +236,8 @@ Keep Node environment overrides for token / build tests (today: `environmentMatc
 
 ---
 
+
+
 ## 5. Playwright + Storybook Testing Architecture
 
 By configuring @storybook/test-runner alongside Playwright, we replicate and exceed Chromatic’s testing features: executing story play interaction functions, scanning WCAG accessibility, and taking pixel-diff visual snapshots.
@@ -233,14 +267,16 @@ html {
 }
 ```
 
+
+
 ### B. Storybook Test Runner & Playwright Pipeline
 
 ```typescript
-// .storybook/test-runner.ts
+// apps/storybook/.storybook/test-runner.ts
 import type { TestRunnerConfig } from '@storybook/test-runner';
 import { injectAxe, checkA11y } from 'axe-playwright';
 import { toMatchImageSnapshot } from 'jest-image-snapshot';
-import { BREAKPOINTS } from '../tests/config/breakpoints';
+import { BREAKPOINTS } from '@proteus-ui/tokens';
 
 const config: TestRunnerConfig = {
   setup() {
@@ -327,12 +363,18 @@ const config: TestRunnerConfig = {
 export default config;
 ```
 
+
+
 ## 6. Responsive Design Testing Specification
+
+
 
 ### A. Centralized Breakpoint Tokens
 
+Target: export `BREAKPOINTS` from `@proteus-ui/tokens` so visual tests and themes share one scale. Until that lands, a local `tests/config/breakpoints.ts` is the stand-in.
+
 ```typescript
-// tests/config/breakpoints.ts
+// @proteus-ui/tokens (target) / tests/config/breakpoints.ts (until then)
 export const BREAKPOINTS = {
   sm: { width: 375, height: 667 },   // Mobile
   md: { width: 768, height: 1024 },  // Tablet
@@ -341,7 +383,11 @@ export const BREAKPOINTS = {
 } as const;
 ```
 
+
+
 ### B. Story Configuration Patterns
+
+
 
 #### Selective Viewport Tagging (@media testing)
 
@@ -387,6 +433,8 @@ export const ResponsiveNavbar: StoryObj = {
 };
 ```
 
+
+
 ## 7. Docker Infrastructure setup for Operating System Equality
 
 To eliminate sub-pixel font rendering differences between macOS, Windows, and Linux CI runners, all tests are executed inside Playwright’s standardized Linux Docker container.
@@ -413,6 +461,8 @@ EXPOSE 6006
 CMD ["pnpm", "test:visual:container"]
 ```
 
+
+
 ### B. Package scripts — unit vs visual
 
 Root `package.json`. Vitest is the default local test. Playwright never runs unless asked (`test:visual` / `test:all`).
@@ -422,8 +472,8 @@ Root `package.json`. Vitest is the default local test. Playwright never runs unl
   "name": "proteus-monorepo",
   "private": true,
   "scripts": {
-    "storybook": "pnpm --filter @proteus-ui/storybook storybook",
-    "build-storybook": "pnpm --filter @proteus-ui/storybook build-storybook",
+    "dev:storybook": "pnpm --filter @proteus-ui/storybook storybook",
+    "build:storybook": "pnpm --filter @proteus-ui/storybook build-storybook",
 
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
@@ -438,19 +488,107 @@ Root `package.json`. Vitest is the default local test. Playwright never runs unl
 }
 ```
 
-Today `pnpm test` / `pnpm test:watch` are the Vitest aliases. When this split lands, keep `test` as `test:unit` or a thin alias so existing muscle memory still hits jsdom, not Docker.
+Today `pnpm test` / `pnpm test:watch` are the Vitest aliases, and Storybook is `pnpm storybook` / `pnpm build-storybook`. When this split lands, keep `test` as `test:unit` (or a thin alias) so existing muscle memory still hits jsdom, not Docker. Prefer `dev:storybook` / `build:storybook` as the canonical Storybook scripts.
 
 ---
 
-## 8. Continuous Integration (GitHub Actions) & Diff Reporting
 
-Run Vitest first. It finishes in a few seconds; a broken hook or `data-*` contract fails the build before Vercel wait or Docker/Playwright. Visual QA is `needs: unit-tests` and hits the **Vercel preview URL**, not a locally built Storybook, so CI sees the same CSS the preview serves.
+
+## 8. Vercel & Storybook Deployment Integration
+
+Storybook is hosted as an independent app inside `apps/storybook` (`@proteus-ui/storybook`). A Vercel project on the monorepo root builds that app so every PR gets a preview URL Playwright can hit.
+
+### Vercel project settings
+
+- Root Directory: `.`
+- Build Command: `pnpm --filter @proteus-ui/storybook build-storybook`
+- Output Directory: `apps/storybook/storybook-static`
+
+---
+
+## 9. Git LFS & ChatOps Snapshot Automation
+
+To prevent git repository bloat from baseline PNG images, Git LFS tracks all snapshot files. Developers can update snapshots from a PR by commenting `/update-snapshots`.
+
+### `.gitattributes`
+
+```text
+**/__snapshots__/**/*.png filter=lfs diff=lfs merge=lfs -text
+```
+
+### ChatOps update workflow (`.github/workflows/update-snapshots.yml`)
+
+```yaml
+name: Update Visual Snapshots (ChatOps)
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  update-baselines:
+    if: ${{ github.event.issue.pull_request && github.event.comment.body == '/update-snapshots' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Acknowledge Command
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          reactions: eyes
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Checkout PR Branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr checkout ${{ github.event.issue.number }}
+
+      - name: Setup pnpm & Node
+        uses: pnpm/action-setup@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Update Visual Snapshots
+        run: pnpm test:visual:update
+
+      - name: Commit and Push Updated Snapshots
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(testing): 📸 update visual snapshots"
+          file_pattern: "**/__snapshots__/**/*.png"
+
+      - name: Report Success
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          reactions: hooray
+```
+
+---
+
+## 10. Continuous Integration (GitHub Actions) & Diff Reporting
+
+Run Vitest first. It finishes in a few seconds; a broken hook or `data-*` contract fails the build before Vercel wait or Docker/Playwright. Visual QA is `needs: unit-tests` and hits the **Vercel preview URL**, not a locally built Storybook, so CI sees the same CSS the preview serves. Checkout uses Git LFS so baseline PNGs are present before Docker starts.
 
 When visual or a11y fails, Playwright’s HTML report (side-by-side diffs, axe traces) uploads as a GitHub Actions artifact.
 
 ```yaml
 # .github/workflows/ci.yml
-name: CI Quality Gate
+name: PROTEUS Quality Gate
 
 on:
   push:
@@ -480,6 +618,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
       - name: Wait for Vercel Preview Deployment
         uses: patrickedqvist/wait-for-vercel-preview@v1.3.0
         id: vercel_preview
@@ -505,24 +646,31 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playwright-visual-diffs
-          path: |
-            apps/storybook/__snapshots__/__diff_output__/
+          path: apps/storybook/__snapshots__/__diff_output__/
           retention-days: 7
 ```
 
 ---
 
-## 9. Operational Summary & Verification Matrix
 
-| Domain | Architectural Rule | Verification Tool |
-| --- | --- | --- |
-| Tokens & types | Semantic token names and TypeScript contract stay valid. | Vitest (Node) — `packages/tokens`. |
-| Hooks | Controlled/uncontrolled and async state machines behave. | Vitest + RTL (`renderHook`) — `packages/core/src/hooks`. |
-| Component DOM / ARIA | Slots, `data-*`, class merge, accessible names. | Vitest + RTL (jsdom) — e.g. `Badge.test.tsx`. |
-| Component Tree-Shaking | Export standalone functions + namespace objects (Text.Paragraph & ParagraphText). | Rollup / esbuild bundle analysis. |
-| API Consistency | Universal size scale (xs-xl) across all primitives; variant restricted to visual styling. | TypeScript interface inspection. |
-| Layout Safety | Zero outer margins on primitives. Spacing governed by layout wrappers (`<Stack>`). | Playwright visual regression. |
-| Accessibility (a11y) | 100% WCAG 2.1 AA compliance; automated ID linkage via `useId()`. | axe-playwright in Storybook test-runner. |
-| Visual Stability | CSS animation zeroing, caret hiding, font readiness locks, and frozen system clocks. | Playwright screenshot diff engine. |
-| Cross-Platform Parity | Local & CI visual snapshots executed strictly inside Linux Docker containers. | Docker / GitHub Actions runner. |
-| CI cost | Logic failures never start Docker or wait on Vercel. | `visual-qa` `needs: unit-tests`. |
+
+## 11. Operational Summary & Verification Matrix
+
+
+| Domain                 | Architectural Rule                                                                        | Verification Tool                                        |
+| ---------------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| Tokens & types         | Semantic token names and TypeScript contract stay valid.                                  | Vitest (Node) — `packages/tokens`.                       |
+| Hooks                  | Controlled/uncontrolled and async state machines behave.                                  | Vitest + RTL (`renderHook`) — `packages/core/src/hooks`. |
+| Component DOM / ARIA   | Slots, `data-*`, class merge, accessible names.                                           | Vitest + RTL (jsdom) — e.g. `Badge.test.tsx`.            |
+| Component Tree-Shaking | Export standalone functions + namespace objects (Text.Paragraph & ParagraphText).         | Rollup / esbuild bundle analysis.                        |
+| API Consistency        | Universal size scale (xs-xl) across all primitives; variant restricted to visual styling. | TypeScript interface inspection.                         |
+| Layout Safety          | Zero outer margins on primitives. Spacing governed by layout wrappers (`<Stack>`).        | Playwright visual regression.                            |
+| Accessibility (a11y)   | 100% WCAG 2.1 AA compliance; automated ID linkage via `useId()`.                          | axe-playwright in Storybook test-runner.                 |
+| Visual Stability       | CSS animation zeroing, caret hiding, font readiness locks, and frozen system clocks.      | Playwright screenshot diff engine.                       |
+| Cross-Platform Parity  | Local & CI visual snapshots executed strictly inside Linux Docker containers.             | Docker / GitHub Actions runner.                          |
+| CI cost                | Logic failures never start Docker or wait on Vercel.                                      | `visual-qa` `needs: unit-tests`.                         |
+| Storybook hosting      | Preview is the Storybook static app on Vercel, not a local `http-server` in CI.           | Vercel project: root `.`, output `apps/storybook/storybook-static`. |
+| Snapshot storage       | Baseline PNGs live in Git LFS, not the regular git object store.                          | `.gitattributes` `**/__snapshots__/**/*.png`.            |
+| Baseline updates       | Developers refresh snapshots from the PR without a local Docker run.                      | ChatOps comment `/update-snapshots`.                     |
+
+
