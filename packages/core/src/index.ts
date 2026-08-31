@@ -1,7 +1,9 @@
 export { cn } from "./utils/cn";
+export { KEYBOARD_KEYS, NAVIGATION_KEYS } from "./utils/keyboard";
 export { useControllableState } from "./hooks/useControllableState";
 export { useCloseOnEscape } from "./hooks/useCloseOnEscape";
 export { useCloseOnOutsideClick } from "./hooks/useCloseOnOutsideClick";
+export type { AutoClose } from "./hooks/useCloseOnOutsideClick";
 export { useInlineEdit } from "./hooks/useInlineEdit";
 export type { UseInlineEditReturn } from "./hooks/useInlineEdit";
 export { useModalCloseHandlers } from "./hooks/useModalCloseHandlers";

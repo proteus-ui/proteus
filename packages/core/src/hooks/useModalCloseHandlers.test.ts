@@ -15,7 +15,7 @@ describe("useModalCloseHandlers", () => {
     renderHook(() => useModalCloseHandlers(true, panelRef, onClose));
     fireEvent.keyDown(document, { key: "Escape" });
     expect(onClose).toHaveBeenCalledTimes(1);
-    fireEvent.mouseDown(outside);
+    fireEvent.click(outside);
     expect(onClose).toHaveBeenCalledTimes(2);
 
     panel.remove();
@@ -32,7 +32,7 @@ describe("useModalCloseHandlers", () => {
 
     renderHook(() => useModalCloseHandlers(false, panelRef, onClose));
     fireEvent.keyDown(document, { key: "Escape" });
-    fireEvent.mouseDown(outside);
+    fireEvent.click(outside);
     expect(onClose).not.toHaveBeenCalled();
 
     panel.remove();
