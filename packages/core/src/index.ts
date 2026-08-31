@@ -26,3 +26,11 @@ export { LinkCard } from "./components/LinkCard";
 export type { LinkCardProps, LinkCardSlot } from "./components/LinkCard";
 export { PageFrame } from "./components/PageFrame";
 export type { PageFrameProps, PageFrameSlot } from "./components/PageFrame";
+export { CollapsibleSection } from "./components/CollapsibleSection";
+export type {
+  CollapsibleItem,
+  CollapsibleMode,
+  CollapsibleSectionProps,
+  CollapsibleSectionSlot,
+} from "./components/CollapsibleSection";
+
