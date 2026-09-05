@@ -12,6 +12,13 @@ const options = [
 const meta = {
   title: "Components/Select",
   component: Select,
+  parameters: {
+    docs: {
+      description: {
+        component: "Choose one option from a list. Selection uses `value` / `onValueChange`.",
+      },
+    },
+  },
   args: {
     options,
     placeholder: "Choose a fruit…",

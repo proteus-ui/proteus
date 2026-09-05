@@ -4,6 +4,14 @@ import { CollapsibleSection } from "@proteus-ui/core";
 const meta = {
   title: "Components/CollapsibleSection",
   component: CollapsibleSection,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Expandable items. `mode` is `single` or `multiple`. Each child is a `CollapsibleSection.Item`.",
+      },
+    },
+  },
   argTypes: {
     mode: { control: "select", options: ["single", "multiple"] },
     openIds: { control: false },

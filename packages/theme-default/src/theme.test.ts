@@ -52,6 +52,8 @@ describe("@proteus-ui/theme-default", () => {
     expect(css).toContain(".pr-otp");
     expect(css).toContain(".pr-otp__cell");
     expect(css).toContain(".pr-tooltip");
+    expect(css).toContain(".pr-text {");
+    expect(css).toContain('.pr-text[data-tag="h1"]');
     // guardrail: no !important, no descendant nesting of pr- classes
     expect(css).not.toContain("!important");
   });

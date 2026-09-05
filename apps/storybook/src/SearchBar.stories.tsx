@@ -5,6 +5,13 @@ import { SearchBar } from "@proteus-ui/core";
 const meta = {
   title: "Components/SearchBar",
   component: SearchBar,
+  parameters: {
+    docs: {
+      description: {
+        component: "Search field with a clear control. Value uses `onValueChange`.",
+      },
+    },
+  },
   args: {
     defaultValue: "",
     placeholder: "Search…",

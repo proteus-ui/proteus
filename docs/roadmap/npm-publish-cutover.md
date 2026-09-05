@@ -40,7 +40,7 @@ Do Proteus first. Only then change job-inbox.
    }
    ```
 
-   CSS exports stay on `src` (`./styles.css`, `./tokens.css`, `./theme.css`). Shrink `files` to `dist` plus those CSS files if you do not want to ship all of `src`.
+   CSS exports stay on `src` (`./styles.css`, `./tokens.css`, `./theme.css`). Keep `./eslint` on `./eslint/index.js` and include `eslint/` in `files`. Shrink `files` to `dist` plus those CSS files and `eslint/` if you do not want to ship all of `src`.
 4. **`workspace:*`.** Leave it in the repo. `pnpm publish` rewrites it to the real version in the tarball. Do not replace it with a git URL.
 5. **Build.** From the monorepo root:
 

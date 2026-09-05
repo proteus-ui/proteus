@@ -16,8 +16,29 @@ function slotList(slots: Record<string, unknown>): string {
   return Object.keys(slots).join(", ");
 }
 
+function typeName(type: unknown): string | undefined {
+  if (type == null || (typeof type !== "function" && typeof type !== "object")) return undefined;
+  const tagged = type as { $$proteusSlot?: string; displayName?: string };
+  return tagged.$$proteusSlot ?? tagged.displayName;
+}
+
+function matchSlot<T extends Record<string, ElementType>>(
+  childType: unknown,
+  slots: T,
+  typeToKey: Map<unknown, keyof T>,
+): keyof T | undefined {
+  const byRef = typeToKey.get(childType);
+  if (byRef != null) return byRef;
+  const name = typeName(childType);
+  if (name == null) return undefined;
+  for (const key of Object.keys(slots) as (keyof T)[]) {
+    if (typeName(slots[key]) === name) return key;
+  }
+  return undefined;
+}
+
 export function collectNamedSlots<T extends Record<string, ElementType>>(
-  children: ReactNode,
+  children: unknown,
   slots: T,
   parentName: string,
 ): { [K in keyof T]?: ReactElement<ComponentProps<T[K]>, T[K]> } {
@@ -26,12 +47,12 @@ export function collectNamedSlots<T extends Record<string, ElementType>>(
     typeToKey.set(slots[key], key);
   }
   const found: { [K in keyof T]?: ReactElement<ComponentProps<T[K]>, T[K]> } = {};
-  Children.forEach(children, (child, index) => {
+  Children.forEach(children as ReactNode, (child, index) => {
     if (child == null || typeof child === "boolean" || isBlankText(child)) return;
     if (!isValidElement(child)) {
       throw new Error(COMPOUND_ERROR.InvalidChild(parentName, slotList(slots), index));
     }
-    const key = typeToKey.get(child.type);
+    const key = matchSlot(child.type, slots, typeToKey);
     if (key == null) {
       throw new Error(COMPOUND_ERROR.InvalidChild(parentName, slotList(slots), index));
     }
@@ -44,15 +65,21 @@ export function collectNamedSlots<T extends Record<string, ElementType>>(
 }
 
 export function collectRepeatingSlot<C extends ElementType>(
-  children: ReactNode,
+  children: unknown,
   slot: C,
   parentName: string,
   slotName: string,
 ): ReactElement<ComponentProps<C>, C>[] {
   const items: ReactElement<ComponentProps<C>, C>[] = [];
-  Children.forEach(children, (child, index) => {
+  const expectedName = typeName(slot);
+  Children.forEach(children as ReactNode, (child, index) => {
     if (child == null || typeof child === "boolean" || isBlankText(child)) return;
-    if (!isValidElement(child) || child.type !== slot) {
+    if (!isValidElement(child)) {
+      throw new Error(COMPOUND_ERROR.InvalidChild(parentName, slotName, index));
+    }
+    const sameRef = child.type === slot;
+    const sameName = expectedName != null && typeName(child.type) === expectedName;
+    if (!sameRef && !sameName) {
       throw new Error(COMPOUND_ERROR.InvalidChild(parentName, slotName, index));
     }
     items.push(child as ReactElement<ComponentProps<C>, C>);

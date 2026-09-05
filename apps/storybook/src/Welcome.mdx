@@ -1,0 +1,162 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import pkg from "../../../packages/core/package.json";
+
+<Meta title="Getting started/Welcome" />
+
+<h1>{pkg.name}</h1>
+
+<p>v{pkg.version}</p>
+
+[GitHub repo](https://github.com/proteus-ui/proteus)
+
+Proteus is a small React library with a stubborn split: **components do the work, themes do the look.** You get markup, accessibility, and state from core. Color, type, and radius come from a stylesheet. Nothing in core invents styles at runtime — no CSS-in-JS, no theme provider, no style registry.
+
+If you already write CSS (or Tailwind), you can keep doing that. Proteus just gives you stable hooks to hang it on.
+
+## The three packages
+
+Think of it as a contract in the middle, with behavior on one side and paint on the other.
+
+<table>
+  <thead>
+    <tr>
+      <th>Package</th>
+      <th>What it is</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>@proteus-ui/core</code></td>
+      <td>The components. They render real HTML, handle keyboard and focus, and stamp <code>pr-</code> classes plus <code>data-*</code> attributes.</td>
+    </tr>
+    <tr>
+      <td><code>@proteus-ui/tokens</code></td>
+      <td>The written contract: slot names, <code>data-*</code> words, and CSS variable names. Themes and core both agree on this list.</td>
+    </tr>
+    <tr>
+      <td><code>@proteus-ui/theme-default</code></td>
+      <td>The default look — token values and the CSS that targets those classes and attributes.</td>
+    </tr>
+    <tr>
+      <td><code>@proteus-ui/theme-*-like</code></td>
+      <td>Later. Same components, different skin (Material-ish, Ant-ish). Not shipped yet.</td>
+    </tr>
+  </tbody>
+</table>
+
+Want a different look? Swap the theme stylesheet. You do not restyle each component in JS.
+
+## How styling actually works
+
+Three things are public API. Rename any of them and you break every theme and every consumer.
+
+**Slots.** Parts of a component have names — `root`, `icon`, `title`. You pass a `classNames` map. The string can be Tailwind, a CSS module hash, or a class you wrote in a `.css` file. Proteus never looks inside it.
+
+Tailwind — utilities go on the slot, states use the same `data-*` the component already emits:
+
+```tsx
+<Button
+  intent="danger"
+  icon={<Trash />}
+  classNames={{
+    root: "rounded-full px-6 shadow-sm data-[disabled]:opacity-40",
+    icon: "text-amber-500",
+  }}
+>
+  Delete
+</Button>
+```
+
+CSS Modules — keep the class local, still hang it on the slot:
+
+```css
+/* SaveButton.module.css */
+.root {
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+}
+.icon {
+  color: #f59e0b;
+}
+```
+
+```tsx
+import styles from "./SaveButton.module.css";
+
+<Button classNames={{ root: styles.root, icon: styles.icon }}>Save</Button>
+```
+
+Plain CSS is the same idea: write `.my-cta { … }` and pass `classNames={{ root: "my-cta" }}`.
+
+**`data-*`.** State lives on the DOM. Disabled is `data-disabled`. A danger button is `data-intent="danger"`. An open dialog is `data-state="open"`. You write CSS against those, the same way you would against `:hover`. In Tailwind that is `data-[state=open]:…`. In a stylesheet it is `.pr-dialog[data-state="open"]`.
+
+**Tokens.** CSS variables named for meaning, not color: `--pr-color-action-primary`, `--pr-color-text`. Never `--pr-pink-500`. Dark mode or a rebrand is a new set of values for the same names.
+
+Core’s own CSS is boring on purpose: `pr-` prefix, one class, no nesting, no `!important`. The theme paints. Your class wins over ours.
+
+## Why bother, if MUI already exists
+
+We are not the library everyone already has in `package.json`. We do not have a date picker, a data grid, or a component for every tag in the HTML spec. That is on purpose.
+
+Where this *is* the better tool:
+
+**You keep your styling stack.** Most popular libraries marry you to one engine — Emotion, styled-components, their own `sx`, or a Tailwind-only kit. Proteus does not. The same `Button` works in a Tailwind app, a CSS-modules app, and a plain-CSS app. We encourage you to keep writing styles the way the rest of the repo already does.
+
+**Appearance is a file, not a runtime.** No theme provider, no style injection on the server, no `useServerInsertedHTML`. Import CSS. Next App Router does not have to treat the design system as a special client island. That is a technical win even when the catalog is small.
+
+**The contract is small and frozen.** Slot names, `data-*` words, and token names are SemVer. Other libraries rename internals and call it a minor. We treat those names as the product, because every theme and every override hangs on them.
+
+**Overrides are first-class.** You do not fight `!important` or a seven-layer specificity tower. You pass a class, or you target `[data-intent="danger"]`. We support that path; we do not hide the DOM behind an unreadable `styled()` tree.
+
+**One core, many skins — later.** A Material-ish or Ant-ish theme is a stylesheet over the same components, not a fork. You are not choosing “the MUI way of dialogs” vs “the Ant way of dialogs.” You choose a look.
+
+**Behavior stays ours; domain UI stays yours.** We allow (and prefer) the inbox row, the job filter, the brand banner to live in the app and *compose* Proteus. The library is primitives plus a few hard widgets (dialog, select, tooltip), not a second product.
+
+If you need a data grid next week, use someone else’s. If you want buttons, inputs, and dialogs that will still look like *your* product in two years, this is the shape we think libraries should have been all along.
+
+## What we will not do
+
+Core does not pick your brand pink. The theme does not run a focus trap. Those jobs stay on their own sides of the fence.
+
+We are not racing MUI on component count. Job-specific UI stays in the app.
+
+A `theme-material-like` would *look* a bit like Material. It would still *behave* like Proteus.
+
+Components do not add outer margin. If two things need a gap, that is your layout’s problem — Stack, Grid, or a few lines of CSS.
+
+## Props that mean the same thing everywhere
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>What it means</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>intent</code></td>
+      <td>Why it is colored: <code>neutral</code>, <code>primary</code>, <code>danger</code>.</td>
+    </tr>
+    <tr>
+      <td><code>size</code></td>
+      <td>How big: <code>sm</code>, <code>md</code>, and so on. Same scale across components.</td>
+    </tr>
+    <tr>
+      <td><code>variant</code></td>
+      <td>Skin of the *same* element — <code>solid</code> vs <code>outline</code>. Not “which HTML tag.”</td>
+    </tr>
+    <tr>
+      <td><code>classNames</code></td>
+      <td>Your classes, keyed by slot.</td>
+    </tr>
+    <tr>
+      <td><code>onValueChange</code> / <code>onCheckedChange</code></td>
+      <td>How controlled values update. Not native <code>onChange</code>.</td>
+    </tr>
+  </tbody>
+</table>
+
+`Card`, `Section`, `Dialog` and friends are parents with named children. Only those slot components are allowed inside.
+
+`Text` is different: it is a bag of tags (`Text.H1`, `Text.P`, `Text.Span`). Write `<Text.P>`, not `<Text>`. `<Text>` itself does not render.

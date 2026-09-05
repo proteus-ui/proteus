@@ -4,6 +4,14 @@ import { Button, Tooltip } from "@proteus-ui/core";
 const meta = {
   title: "Components/Tooltip",
   component: Tooltip,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Short hint shown on hover or focus. Compose with `Tooltip.Trigger` and `Tooltip.Content`.",
+      },
+    },
+  },
   args: {
     delay: 0,
     placement: "top",

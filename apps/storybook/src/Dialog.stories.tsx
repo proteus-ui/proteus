@@ -5,6 +5,14 @@ import { Dialog } from "@proteus-ui/core";
 const meta = {
   title: "Components/Dialog",
   component: Dialog,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Modal dialog that traps focus while open. Compose with `Dialog.Title`, `Dialog.Body`, and `Dialog.Actions`.",
+      },
+    },
+  },
   args: {
     open: false,
     onClose: fn(),

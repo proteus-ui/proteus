@@ -5,6 +5,13 @@ import { NumberStepper } from "@proteus-ui/core";
 const meta = {
   title: "Components/NumberStepper",
   component: NumberStepper,
+  parameters: {
+    docs: {
+      description: {
+        component: "Numeric value with increment and decrement. Value uses `onValueChange`.",
+      },
+    },
+  },
   args: {
     defaultValue: 0,
     min: 0,

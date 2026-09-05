@@ -15,4 +15,9 @@
   --pr-font-sans: system-ui, sans-serif;
   --pr-font-size-sm: 13px;
   --pr-font-size-md: 15px;
+  --pr-font-size-lg: 18px;
+  --pr-font-size-xl: 24px;
+  --pr-font-size-2xl: 32px;
+  --pr-font-weight-semibold: 600;
+  --pr-font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 }

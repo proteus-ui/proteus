@@ -1,7 +1,7 @@
 import { createContext, forwardRef, useContext, useId } from "react";
 import type { SlotClassNames } from "@proteus-ui/tokens";
 import { cn } from "../../utils/cn";
-import { collectNamedSlots } from "../../utils/compound";
+import { asSlot, collectNamedSlots } from "../../utils/compound";
 import { SECTION_CLASS, SECTION_DISPLAY_NAME } from "./consts";
 import type { SectionBodyProps, SectionProps, SectionSlot, SectionTitleProps } from "./types";
 
@@ -12,36 +12,40 @@ type SectionContextValue = {
 
 const SectionContext = createContext<SectionContextValue | undefined>(undefined);
 
-export const SectionTitle = forwardRef<HTMLHeadingElement, SectionTitleProps>(function SectionTitle(
-  { className, children, ...rest },
-  ref,
-) {
-  const ctx = useContext(SectionContext);
-  return (
-    <h2
-      ref={ref}
-      id={ctx?.titleId}
-      className={cn(SECTION_CLASS.title, ctx?.classNames?.title, className)}
-      {...rest}
-    >
-      {children}
-    </h2>
-  );
-});
-SectionTitle.displayName = SECTION_DISPLAY_NAME.Title;
+export const SectionTitle = asSlot(
+  SECTION_DISPLAY_NAME.Title,
+  forwardRef<HTMLHeadingElement, SectionTitleProps>(function SectionTitle(
+    { className, children, ...rest },
+    ref,
+  ) {
+    const ctx = useContext(SectionContext);
+    return (
+      <h2
+        ref={ref}
+        id={ctx?.titleId}
+        className={cn(SECTION_CLASS.title, ctx?.classNames?.title, className)}
+        {...rest}
+      >
+        {children}
+      </h2>
+    );
+  }),
+);
 
-export const SectionBody = forwardRef<HTMLDivElement, SectionBodyProps>(function SectionBody(
-  { className, children, ...rest },
-  ref,
-) {
-  const ctx = useContext(SectionContext);
-  return (
-    <div ref={ref} className={cn(SECTION_CLASS.body, ctx?.classNames?.body, className)} {...rest}>
-      {children}
-    </div>
-  );
-});
-SectionBody.displayName = SECTION_DISPLAY_NAME.Body;
+export const SectionBody = asSlot(
+  SECTION_DISPLAY_NAME.Body,
+  forwardRef<HTMLDivElement, SectionBodyProps>(function SectionBody(
+    { className, children, ...rest },
+    ref,
+  ) {
+    const ctx = useContext(SectionContext);
+    return (
+      <div ref={ref} className={cn(SECTION_CLASS.body, ctx?.classNames?.body, className)} {...rest}>
+        {children}
+      </div>
+    );
+  }),
+);
 
 const SectionRoot = forwardRef<HTMLElement, SectionProps>(function Section(
   { classNames, className, children, "aria-labelledby": ariaLabelledby, ...rest },

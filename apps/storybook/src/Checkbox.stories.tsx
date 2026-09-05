@@ -4,6 +4,14 @@ import { Checkbox } from "@proteus-ui/core";
 const meta = {
   title: "Components/Checkbox",
   component: Checkbox,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Binary choice with an optional visible label. Use `onCheckedChange` instead of native `onChange`.",
+      },
+    },
+  },
   args: {
     label: "Remote",
     defaultChecked: false,

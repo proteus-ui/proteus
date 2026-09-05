@@ -33,6 +33,11 @@ export const TOKEN_VARS = [
   "--pr-font-sans",
   "--pr-font-size-sm",
   "--pr-font-size-md",
+  "--pr-font-size-lg",
+  "--pr-font-size-xl",
+  "--pr-font-size-2xl",
+  "--pr-font-weight-semibold",
+  "--pr-font-mono",
 ] as const;
 
 export type TokenVar = (typeof TOKEN_VARS)[number];

@@ -5,6 +5,13 @@ import { TimeInput } from "@proteus-ui/core";
 const meta = {
   title: "Components/TimeInput",
   component: TimeInput,
+  parameters: {
+    docs: {
+      description: {
+        component: "Time-of-day field. Value uses `onValueChange`.",
+      },
+    },
+  },
   args: {
     defaultValue: "",
     disabled: false,

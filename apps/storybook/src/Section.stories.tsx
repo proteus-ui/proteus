@@ -4,6 +4,14 @@ import { Section } from "@proteus-ui/core";
 const meta = {
   title: "Components/Section",
   component: Section,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Landmark region. Compose with optional `Section.Title` and `Section.Body`.",
+      },
+    },
+  },
 } satisfies Meta<typeof Section>;
 
 export default meta;

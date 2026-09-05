@@ -1,7 +1,7 @@
 import { createContext, forwardRef, useContext } from "react";
 import type { SlotClassNames } from "@proteus-ui/tokens";
 import { cn } from "../../utils/cn";
-import { collectNamedSlots } from "../../utils/compound";
+import { asSlot, collectNamedSlots } from "../../utils/compound";
 import { PAGE_FRAME_CLASS, PAGE_FRAME_DISPLAY_NAME } from "./consts";
 import type {
   PageFrameFooterProps,
@@ -15,8 +15,12 @@ const PageFrameClassNamesContext = createContext<SlotClassNames<PageFrameSlot> |
   undefined,
 );
 
-export const PageFrameHeader = forwardRef<HTMLElement, PageFrameHeaderProps>(
-  function PageFrameHeader({ className, children, ...rest }, ref) {
+export const PageFrameHeader = asSlot(
+  PAGE_FRAME_DISPLAY_NAME.Header,
+  forwardRef<HTMLElement, PageFrameHeaderProps>(function PageFrameHeader(
+    { className, children, ...rest },
+    ref,
+  ) {
     const classNames = useContext(PageFrameClassNamesContext);
     return (
       <header
@@ -27,25 +31,30 @@ export const PageFrameHeader = forwardRef<HTMLElement, PageFrameHeaderProps>(
         {children}
       </header>
     );
-  },
+  }),
 );
-PageFrameHeader.displayName = PAGE_FRAME_DISPLAY_NAME.Header;
 
-export const PageFrameMain = forwardRef<HTMLElement, PageFrameMainProps>(function PageFrameMain(
-  { className, children, ...rest },
-  ref,
-) {
-  const classNames = useContext(PageFrameClassNamesContext);
-  return (
-    <main ref={ref} className={cn(PAGE_FRAME_CLASS.main, classNames?.main, className)} {...rest}>
-      {children}
-    </main>
-  );
-});
-PageFrameMain.displayName = PAGE_FRAME_DISPLAY_NAME.Main;
+export const PageFrameMain = asSlot(
+  PAGE_FRAME_DISPLAY_NAME.Main,
+  forwardRef<HTMLElement, PageFrameMainProps>(function PageFrameMain(
+    { className, children, ...rest },
+    ref,
+  ) {
+    const classNames = useContext(PageFrameClassNamesContext);
+    return (
+      <main ref={ref} className={cn(PAGE_FRAME_CLASS.main, classNames?.main, className)} {...rest}>
+        {children}
+      </main>
+    );
+  }),
+);
 
-export const PageFrameFooter = forwardRef<HTMLElement, PageFrameFooterProps>(
-  function PageFrameFooter({ className, children, ...rest }, ref) {
+export const PageFrameFooter = asSlot(
+  PAGE_FRAME_DISPLAY_NAME.Footer,
+  forwardRef<HTMLElement, PageFrameFooterProps>(function PageFrameFooter(
+    { className, children, ...rest },
+    ref,
+  ) {
     const classNames = useContext(PageFrameClassNamesContext);
     return (
       <footer
@@ -56,9 +65,8 @@ export const PageFrameFooter = forwardRef<HTMLElement, PageFrameFooterProps>(
         {children}
       </footer>
     );
-  },
+  }),
 );
-PageFrameFooter.displayName = PAGE_FRAME_DISPLAY_NAME.Footer;
 
 const PageFrameRoot = forwardRef<HTMLDivElement, PageFrameProps>(function PageFrame(
   { classNames, className, children, ...rest },

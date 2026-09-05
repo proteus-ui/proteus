@@ -4,6 +4,13 @@ import { Spinner } from "@proteus-ui/core";
 const meta = {
   title: "Components/Spinner",
   component: Spinner,
+  parameters: {
+    docs: {
+      description: {
+        component: "Indicates an in-progress action. `label` is announced to assistive tech.",
+      },
+    },
+  },
   args: {
     size: "md",
     label: "Loading",

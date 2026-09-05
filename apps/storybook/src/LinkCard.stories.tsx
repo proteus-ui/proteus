@@ -4,6 +4,14 @@ import { LinkCard } from "@proteus-ui/core";
 const meta = {
   title: "Components/LinkCard",
   component: LinkCard,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Navigational card rendered as an anchor. Compose with `LinkCard.Title` and `LinkCard.Body`.",
+      },
+    },
+  },
 } satisfies Meta<typeof LinkCard>;
 
 export default meta;

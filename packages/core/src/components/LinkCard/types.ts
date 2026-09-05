@@ -1,20 +1,17 @@
-import type { AnchorHTMLAttributes, HTMLAttributes } from "react";
+import type { AnchorHTMLAttributes, HTMLAttributes, ReactNode } from "react";
 import type { SlotClassNames } from "@proteus-ui/tokens";
-import type { CompoundChildren, SlotElement } from "../../utils/compound";
-import type { LinkCardBody, LinkCardTitle } from "./LinkCard";
 
 export type LinkCardSlot = "root" | "title" | "body";
 
 export type LinkCardTitleProps = HTMLAttributes<HTMLDivElement>;
 export type LinkCardBodyProps = HTMLAttributes<HTMLDivElement>;
 
-export type LinkCardSlotChild =
-  | SlotElement<typeof LinkCardTitle>
-  | SlotElement<typeof LinkCardBody>;
-
 export interface LinkCardProps
   extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "title" | "children"> {
+  /** Destination URL. The root renders as an anchor. */
   href: string;
+  /** Per-slot class names (`root`, `title`, `body`). */
   classNames?: SlotClassNames<LinkCardSlot>;
-  children?: CompoundChildren<LinkCardSlotChild>;
+  /** Slot children: `LinkCard.Title`, `LinkCard.Body`. */
+  children?: ReactNode;
 }

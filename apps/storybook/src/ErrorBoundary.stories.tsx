@@ -9,6 +9,13 @@ function ThrowOnce() {
 const meta = {
   title: "Components/ErrorBoundary",
   component: ErrorBoundary,
+  parameters: {
+    docs: {
+      description: {
+        component: "Catches render errors in its children and shows `fallback`.",
+      },
+    },
+  },
   args: {
     children: "Content inside the boundary",
   },

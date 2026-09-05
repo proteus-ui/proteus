@@ -4,6 +4,13 @@ import { Toolbar, ToolbarButton } from "@proteus-ui/core";
 const meta = {
   title: "Components/Toolbar",
   component: Toolbar,
+  parameters: {
+    docs: {
+      description: {
+        component: "Horizontal group of actions. Place `ToolbarButton` children inside.",
+      },
+    },
+  },
 } satisfies Meta<typeof Toolbar>;
 
 export default meta;

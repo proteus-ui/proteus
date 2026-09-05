@@ -4,6 +4,14 @@ import { IconButton } from "@proteus-ui/core";
 const meta = {
   title: "Components/IconButton",
   component: IconButton,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Icon-only action button. Requires an accessible name via `aria-label`.",
+      },
+    },
+  },
   args: {
     "aria-label": "Star",
     icon: <span>★</span>,

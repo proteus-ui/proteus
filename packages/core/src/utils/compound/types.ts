@@ -1,9 +1,22 @@
-import type { ComponentProps, ElementType, ReactElement } from "react";
+import type { ComponentType } from "react";
 
-export type SlotElement<C extends ElementType> = ReactElement<ComponentProps<C>, C>;
+declare const PROTEUS_ELEMENT: unique symbol;
 
-export type CompoundChild<E extends ReactElement> = E | boolean | null | undefined;
+export type ProteusElement<Name extends string> = {
+  readonly [PROTEUS_ELEMENT]: Name;
+};
 
-export type CompoundChildren<E extends ReactElement> =
-  | CompoundChild<E>
-  | Iterable<CompoundChild<E>>;
+export type CompoundChild<Name extends string> =
+  | ProteusElement<Name>
+  | boolean
+  | null
+  | undefined;
+
+export type CompoundChildren<Name extends string> =
+  | CompoundChild<Name>
+  | ReadonlyArray<CompoundChild<Name>>;
+
+export type SlotComponent<Name extends string, P extends object> = ComponentType<P> & {
+  displayName: Name;
+  readonly $$proteusSlot: Name;
+};

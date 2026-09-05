@@ -2,20 +2,22 @@ import { cloneElement, isValidElement, useCallback, useEffect, useMemo, useRef, 
 import { flip, offset, shift, useFloating } from "@floating-ui/react";
 import { useTooltip, useTooltipTrigger } from "@react-aria/tooltip";
 import { cn } from "../../utils/cn";
-import { collectNamedSlots } from "../../utils/compound";
+import { asSlot, collectNamedSlots } from "../../utils/compound";
 import { TOOLTIP_CLASS, TOOLTIP_DEFAULT, TOOLTIP_DISPLAY_NAME } from "./consts";
 import type { TooltipContentProps, TooltipProps, TooltipTriggerProps, TooltipTriggerState } from "./types";
 import { childTriggerRef, mergeTriggerProps, skipWithoutLayout } from "./utils";
 
-export function TooltipTrigger(_props: TooltipTriggerProps) {
+export const TooltipTrigger = asSlot(TOOLTIP_DISPLAY_NAME.Trigger, function TooltipTrigger(
+  _props: TooltipTriggerProps,
+) {
   return null;
-}
-TooltipTrigger.displayName = TOOLTIP_DISPLAY_NAME.Trigger;
+});
 
-export function TooltipContent(_props: TooltipContentProps) {
+export const TooltipContent = asSlot(TOOLTIP_DISPLAY_NAME.Content, function TooltipContent(
+  _props: TooltipContentProps,
+) {
   return null;
-}
-TooltipContent.displayName = TOOLTIP_DISPLAY_NAME.Content;
+});
 
 export function Tooltip({
   children,

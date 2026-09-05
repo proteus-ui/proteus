@@ -4,6 +4,14 @@ import { Textarea } from "@proteus-ui/core";
 const meta = {
   title: "Components/Textarea",
   component: Textarea,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Multi-line text field. Value is controlled with `value` / `onValueChange`, not native `onChange`.",
+      },
+    },
+  },
   args: {
     defaultValue: "",
     placeholder: "Notes…",

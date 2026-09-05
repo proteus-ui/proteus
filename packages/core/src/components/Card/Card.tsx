@@ -1,50 +1,56 @@
 import { createContext, forwardRef, useContext } from "react";
 import type { SlotClassNames } from "@proteus-ui/tokens";
 import { cn } from "../../utils/cn";
-import { collectNamedSlots } from "../../utils/compound";
+import { asSlot, collectNamedSlots } from "../../utils/compound";
 import { CARD_CLASS, CARD_DISPLAY_NAME } from "./consts";
 import type { CardBodyProps, CardFooterProps, CardProps, CardSlot, CardTitleProps } from "./types";
 
 const CardClassNamesContext = createContext<SlotClassNames<CardSlot> | undefined>(undefined);
 
-export const CardTitle = forwardRef<HTMLDivElement, CardTitleProps>(function CardTitle(
-  { className, children, ...rest },
-  ref,
-) {
-  const classNames = useContext(CardClassNamesContext);
-  return (
-    <div ref={ref} className={cn(CARD_CLASS.header, classNames?.header, className)} {...rest}>
-      {children}
-    </div>
-  );
-});
-CardTitle.displayName = CARD_DISPLAY_NAME.Title;
+export const CardTitle = asSlot(
+  CARD_DISPLAY_NAME.Title,
+  forwardRef<HTMLDivElement, CardTitleProps>(function CardTitle(
+    { className, children, ...rest },
+    ref,
+  ) {
+    const classNames = useContext(CardClassNamesContext);
+    return (
+      <div ref={ref} className={cn(CARD_CLASS.header, classNames?.header, className)} {...rest}>
+        {children}
+      </div>
+    );
+  }),
+);
 
-export const CardBody = forwardRef<HTMLDivElement, CardBodyProps>(function CardBody(
-  { className, children, ...rest },
-  ref,
-) {
-  const classNames = useContext(CardClassNamesContext);
-  return (
-    <div ref={ref} className={cn(CARD_CLASS.body, classNames?.body, className)} {...rest}>
-      {children}
-    </div>
-  );
-});
-CardBody.displayName = CARD_DISPLAY_NAME.Body;
+export const CardBody = asSlot(
+  CARD_DISPLAY_NAME.Body,
+  forwardRef<HTMLDivElement, CardBodyProps>(function CardBody(
+    { className, children, ...rest },
+    ref,
+  ) {
+    const classNames = useContext(CardClassNamesContext);
+    return (
+      <div ref={ref} className={cn(CARD_CLASS.body, classNames?.body, className)} {...rest}>
+        {children}
+      </div>
+    );
+  }),
+);
 
-export const CardFooter = forwardRef<HTMLDivElement, CardFooterProps>(function CardFooter(
-  { className, children, ...rest },
-  ref,
-) {
-  const classNames = useContext(CardClassNamesContext);
-  return (
-    <div ref={ref} className={cn(CARD_CLASS.footer, classNames?.footer, className)} {...rest}>
-      {children}
-    </div>
-  );
-});
-CardFooter.displayName = CARD_DISPLAY_NAME.Footer;
+export const CardFooter = asSlot(
+  CARD_DISPLAY_NAME.Footer,
+  forwardRef<HTMLDivElement, CardFooterProps>(function CardFooter(
+    { className, children, ...rest },
+    ref,
+  ) {
+    const classNames = useContext(CardClassNamesContext);
+    return (
+      <div ref={ref} className={cn(CARD_CLASS.footer, classNames?.footer, className)} {...rest}>
+        {children}
+      </div>
+    );
+  }),
+);
 
 const CardRoot = forwardRef<HTMLElement, CardProps>(function Card(
   { classNames, className, children, ...rest },

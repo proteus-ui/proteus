@@ -5,6 +5,13 @@ import { OtpInput } from "@proteus-ui/core";
 const meta = {
   title: "Components/OtpInput",
   component: OtpInput,
+  parameters: {
+    docs: {
+      description: {
+        component: "One-time code, one character per cell. `onComplete` fires when every cell is filled.",
+      },
+    },
+  },
   args: {
     defaultValue: "",
     otpLength: 6,

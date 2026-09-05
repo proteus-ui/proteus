@@ -4,6 +4,13 @@ import { PageLoader } from "@proteus-ui/core";
 const meta = {
   title: "Components/PageLoader",
   component: PageLoader,
+  parameters: {
+    docs: {
+      description: {
+        component: "Full-area loading state with a visible label.",
+      },
+    },
+  },
   args: {
     label: "Loading",
   },

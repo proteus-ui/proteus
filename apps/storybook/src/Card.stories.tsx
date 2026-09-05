@@ -4,6 +4,14 @@ import { Card } from "@proteus-ui/core";
 const meta = {
   title: "Components/Card",
   component: Card,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Content container. Compose with `Card.Title`, `Card.Body`, and optional `Card.Footer`.",
+      },
+    },
+  },
 } satisfies Meta<typeof Card>;
 
 export default meta;

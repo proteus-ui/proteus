@@ -5,7 +5,7 @@ import { FocusScope } from "@react-aria/focus";
 import { ariaHideOutside, usePreventScroll } from "@react-aria/overlays";
 import type { SlotClassNames } from "@proteus-ui/tokens";
 import { cn } from "../../utils/cn";
-import { collectNamedSlots } from "../../utils/compound";
+import { asSlot, collectNamedSlots } from "../../utils/compound";
 import { useCloseOnEscape } from "../../hooks/useCloseOnEscape";
 import { useDialogTransition } from "../../hooks/useDialogTransition";
 import {
@@ -30,7 +30,11 @@ type DialogContextValue = {
 
 const DialogContext = createContext<DialogContextValue | undefined>(undefined);
 
-export function DialogTitle({ className, children, ...rest }: DialogTitleProps) {
+export const DialogTitle = asSlot(DIALOG_DISPLAY_NAME.Title, function DialogTitle({
+  className,
+  children,
+  ...rest
+}: DialogTitleProps) {
   const ctx = useContext(DialogContext);
   return (
     <div
@@ -41,28 +45,33 @@ export function DialogTitle({ className, children, ...rest }: DialogTitleProps) 
       {children}
     </div>
   );
-}
-DialogTitle.displayName = DIALOG_DISPLAY_NAME.Title;
+});
 
-export function DialogBody({ className, children, ...rest }: DialogBodyProps) {
+export const DialogBody = asSlot(DIALOG_DISPLAY_NAME.Body, function DialogBody({
+  className,
+  children,
+  ...rest
+}: DialogBodyProps) {
   const ctx = useContext(DialogContext);
   return (
     <div className={cn(DIALOG_CLASS.body, ctx?.classNames?.body, className)} {...rest}>
       {children}
     </div>
   );
-}
-DialogBody.displayName = DIALOG_DISPLAY_NAME.Body;
+});
 
-export function DialogActions({ className, children, ...rest }: DialogActionsProps) {
+export const DialogActions = asSlot(DIALOG_DISPLAY_NAME.Actions, function DialogActions({
+  className,
+  children,
+  ...rest
+}: DialogActionsProps) {
   const ctx = useContext(DialogContext);
   return (
     <div className={cn(DIALOG_CLASS.actions, ctx?.classNames?.actions, className)} {...rest}>
       {children}
     </div>
   );
-}
-DialogActions.displayName = DIALOG_DISPLAY_NAME.Actions;
+});
 
 export function Dialog({
   open,

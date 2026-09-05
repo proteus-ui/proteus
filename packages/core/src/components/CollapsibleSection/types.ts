@@ -1,11 +1,5 @@
-import type { HTMLAttributes } from "react";
+import type { HTMLAttributes, ReactNode } from "react";
 import type { SlotClassNames } from "@proteus-ui/tokens";
-import type { CompoundChildren, SlotElement } from "../../utils/compound";
-import type {
-  CollapsibleItem,
-  CollapsiblePanel,
-  CollapsibleTitle,
-} from "./CollapsibleSection";
 
 export type CollapsibleMode = "single" | "multiple";
 
@@ -14,24 +8,26 @@ export type CollapsibleSectionSlot = "root" | "item" | "trigger" | "panel";
 export type CollapsibleTitleProps = HTMLAttributes<HTMLSpanElement>;
 export type CollapsiblePanelProps = HTMLAttributes<HTMLDivElement>;
 
-export type CollapsibleItemSlotChild =
-  | SlotElement<typeof CollapsibleTitle>
-  | SlotElement<typeof CollapsiblePanel>;
-
 export interface CollapsibleItemProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
+  /** Stable id used for controlled `openIds`. */
   id: string;
+  /** Whether the item starts open when uncontrolled. */
   defaultOpen?: boolean;
-  children?: CompoundChildren<CollapsibleItemSlotChild>;
+  /** Slot children: `CollapsibleSection.Item` title and panel. */
+  children?: ReactNode;
 }
 
-export type CollapsibleSectionSlotChild = SlotElement<typeof CollapsibleItem>;
-
 export interface CollapsibleSectionProps {
+  /** `single` keeps one item open; `multiple` allows many. */
   mode?: CollapsibleMode;
+  /** Controlled set of open item ids. Pair with `onOpenChange`. */
   openIds?: string[];
+  /** Called with the next open ids. */
   onOpenChange?: (ids: string[]) => void;
+  /** Per-slot class names (`root`, `item`, `trigger`, `panel`). */
   classNames?: SlotClassNames<CollapsibleSectionSlot>;
-  children?: CompoundChildren<CollapsibleSectionSlotChild>;
+  /** Repeating `CollapsibleSection.Item` children. */
+  children?: ReactNode;
 }
 
 export type CollapsibleItemMeta = {

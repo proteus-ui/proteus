@@ -4,6 +4,14 @@ import { TextInput } from "@proteus-ui/core";
 const meta = {
   title: "Components/TextInput",
   component: TextInput,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Single-line text field. Value is controlled with `value` / `onValueChange`, not native `onChange`.",
+      },
+    },
+  },
   args: {
     defaultValue: "",
     placeholder: "Type…",

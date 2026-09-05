@@ -1,6 +1,8 @@
 "use client";
 
 export { cn } from "./utils/cn";
+export type { CompoundChildren, ProteusElement, SlotComponent } from "./utils/compound";
+export { asSlot } from "./utils/compound";
 export { KEYBOARD_KEYS, NAVIGATION_KEYS } from "./utils/keyboard";
 export { useControllableState } from "./hooks/useControllableState";
 export { useCloseOnEscape } from "./hooks/useCloseOnEscape";
@@ -110,4 +112,82 @@ export type {
 } from "./components/Spinner";
 export { ErrorBoundary } from "./components/ErrorBoundary";
 export type { ErrorBoundaryProps } from "./components/ErrorBoundary";
+export {
+  Text,
+  TextAbbr,
+  TextA,
+  TextB,
+  TextBdi,
+  TextBdo,
+  TextBlockquote,
+  TextBr,
+  TextCite,
+  TextCode,
+  TextData,
+  TextDfn,
+  TextEm,
+  TextH1,
+  TextH2,
+  TextH3,
+  TextH4,
+  TextH5,
+  TextH6,
+  TextI,
+  TextKbd,
+  TextMark,
+  TextP,
+  TextPre,
+  TextQ,
+  TextS,
+  TextSamp,
+  TextSmall,
+  TextSpan,
+  TextStrong,
+  TextSub,
+  TextSup,
+  TextTime,
+  TextU,
+  TextVar,
+  TextWbr,
+} from "./components/Text";
+export type {
+  TextAProps,
+  TextAbbrProps,
+  TextBProps,
+  TextBdiProps,
+  TextBdoProps,
+  TextBlockquoteProps,
+  TextBrProps,
+  TextCiteProps,
+  TextCodeProps,
+  TextDataProps,
+  TextDfnProps,
+  TextEmProps,
+  TextH1Props,
+  TextH2Props,
+  TextH3Props,
+  TextH4Props,
+  TextH5Props,
+  TextH6Props,
+  TextIProps,
+  TextKbdProps,
+  TextMarkProps,
+  TextPProps,
+  TextPreProps,
+  TextProps,
+  TextQProps,
+  TextSProps,
+  TextSampProps,
+  TextSlot,
+  TextSmallProps,
+  TextSpanProps,
+  TextStrongProps,
+  TextSubProps,
+  TextSupProps,
+  TextTag,
+  TextTimeProps,
+  TextUProps,
+  TextVarProps,
+  TextWbrProps,
+} from "./components/Text";
 

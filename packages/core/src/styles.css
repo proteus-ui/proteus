@@ -1,4 +1,5 @@
 /* Minimal structural defaults. Appearance lives in @proteus-ui/theme-default. */
 .pr-button { font: inherit; cursor: pointer; }
+.pr-text { font: inherit; }
 .pr-button[data-disabled] { cursor: not-allowed; }
 .pr-search__field::-webkit-search-cancel-button { display: none; }

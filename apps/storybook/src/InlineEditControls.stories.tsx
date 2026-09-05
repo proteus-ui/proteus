@@ -5,6 +5,13 @@ import { InlineEditControls } from "@proteus-ui/core";
 const meta = {
   title: "Components/InlineEditControls",
   component: InlineEditControls,
+  parameters: {
+    docs: {
+      description: {
+        component: "Edit, save, and cancel controls for an inline-edit surface.",
+      },
+    },
+  },
   args: {
     editing: false,
     onEdit: fn(),

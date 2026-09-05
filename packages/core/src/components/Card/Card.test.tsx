@@ -22,6 +22,7 @@ describe("Card", () => {
     expect(() =>
       render(
         <Card>
+          {/* eslint-disable-next-line @proteus-ui/compound-slots -- runtime guard */}
           <div>nope</div>
         </Card>,
       ),

@@ -7,7 +7,17 @@ const configDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(configDir, "../../..");
 
 const config: StorybookConfig = {
-  stories: ["../src/**/*.stories.tsx"],
+  stories: ["../src/**/*.mdx", "../src/**/*.stories.tsx"],
+  addons: ["@storybook/addon-docs"],
+  typescript: {
+    reactDocgen: "react-docgen-typescript",
+    reactDocgenTypescriptOptions: {
+      shouldExtractLiteralValuesFromEnum: true,
+      shouldRemoveUndefinedFromOptional: true,
+      propFilter: (prop) =>
+        prop.parent ? !/node_modules/.test(prop.parent.fileName) : true,
+    },
+  },
   framework: {
     name: "@storybook/react-vite",
     options: {},

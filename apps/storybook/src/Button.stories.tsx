@@ -4,6 +4,14 @@ import { Button } from "@proteus-ui/core";
 const meta = {
   title: "Components/Button",
   component: Button,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Triggers an action. Use for labeled actions, optionally with a leading icon. Icon-only actions should use IconButton.",
+      },
+    },
+  },
   args: {
     children: "Button",
     intent: "neutral",

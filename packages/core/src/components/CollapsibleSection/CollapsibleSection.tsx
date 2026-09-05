@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useRef } from "react";
 import type { SlotClassNames } from "@proteus-ui/tokens";
 import { cn } from "../../utils/cn";
-import { collectNamedSlots, collectRepeatingSlot } from "../../utils/compound";
+import { asSlot, collectNamedSlots, collectRepeatingSlot } from "../../utils/compound";
 import { useControllableState } from "../../hooks/useControllableState";
 import {
   COLLAPSIBLE_CLASS,
@@ -32,27 +32,33 @@ type CollapsibleContextValue = {
 
 const CollapsibleContext = createContext<CollapsibleContextValue | undefined>(undefined);
 
-export function CollapsibleTitle({ className, children, ...rest }: CollapsibleTitleProps) {
-  return (
-    <span className={className} {...rest}>
-      {children}
-    </span>
-  );
-}
-CollapsibleTitle.displayName = COLLAPSIBLE_DISPLAY_NAME.Title;
+export const CollapsibleTitle = asSlot(
+  COLLAPSIBLE_DISPLAY_NAME.Title,
+  function CollapsibleTitle({ className, children, ...rest }: CollapsibleTitleProps) {
+    return (
+      <span className={className} {...rest}>
+        {children}
+      </span>
+    );
+  },
+);
 
-export function CollapsiblePanel({ children }: CollapsiblePanelProps) {
-  return children;
-}
-CollapsiblePanel.displayName = COLLAPSIBLE_DISPLAY_NAME.Panel;
+export const CollapsiblePanel = asSlot(
+  COLLAPSIBLE_DISPLAY_NAME.Panel,
+  function CollapsiblePanel({ children }: CollapsiblePanelProps) {
+    return children;
+  },
+);
 
-export function CollapsibleItem({
-  id,
-  className,
-  children,
-  defaultOpen: _defaultOpen,
-  ...rest
-}: CollapsibleItemProps) {
+export const CollapsibleItem = asSlot(
+  COLLAPSIBLE_DISPLAY_NAME.Item,
+  function CollapsibleItem({
+    id,
+    className,
+    children,
+    defaultOpen: _defaultOpen,
+    ...rest
+  }: CollapsibleItemProps) {
   const ctx = useContext(CollapsibleContext);
   const slots = collectNamedSlots(
     children,
@@ -90,8 +96,8 @@ export function CollapsibleItem({
       </div>
     </div>
   );
-}
-CollapsibleItem.displayName = COLLAPSIBLE_DISPLAY_NAME.Item;
+},
+);
 
 export function CollapsibleSection({
   mode = COLLAPSIBLE_DEFAULT.mode,
