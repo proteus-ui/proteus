@@ -16,3 +16,9 @@ export const TOOLTIP_DEFAULT = {
   delay: 1500,
   offset: 8,
 } as const;
+
+export const TOOLTIP_DISPLAY_NAME = {
+  Root: "Tooltip",
+  Trigger: "Tooltip.Trigger",
+  Content: "Tooltip.Content",
+} as const;

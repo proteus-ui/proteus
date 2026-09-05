@@ -4,3 +4,10 @@ export const CARD_CLASS = {
   body: "pr-card__body",
   footer: "pr-card__footer",
 } as const;
+
+export const CARD_DISPLAY_NAME = {
+  Root: "Card",
+  Title: "Card.Title",
+  Body: "Card.Body",
+  Footer: "Card.Footer",
+} as const;

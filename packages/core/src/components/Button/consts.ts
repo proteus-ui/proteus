@@ -24,11 +24,11 @@ export const BUTTON_CLASS = {
 export const BUTTON_DEFAULT = {
   intent: BUTTON_INTENT.Neutral,
   size: BUTTON_SIZE.Md,
+  variant: BUTTON_VARIANT.Solid,
 } as const;
 
 export const BUTTON_DISPLAY_NAME = {
   Button: "Button",
-  OutlineButton: "OutlineButton",
   IconButton: "IconButton",
 } as const;
 

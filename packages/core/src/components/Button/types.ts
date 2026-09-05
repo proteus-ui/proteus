@@ -9,6 +9,7 @@ export type ButtonSlot = "root" | "icon";
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   intent?: ButtonIntent;
   size?: ButtonSize;
+  variant?: ButtonVariant;
   icon?: ReactNode;
   classNames?: SlotClassNames<ButtonSlot>;
 }

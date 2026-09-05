@@ -4,24 +4,25 @@ import { LinkCard } from "@proteus-ui/core";
 const meta = {
   title: "Components/LinkCard",
   component: LinkCard,
-  args: {
-    href: "#",
-    title: "Link card",
-    children: "Card body",
-  },
-  argTypes: {
-    href: { control: "text" },
-    title: { control: "text" },
-    children: { control: "text" },
-  },
 } satisfies Meta<typeof LinkCard>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  render: () => (
+    <LinkCard href="#">
+      <LinkCard.Title>Link card</LinkCard.Title>
+      <LinkCard.Body>Card body</LinkCard.Body>
+    </LinkCard>
+  ),
+};
 
 export const Untitled: Story = {
-  args: { title: undefined },
+  render: () => (
+    <LinkCard href="#">
+      <LinkCard.Body>Card body</LinkCard.Body>
+    </LinkCard>
+  ),
 };

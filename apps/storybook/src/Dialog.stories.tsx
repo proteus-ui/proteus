@@ -7,14 +7,10 @@ const meta = {
   component: Dialog,
   args: {
     open: false,
-    title: "Dialog title",
-    children: "Dialog body",
     onClose: fn(),
   },
   argTypes: {
     open: { control: "boolean" },
-    title: { control: "text" },
-    children: { control: "text" },
   },
 } satisfies Meta<typeof Dialog>;
 
@@ -24,8 +20,20 @@ type Story = StoryObj<typeof meta>;
 
 export const Closed: Story = {
   args: { open: false },
+  render: (args) => (
+    <Dialog {...args}>
+      <Dialog.Title>Dialog title</Dialog.Title>
+      <Dialog.Body>Dialog body</Dialog.Body>
+    </Dialog>
+  ),
 };
 
 export const Open: Story = {
   args: { open: true },
+  render: (args) => (
+    <Dialog {...args}>
+      <Dialog.Title>Dialog title</Dialog.Title>
+      <Dialog.Body>Dialog body</Dialog.Body>
+    </Dialog>
+  ),
 };

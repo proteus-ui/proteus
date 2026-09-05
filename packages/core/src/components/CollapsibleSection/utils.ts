@@ -1,5 +1,5 @@
 import { COLLAPSIBLE_MODE } from "./consts";
-import type { CollapsibleItem, CollapsibleMode } from "./types";
+import type { CollapsibleItemMeta, CollapsibleMode } from "./types";
 
 export function nextIds(mode: CollapsibleMode, current: string[], id: string): string[] {
   const isOpen = current.includes(id);
@@ -7,7 +7,7 @@ export function nextIds(mode: CollapsibleMode, current: string[], id: string): s
   return isOpen ? current.filter((x) => x !== id) : [...current, id];
 }
 
-export function defaultOpenIds(items: readonly CollapsibleItem[]): string[] {
+export function defaultOpenIds(items: readonly CollapsibleItemMeta[]): string[] {
   return items.filter((i) => i.defaultOpen).map((i) => i.id);
 }
 

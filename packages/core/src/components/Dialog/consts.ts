@@ -16,3 +16,10 @@ export const DIALOG_TEST_ID = {
 } as const;
 
 export const DIALOG_ARIA_MODAL = "true";
+
+export const DIALOG_DISPLAY_NAME = {
+  Root: "Dialog",
+  Title: "Dialog.Title",
+  Body: "Dialog.Body",
+  Actions: "Dialog.Actions",
+} as const;

@@ -7,8 +7,9 @@ import { Dialog } from "../../index";
 describe("Dialog", () => {
   it("renders nothing when closed", () => {
     render(
-      <Dialog open={false} onClose={() => {}} title="Confirm">
-        body
+      <Dialog open={false} onClose={() => {}}>
+        <Dialog.Title>Confirm</Dialog.Title>
+        <Dialog.Body>body</Dialog.Body>
       </Dialog>,
     );
     expect(screen.queryByRole("dialog")).toBeNull();
@@ -16,8 +17,11 @@ describe("Dialog", () => {
 
   it("renders an accessible dialog with data-state and aria wiring when open", async () => {
     render(
-      <Dialog open onClose={() => {}} title="Confirm" ariaDescribedBy="desc-1">
-        <p id="desc-1">body</p>
+      <Dialog open onClose={() => {}} ariaDescribedBy="desc-1">
+        <Dialog.Title>Confirm</Dialog.Title>
+        <Dialog.Body>
+          <p id="desc-1">body</p>
+        </Dialog.Body>
       </Dialog>,
     );
     const dialog = screen.getByRole("dialog");
@@ -30,8 +34,9 @@ describe("Dialog", () => {
   it("calls onClose on Escape", async () => {
     const onClose = vi.fn();
     render(
-      <Dialog open onClose={onClose} title="Confirm">
-        body
+      <Dialog open onClose={onClose}>
+        <Dialog.Title>Confirm</Dialog.Title>
+        <Dialog.Body>body</Dialog.Body>
       </Dialog>,
     );
     await userEvent.keyboard("{Escape}");
@@ -41,8 +46,11 @@ describe("Dialog", () => {
   it("calls onClose when the overlay is clicked but not the panel", async () => {
     const onClose = vi.fn();
     render(
-      <Dialog open onClose={onClose} title="Confirm">
-        <button>inside</button>
+      <Dialog open onClose={onClose}>
+        <Dialog.Title>Confirm</Dialog.Title>
+        <Dialog.Body>
+          <button>inside</button>
+        </Dialog.Body>
       </Dialog>,
     );
     await userEvent.click(screen.getByRole("button", { name: "inside" }));
@@ -57,8 +65,11 @@ describe("Dialog", () => {
       return (
         <>
           <button onClick={() => setOpen(true)}>open</button>
-          <Dialog open={open} onClose={() => setOpen(false)} title="Confirm">
-            <button>inside</button>
+          <Dialog open={open} onClose={() => setOpen(false)}>
+            <Dialog.Title>Confirm</Dialog.Title>
+            <Dialog.Body>
+              <button>inside</button>
+            </Dialog.Body>
           </Dialog>
         </>
       );

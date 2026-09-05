@@ -5,13 +5,10 @@ const meta = {
   title: "Components/Tooltip",
   component: Tooltip,
   args: {
-    content: "Helpful tip",
     delay: 0,
     placement: "top",
-    children: <Button>Hover me</Button>,
   },
   argTypes: {
-    content: { control: "text" },
     delay: { control: "number" },
     placement: { control: "select", options: ["top", "bottom", "left", "right"] },
     children: { control: false },
@@ -23,14 +20,36 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  render: (args) => (
+    <Tooltip {...args}>
+      <Tooltip.Trigger>
+        <Button>Hover me</Button>
+      </Tooltip.Trigger>
+      <Tooltip.Content>Helpful tip</Tooltip.Content>
+    </Tooltip>
+  ),
+};
 
 export const Bottom: Story = {
-  args: { placement: "bottom", content: "Shown below" },
+  args: { placement: "bottom" },
+  render: (args) => (
+    <Tooltip {...args}>
+      <Tooltip.Trigger>
+        <Button>Hover me</Button>
+      </Tooltip.Trigger>
+      <Tooltip.Content>Shown below</Tooltip.Content>
+    </Tooltip>
+  ),
 };
 
 export const LongContent: Story = {
-  args: {
-    content: "This tooltip has a longer message for layout checks.",
-  },
+  render: (args) => (
+    <Tooltip {...args}>
+      <Tooltip.Trigger>
+        <Button>Hover me</Button>
+      </Tooltip.Trigger>
+      <Tooltip.Content>This tooltip has a longer message for layout checks.</Tooltip.Content>
+    </Tooltip>
+  ),
 };

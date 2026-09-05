@@ -5,8 +5,9 @@ import { LinkCard } from "../../index";
 describe("LinkCard", () => {
   it("renders an anchor with pr-link-card and href", () => {
     render(
-      <LinkCard href="/x" title="Go">
-        Desc
+      <LinkCard href="/x">
+        <LinkCard.Title>Go</LinkCard.Title>
+        <LinkCard.Body>Desc</LinkCard.Body>
       </LinkCard>,
     );
     const a = screen.getByRole("link", { name: /Go/ });

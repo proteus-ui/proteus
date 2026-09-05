@@ -12,7 +12,7 @@ export { useModalCloseHandlers } from "./hooks/useModalCloseHandlers";
 export { useSearchFilter } from "./hooks/useSearchFilter";
 export { useConfirmation } from "./hooks/useConfirmation";
 export { useAsyncOperation } from "./hooks/useAsyncOperation";
-export { Button, IconButton, OutlineButton } from "./components/Button";
+export { Button, IconButton } from "./components/Button";
 export type {
   ButtonProps,
   ButtonIntent,
@@ -36,26 +36,62 @@ export { SearchBar } from "./components/SearchBar";
 export type { SearchBarProps, SearchBarSlot } from "./components/SearchBar";
 export { Select } from "./components/Select";
 export type { SelectOption, SelectProps, SelectSlot } from "./components/Select";
-export { Dialog } from "./components/Dialog";
-export type { DialogProps, DialogSlot } from "./components/Dialog";
-export { Tooltip } from "./components/Tooltip";
-export type { TooltipPlacement, TooltipProps, TooltipSlot } from "./components/Tooltip";
+export { Dialog, DialogActions, DialogBody, DialogTitle } from "./components/Dialog";
+export type {
+  DialogActionsProps,
+  DialogBodyProps,
+  DialogProps,
+  DialogSlot,
+  DialogTitleProps,
+} from "./components/Dialog";
+export { Tooltip, TooltipContent, TooltipTrigger } from "./components/Tooltip";
+export type {
+  TooltipContentProps,
+  TooltipPlacement,
+  TooltipProps,
+  TooltipSlot,
+  TooltipTriggerProps,
+} from "./components/Tooltip";
 export { Badge, Pill } from "./components/Badge";
 export type { BadgeProps, BadgeIntent, BadgeSlot, BadgeVariant } from "./components/Badge";
-export { Card } from "./components/Card";
-export type { CardProps, CardSlot } from "./components/Card";
-export { Section } from "./components/Section";
-export type { SectionProps, SectionSlot } from "./components/Section";
-export { LinkCard } from "./components/LinkCard";
-export type { LinkCardProps, LinkCardSlot } from "./components/LinkCard";
-export { PageFrame } from "./components/PageFrame";
-export type { PageFrameProps, PageFrameSlot } from "./components/PageFrame";
-export { CollapsibleSection } from "./components/CollapsibleSection";
+export { Card, CardBody, CardFooter, CardTitle } from "./components/Card";
 export type {
+  CardBodyProps,
+  CardFooterProps,
+  CardProps,
+  CardSlot,
+  CardTitleProps,
+} from "./components/Card";
+export { Section, SectionBody, SectionTitle } from "./components/Section";
+export type { SectionBodyProps, SectionProps, SectionSlot, SectionTitleProps } from "./components/Section";
+export { LinkCard, LinkCardBody, LinkCardTitle } from "./components/LinkCard";
+export type {
+  LinkCardBodyProps,
+  LinkCardProps,
+  LinkCardSlot,
+  LinkCardTitleProps,
+} from "./components/LinkCard";
+export { PageFrame, PageFrameFooter, PageFrameHeader, PageFrameMain } from "./components/PageFrame";
+export type {
+  PageFrameFooterProps,
+  PageFrameHeaderProps,
+  PageFrameMainProps,
+  PageFrameProps,
+  PageFrameSlot,
+} from "./components/PageFrame";
+export {
   CollapsibleItem,
+  CollapsiblePanel,
+  CollapsibleSection,
+  CollapsibleTitle,
+} from "./components/CollapsibleSection";
+export type {
+  CollapsibleItemProps,
   CollapsibleMode,
+  CollapsiblePanelProps,
   CollapsibleSectionProps,
   CollapsibleSectionSlot,
+  CollapsibleTitleProps,
 } from "./components/CollapsibleSection";
 export { Toolbar, ToolbarButton } from "./components/Toolbar";
 export type { ToolbarButtonProps, ToolbarProps, ToolbarSlot } from "./components/Toolbar";

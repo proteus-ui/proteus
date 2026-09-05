@@ -6,8 +6,11 @@ import { Tooltip } from "../../index";
 describe("Tooltip", () => {
   it("shows role=tooltip on hover", async () => {
     render(
-      <Tooltip content="Hint" delay={0}>
-        <button type="button">Target</button>
+      <Tooltip delay={0}>
+        <Tooltip.Trigger>
+          <button type="button">Target</button>
+        </Tooltip.Trigger>
+        <Tooltip.Content>Hint</Tooltip.Content>
       </Tooltip>,
     );
     expect(screen.queryByRole("tooltip")).toBeNull();
@@ -19,10 +22,13 @@ describe("Tooltip", () => {
   it("invokes a function child ref once per attach", () => {
     const childRef = vi.fn();
     render(
-      <Tooltip content="Hint" delay={0}>
-        <button type="button" ref={childRef}>
-          Target
-        </button>
+      <Tooltip delay={0}>
+        <Tooltip.Trigger>
+          <button type="button" ref={childRef}>
+            Target
+          </button>
+        </Tooltip.Trigger>
+        <Tooltip.Content>Hint</Tooltip.Content>
       </Tooltip>,
     );
     expect(childRef.mock.calls.filter(([node]) => node != null)).toHaveLength(1);

@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Button, IconButton, OutlineButton } from "../../index";
+import { Button, IconButton } from "../../index";
 
 describe("Button", () => {
   it("renders the pr-button root class and default data attributes", () => {
@@ -9,6 +9,7 @@ describe("Button", () => {
     expect(btn).toHaveClass("pr-button");
     expect(btn).toHaveAttribute("data-intent", "neutral");
     expect(btn).toHaveAttribute("data-size", "md");
+    expect(btn).toHaveAttribute("data-variant", "solid");
     expect(btn).not.toHaveAttribute("data-disabled");
   });
 
@@ -36,14 +37,13 @@ describe("Button", () => {
     expect(screen.getByTestId("i").parentElement).toHaveClass("pr-button__icon", "my-icon");
   });
 
-  it("OutlineButton and IconButton also render the root slot", () => {
-    render(
-      <>
-        <OutlineButton>Outline</OutlineButton>
-        <IconButton aria-label="star" icon={<svg />} />
-      </>,
-    );
-    expect(screen.getByRole("button", { name: "Outline" })).toHaveClass("pr-button");
+  it("sets data-variant from the variant prop", () => {
+    render(<Button variant="outline">Outline</Button>);
+    expect(screen.getByRole("button", { name: "Outline" })).toHaveAttribute("data-variant", "outline");
+  });
+
+  it("IconButton renders the root slot", () => {
+    render(<IconButton aria-label="star" icon={<svg />} />);
     expect(screen.getByRole("button", { name: "star" })).toHaveClass("pr-button");
   });
 });

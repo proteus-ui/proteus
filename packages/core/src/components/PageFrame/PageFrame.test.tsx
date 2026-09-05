@@ -3,10 +3,12 @@ import { describe, expect, it } from "vitest";
 import { PageFrame } from "../../index";
 
 describe("PageFrame", () => {
-  it("renders header, main, footer slots", () => {
+  it("renders Header, Main, Footer slots", () => {
     render(
-      <PageFrame header="Top" footer="Bottom">
-        Page
+      <PageFrame>
+        <PageFrame.Header>Top</PageFrame.Header>
+        <PageFrame.Main>Page</PageFrame.Main>
+        <PageFrame.Footer>Bottom</PageFrame.Footer>
       </PageFrame>,
     );
     expect(document.querySelector(".pr-page-frame")).not.toBeNull();

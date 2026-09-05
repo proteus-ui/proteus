@@ -8,11 +8,13 @@ const meta = {
     children: "Button",
     intent: "neutral",
     size: "md",
+    variant: "solid",
     disabled: false,
   },
   argTypes: {
     intent: { control: "select", options: ["neutral", "primary", "danger"] },
     size: { control: "select", options: ["sm", "md"] },
+    variant: { control: "select", options: ["solid", "outline"] },
     disabled: { control: "boolean" },
     children: { control: "text" },
     icon: { control: false },
@@ -35,6 +37,10 @@ export const Danger: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
+};
+
+export const Outline: Story = {
+  args: { variant: "outline" },
 };
 
 export const WithIcon: Story = {

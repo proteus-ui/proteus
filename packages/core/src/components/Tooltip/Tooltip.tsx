@@ -1,18 +1,37 @@
-import { cloneElement, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { cloneElement, isValidElement, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { flip, offset, shift, useFloating } from "@floating-ui/react";
 import { useTooltip, useTooltipTrigger } from "@react-aria/tooltip";
 import { cn } from "../../utils/cn";
-import { TOOLTIP_CLASS, TOOLTIP_DEFAULT } from "./consts";
-import type { TooltipProps, TooltipTriggerState } from "./types";
+import { collectNamedSlots } from "../../utils/compound";
+import { TOOLTIP_CLASS, TOOLTIP_DEFAULT, TOOLTIP_DISPLAY_NAME } from "./consts";
+import type { TooltipContentProps, TooltipProps, TooltipTriggerProps, TooltipTriggerState } from "./types";
 import { childTriggerRef, mergeTriggerProps, skipWithoutLayout } from "./utils";
 
+export function TooltipTrigger(_props: TooltipTriggerProps) {
+  return null;
+}
+TooltipTrigger.displayName = TOOLTIP_DISPLAY_NAME.Trigger;
+
+export function TooltipContent(_props: TooltipContentProps) {
+  return null;
+}
+TooltipContent.displayName = TOOLTIP_DISPLAY_NAME.Content;
+
 export function Tooltip({
-  content,
   children,
   placement = TOOLTIP_DEFAULT.placement,
   delay = TOOLTIP_DEFAULT.delay,
   classNames,
 }: TooltipProps) {
+  const slots = collectNamedSlots(
+    children,
+    { Trigger: TooltipTrigger, Content: TooltipContent },
+    TOOLTIP_DISPLAY_NAME.Root,
+  );
+  const triggerChild = slots.Trigger?.props.children;
+  const content = slots.Content?.props.children;
+  const contentClassName = slots.Content?.props.className;
+
   const [isOpen, setIsOpen] = useState(false);
   const delayTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
@@ -80,7 +99,7 @@ export function Tooltip({
   );
   const { tooltipProps } = useTooltip(triggerTooltipProps, state);
 
-  const childRef = childTriggerRef(children);
+  const childRef = isValidElement(triggerChild) ? childTriggerRef(triggerChild) : undefined;
   const setTriggerRef = useCallback(
     (node: HTMLElement | null) => {
       triggerRef.current = node;
@@ -90,23 +109,26 @@ export function Tooltip({
     },
     [refs.setReference, childRef],
   );
-  const trigger = cloneElement(
-    children,
-    mergeTriggerProps(children.props as Record<string, unknown>, {
-      ...triggerProps,
-      ref: setTriggerRef,
-    }) as Partial<typeof children.props>,
-  );
+  const trigger =
+    isValidElement(triggerChild) ?
+      cloneElement(
+        triggerChild,
+        mergeTriggerProps(triggerChild.props as Record<string, unknown>, {
+          ...triggerProps,
+          ref: setTriggerRef,
+        }) as Partial<typeof triggerChild.props>,
+      )
+    : null;
 
   return (
     <>
       {trigger}
-      {isOpen ? (
+      {isOpen && content != null ? (
         <div
           {...tooltipProps}
           ref={refs.setFloating}
           style={floatingStyles}
-          className={cn(TOOLTIP_CLASS.root, classNames?.root)}
+          className={cn(TOOLTIP_CLASS.root, classNames?.root, contentClassName)}
           data-placement={resolvedPlacement}
         >
           {content}
@@ -115,3 +137,7 @@ export function Tooltip({
     </>
   );
 }
+
+Tooltip.Trigger = TooltipTrigger;
+Tooltip.Content = TooltipContent;
+Tooltip.displayName = TOOLTIP_DISPLAY_NAME.Root;

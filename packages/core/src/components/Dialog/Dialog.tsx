@@ -1,19 +1,72 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useId, useRef, useState } from "react";
 import type { MouseEvent } from "react";
 import { createPortal } from "react-dom";
 import { FocusScope } from "@react-aria/focus";
 import { ariaHideOutside, usePreventScroll } from "@react-aria/overlays";
+import type { SlotClassNames } from "@proteus-ui/tokens";
 import { cn } from "../../utils/cn";
+import { collectNamedSlots } from "../../utils/compound";
 import { useCloseOnEscape } from "../../hooks/useCloseOnEscape";
 import { useDialogTransition } from "../../hooks/useDialogTransition";
-import { DIALOG_ARIA_MODAL, DIALOG_CLASS, DIALOG_DEFAULT, DIALOG_TEST_ID } from "./consts";
-import type { DialogProps } from "./types";
+import {
+  DIALOG_ARIA_MODAL,
+  DIALOG_CLASS,
+  DIALOG_DEFAULT,
+  DIALOG_DISPLAY_NAME,
+  DIALOG_TEST_ID,
+} from "./consts";
+import type {
+  DialogActionsProps,
+  DialogBodyProps,
+  DialogProps,
+  DialogSlot,
+  DialogTitleProps,
+} from "./types";
+
+type DialogContextValue = {
+  titleId: string;
+  classNames?: SlotClassNames<DialogSlot>;
+};
+
+const DialogContext = createContext<DialogContextValue | undefined>(undefined);
+
+export function DialogTitle({ className, children, ...rest }: DialogTitleProps) {
+  const ctx = useContext(DialogContext);
+  return (
+    <div
+      id={ctx?.titleId}
+      className={cn(DIALOG_CLASS.title, ctx?.classNames?.title, className)}
+      {...rest}
+    >
+      {children}
+    </div>
+  );
+}
+DialogTitle.displayName = DIALOG_DISPLAY_NAME.Title;
+
+export function DialogBody({ className, children, ...rest }: DialogBodyProps) {
+  const ctx = useContext(DialogContext);
+  return (
+    <div className={cn(DIALOG_CLASS.body, ctx?.classNames?.body, className)} {...rest}>
+      {children}
+    </div>
+  );
+}
+DialogBody.displayName = DIALOG_DISPLAY_NAME.Body;
+
+export function DialogActions({ className, children, ...rest }: DialogActionsProps) {
+  const ctx = useContext(DialogContext);
+  return (
+    <div className={cn(DIALOG_CLASS.actions, ctx?.classNames?.actions, className)} {...rest}>
+      {children}
+    </div>
+  );
+}
+DialogActions.displayName = DIALOG_DISPLAY_NAME.Actions;
 
 export function Dialog({
   open,
   onClose,
-  title,
-  actions,
   ariaLabel,
   ariaDescribedBy,
   closeOnOverlayClick = DIALOG_DEFAULT.closeOnOverlayClick,
@@ -25,6 +78,11 @@ export function Dialog({
   const titleId = useId();
   const [ready, setReady] = useState(false);
   const { mounted, phase } = useDialogTransition(open, panelRef);
+  const slots = collectNamedSlots(
+    children,
+    { Title: DialogTitle, Body: DialogBody, Actions: DialogActions },
+    DIALOG_DISPLAY_NAME.Root,
+  );
 
   useEffect(() => {
     setReady(true);
@@ -40,8 +98,6 @@ export function Dialog({
     return ariaHideOutside([panel]);
   }, [ready, mounted]);
 
-  // `ready` is false on the server and on the first client paint, so the
-  // portal does not hydrate-mismatch a null SSR tree.
   if (!ready || !mounted) return null;
 
   const onOverlayMouseDown = (e: MouseEvent<HTMLDivElement>) => {
@@ -49,10 +105,8 @@ export function Dialog({
     if (e.target === e.currentTarget) onClose();
   };
 
-  const labelledBy = ariaLabel == null && title != null ? titleId : undefined;
+  const labelledBy = ariaLabel == null && slots.Title != null ? titleId : undefined;
 
-  // FocusScope: `contain` traps Tab, `restoreFocus` returns focus to the
-  // trigger on unmount, `autoFocus` focuses the first focusable on open.
   return createPortal(
     <div
       data-testid={DIALOG_TEST_ID.Overlay}
@@ -72,18 +126,19 @@ export function Dialog({
           tabIndex={-1}
           className={cn(DIALOG_CLASS.panel, classNames?.panel)}
         >
-          {title != null && (
-            <div id={titleId} className={cn(DIALOG_CLASS.title, classNames?.title)}>
-              {title}
-            </div>
-          )}
-          <div className={cn(DIALOG_CLASS.body, classNames?.body)}>{children}</div>
-          {actions != null && (
-            <div className={cn(DIALOG_CLASS.actions, classNames?.actions)}>{actions}</div>
-          )}
+          <DialogContext.Provider value={{ titleId, classNames }}>
+            {slots.Title}
+            {slots.Body}
+            {slots.Actions}
+          </DialogContext.Provider>
         </div>
       </FocusScope>
     </div>,
     document.body,
   );
 }
+
+Dialog.Title = DialogTitle;
+Dialog.Body = DialogBody;
+Dialog.Actions = DialogActions;
+Dialog.displayName = DIALOG_DISPLAY_NAME.Root;

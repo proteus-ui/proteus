@@ -1,26 +1,75 @@
-import { forwardRef, useId } from "react";
+import { createContext, forwardRef, useContext, useId } from "react";
+import type { SlotClassNames } from "@proteus-ui/tokens";
 import { cn } from "../../utils/cn";
-import { SECTION_CLASS } from "./consts";
-import type { SectionProps } from "./types";
+import { collectNamedSlots } from "../../utils/compound";
+import { SECTION_CLASS, SECTION_DISPLAY_NAME } from "./consts";
+import type { SectionBodyProps, SectionProps, SectionSlot, SectionTitleProps } from "./types";
 
-export const Section = forwardRef<HTMLElement, SectionProps>(function Section(
-  { title, classNames, className, children, "aria-labelledby": ariaLabelledby, ...rest },
+type SectionContextValue = {
+  titleId: string;
+  classNames?: SlotClassNames<SectionSlot>;
+};
+
+const SectionContext = createContext<SectionContextValue | undefined>(undefined);
+
+export const SectionTitle = forwardRef<HTMLHeadingElement, SectionTitleProps>(function SectionTitle(
+  { className, children, ...rest },
+  ref,
+) {
+  const ctx = useContext(SectionContext);
+  return (
+    <h2
+      ref={ref}
+      id={ctx?.titleId}
+      className={cn(SECTION_CLASS.title, ctx?.classNames?.title, className)}
+      {...rest}
+    >
+      {children}
+    </h2>
+  );
+});
+SectionTitle.displayName = SECTION_DISPLAY_NAME.Title;
+
+export const SectionBody = forwardRef<HTMLDivElement, SectionBodyProps>(function SectionBody(
+  { className, children, ...rest },
+  ref,
+) {
+  const ctx = useContext(SectionContext);
+  return (
+    <div ref={ref} className={cn(SECTION_CLASS.body, ctx?.classNames?.body, className)} {...rest}>
+      {children}
+    </div>
+  );
+});
+SectionBody.displayName = SECTION_DISPLAY_NAME.Body;
+
+const SectionRoot = forwardRef<HTMLElement, SectionProps>(function Section(
+  { classNames, className, children, "aria-labelledby": ariaLabelledby, ...rest },
   ref,
 ) {
   const titleId = useId();
-  return (
-    <section
-      ref={ref}
-      className={cn(SECTION_CLASS.root, classNames?.root, className)}
-      {...rest}
-      aria-labelledby={title != null ? titleId : ariaLabelledby}
-    >
-      {title != null && (
-        <h2 id={titleId} className={cn(SECTION_CLASS.title, classNames?.title)}>
-          {title}
-        </h2>
-      )}
-      <div className={cn(SECTION_CLASS.body, classNames?.body)}>{children}</div>
-    </section>
+  const slots = collectNamedSlots(
+    children,
+    { Title: SectionTitle, Body: SectionBody },
+    SECTION_DISPLAY_NAME.Root,
   );
+  return (
+    <SectionContext.Provider value={{ titleId, classNames }}>
+      <section
+        ref={ref}
+        className={cn(SECTION_CLASS.root, classNames?.root, className)}
+        {...rest}
+        aria-labelledby={slots.Title != null ? titleId : ariaLabelledby}
+      >
+        {slots.Title}
+        {slots.Body}
+      </section>
+    </SectionContext.Provider>
+  );
+});
+SectionRoot.displayName = SECTION_DISPLAY_NAME.Root;
+
+export const Section = Object.assign(SectionRoot, {
+  Title: SectionTitle,
+  Body: SectionBody,
 });

@@ -154,6 +154,8 @@
   padding: var(--pr-space-3);
   min-width: 320px;
   max-width: 90vw;
+  font-family: var(--pr-font-sans);
+  font-size: var(--pr-font-size-md);
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   opacity: 0;
   transform: translateY(8px) scale(0.98);

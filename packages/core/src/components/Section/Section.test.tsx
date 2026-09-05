@@ -3,10 +3,11 @@ import { describe, expect, it } from "vitest";
 import { Section } from "../../index";
 
 describe("Section", () => {
-  it("renders section.pr-section with title and body slots", () => {
+  it("renders section.pr-section with Title and Body slots", () => {
     render(
-      <Section title="Heading" classNames={{ root: "r", title: "t", body: "b" }}>
-        Content
+      <Section classNames={{ root: "r", title: "t", body: "b" }}>
+        <Section.Title>Heading</Section.Title>
+        <Section.Body>Content</Section.Body>
       </Section>,
     );
     const root = screen.getByRole("region", { name: "Heading" });
