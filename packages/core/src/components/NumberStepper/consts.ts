@@ -15,9 +15,4 @@ export const NUMBER_STEPPER_LABEL = {
   Increase: "Increase value",
 } as const;
 
-export const NUMBER_STEPPER_SYMBOL = {
-  Decrease: "−",
-  Increase: "+",
-} as const;
-
 export const DATA_TRUE = "true";

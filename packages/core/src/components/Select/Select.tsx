@@ -16,7 +16,6 @@ import {
   SELECT_OPTION_ID_SUFFIX,
   SELECT_OPTION_KEY_SEP,
   SELECT_STATE,
-  SELECT_SYMBOL,
 } from "./consts";
 import type { SelectOption, SelectProps } from "./types";
 import { formatOptionCount, isNavigationKey, labelForId, optionHaystack } from "./utils";
@@ -252,9 +251,7 @@ export function Select({
             aria-label={SELECT_LABEL.Clear}
             tabIndex={-1}
             onClick={handleClear}
-          >
-            {SELECT_SYMBOL.Clear}
-          </button>
+          />
         )}
         {showToggle && (
           <button
@@ -266,9 +263,7 @@ export function Select({
             tabIndex={-1}
             onPointerDown={(e) => e.preventDefault()}
             onClick={handleToggle}
-          >
-            {SELECT_SYMBOL.Toggle}
-          </button>
+          />
         )}
         <div
           className={cn(SELECT_CLASS.announcer, classNames?.announcer)}
@@ -306,7 +301,11 @@ export function Select({
           </ul>
         )}
       </div>
-      {showNoResults && <div role="status">{SELECT_LABEL.NoResults}</div>}
+      {showNoResults && (
+        <div role="status" className={SELECT_CLASS.status}>
+          {SELECT_LABEL.NoResults}
+        </div>
+      )}
     </div>
   );
 }

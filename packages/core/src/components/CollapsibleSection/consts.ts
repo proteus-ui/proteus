@@ -28,10 +28,6 @@ export const COLLAPSIBLE_ID = {
 
 export const COLLAPSIBLE_ITEM_KEY_SEP = "\0";
 
-export const COLLAPSIBLE_SYMBOL = {
-  Chevron: "▾",
-} as const;
-
 export const COLLAPSIBLE_DISPLAY_NAME = {
   Root: "CollapsibleSection",
   Item: "CollapsibleSection.Item",

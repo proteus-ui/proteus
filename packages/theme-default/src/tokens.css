@@ -4,19 +4,28 @@
 /* Default values seeded from the extraction-analysis palette (Visualizer/
    flow-observer): brand pink #ec4899, semantic neutrals, feedback red. */
 :root {
-  --pr-color-surface: #ffffff;
+  /* Neutrals — canvas, copy, and chrome borders */
+  --pr-color-surface: #ffffff; /* Default panel/paper fill — cards, inputs, solid-neutral buttons, dropdown lists */
   --pr-color-text: #111827;
   --pr-color-text-muted: #6b7280;
   --pr-color-border: #e5e7eb;
+
+  /* Semantic action & feedback — fills and paired on-* foregrounds */
   --pr-color-action-primary: #ec4899;
   --pr-color-on-action-primary: #ffffff;
   --pr-color-feedback-error: #ef4444;
   --pr-color-on-feedback-error: #ffffff;
+
+  /* Radius */
   --pr-radius-sm: 6px;
   --pr-radius-md: 8px;
+
+  /* Spacing scale */
   --pr-space-1: 4px;
   --pr-space-2: 8px;
   --pr-space-3: 16px;
+
+  /* Typography */
   --pr-font-sans: Inter, system-ui, sans-serif;
   --pr-font-size-sm: 12px;
   --pr-font-size-md: 14px;
@@ -25,4 +34,27 @@
   --pr-font-size-2xl: 32px;
   --pr-font-weight-semibold: 600;
   --pr-font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Interaction — hover fills, focus marker, disabled, shared motion */
+  --pr-color-border-hover: #9ca3af;
+  --pr-color-surface-hover: color-mix(
+    in srgb,
+    var(--pr-color-border) 55%,
+    var(--pr-color-surface)
+  );
+  --pr-focus-ring-color: var(--pr-color-action-primary);
+  --pr-focus-ring-width: 2px;
+  --pr-focus-ring-offset: 2px;
+  --pr-opacity-disabled: 0.5;
+  --pr-transition-control:
+    border-color 250ms ease-out, background-color 250ms ease-out,
+    color 250ms ease-out, opacity 250ms ease-out, box-shadow 250ms ease-out;
+
+  /* Control icons — override to swap glyphs (CSS-only themes) */
+  --pr-icon-select-toggle: "▾";
+  --pr-icon-select-clear: "×";
+  --pr-icon-search-clear: "×";
+  --pr-icon-stepper-decrease: "−";
+  --pr-icon-stepper-increase: "+";
+  --pr-icon-collapse-chevron: "▾";
 }

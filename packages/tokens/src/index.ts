@@ -8,7 +8,9 @@ export type SlotClassNames<Slot extends string> = Partial<Record<Slot, string>>;
  * Uses `csstype` (not React's `CSSProperties`) so the contract stays
  * framework-agnostic — no React dependency leaks into the token layer.
  */
-export type SlotStyles<Slot extends string> = Partial<Record<Slot, CSSProperties>>;
+export type SlotStyles<Slot extends string> = Partial<
+  Record<Slot, CSSProperties>
+>;
 
 /**
  * Canonical CSS-variable token names. This list is SemVer-protected public
@@ -38,6 +40,19 @@ export const TOKEN_VARS = [
   "--pr-font-size-2xl",
   "--pr-font-weight-semibold",
   "--pr-font-mono",
+  "--pr-color-border-hover",
+  "--pr-color-surface-hover",
+  "--pr-focus-ring-color",
+  "--pr-focus-ring-width",
+  "--pr-focus-ring-offset",
+  "--pr-opacity-disabled",
+  "--pr-transition-control",
+  "--pr-icon-select-toggle",
+  "--pr-icon-select-clear",
+  "--pr-icon-search-clear",
+  "--pr-icon-stepper-decrease",
+  "--pr-icon-stepper-increase",
+  "--pr-icon-collapse-chevron",
 ] as const;
 
 export type TokenVar = (typeof TOKEN_VARS)[number];

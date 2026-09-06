@@ -12,8 +12,4 @@ export const SEARCH_BAR_LABEL = {
   Clear: "Clear search",
 } as const;
 
-export const SEARCH_BAR_SYMBOL = {
-  Clear: "×",
-} as const;
-
 export const DATA_TRUE = "true";

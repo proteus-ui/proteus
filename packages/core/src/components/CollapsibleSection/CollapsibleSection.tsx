@@ -10,7 +10,6 @@ import {
   COLLAPSIBLE_ID,
   COLLAPSIBLE_ITEM_KEY_SEP,
   COLLAPSIBLE_STATE,
-  COLLAPSIBLE_SYMBOL,
 } from "./consts";
 import type {
   CollapsibleItemMeta,
@@ -82,7 +81,6 @@ export const CollapsibleItem = asSlot(
         onClick={() => ctx?.set(nextIds(ctx.mode, ctx.openList, id))}
       >
         {slots.Title}
-        <span aria-hidden="true">{COLLAPSIBLE_SYMBOL.Chevron}</span>
       </button>
       <div
         id={panelId}

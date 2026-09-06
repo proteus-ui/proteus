@@ -4,6 +4,7 @@ import {
   BUTTON_CLASS,
   BUTTON_DEFAULT,
   BUTTON_DISPLAY_NAME,
+  BUTTON_ICON_PLACEMENT,
   DATA_TRUE,
 } from "./consts";
 import type { ButtonProps } from "./types";
@@ -14,6 +15,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     size = BUTTON_DEFAULT.size,
     variant = BUTTON_DEFAULT.variant,
     icon,
+    iconPlacement = BUTTON_DEFAULT.iconPlacement,
     classNames,
     className,
     children,
@@ -22,6 +24,16 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   },
   ref,
 ) {
+  const iconEl =
+    icon != null ? (
+      <span className={cn(BUTTON_CLASS.icon, classNames?.icon)} aria-hidden="true">
+        {icon}
+      </span>
+    ) : null;
+
+  const prefix = iconPlacement === BUTTON_ICON_PLACEMENT.Prefix ? iconEl : null;
+  const suffix = iconPlacement === BUTTON_ICON_PLACEMENT.Suffix ? iconEl : null;
+
   return (
     <button
       ref={ref}
@@ -29,17 +41,15 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       data-intent={intent}
       data-size={size}
       data-variant={variant}
+      data-icon-placement={iconEl != null ? iconPlacement : undefined}
       data-disabled={disabled ? DATA_TRUE : undefined}
       disabled={disabled}
       type="button"
       {...rest}
     >
-      {icon != null && (
-        <span className={cn(BUTTON_CLASS.icon, classNames?.icon)} aria-hidden="true">
-          {icon}
-        </span>
-      )}
+      {prefix}
       {children}
+      {suffix}
     </button>
   );
 });

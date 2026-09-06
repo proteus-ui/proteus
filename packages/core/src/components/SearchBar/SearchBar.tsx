@@ -6,7 +6,6 @@ import {
   SEARCH_BAR_CLASS,
   SEARCH_BAR_DEFAULT,
   SEARCH_BAR_LABEL,
-  SEARCH_BAR_SYMBOL,
 } from "./consts";
 import type { SearchBarProps } from "./types";
 
@@ -55,9 +54,7 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(function S
             setCurrent(SEARCH_BAR_DEFAULT.value);
             onClear?.();
           }}
-        >
-          {SEARCH_BAR_SYMBOL.Clear}
-        </button>
+        />
       )}
     </div>
   );

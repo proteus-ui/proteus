@@ -1,0 +1,224 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Getting started/Theme customization" />
+
+# Theme customization
+
+A custom theme is **CSS only**. You do not fork components or change TypeScript. Ship two files in the same shape as `@proteus-ui/theme-default`:
+
+1. **`tokens.css`** — values for every `--pr-*` contract variable
+2. **`theme.css`** — rules that target core’s `pr-*` classes and `data-*` attributes
+
+## 1. Install packages
+
+```bash
+npm install @proteus-ui/core @proteus-ui/tokens @proteus-ui/theme-default
+```
+
+`theme-default` is optional once you own the full look. Keep `@proteus-ui/tokens` either way — that package is the SemVer-protected list of variable names (`TOKEN_VARS` and `tokens.css`).
+
+## 2. Import CSS in this order
+
+Order matters. Load the contract first, then your token values, then core’s structural CSS, then your theme rules, and finally any app CSS.
+
+```tsx
+// app layout / root entry
+import "@proteus-ui/tokens/tokens.css"; // 1. contract defaults (names + fallbacks)
+import "./my-theme/tokens.css"; // 2. your token values (override :root)
+import "@proteus-ui/core/styles.css"; // 3. structural defaults only
+import "./my-theme/theme.css"; // 4. your appearance
+import "./globals.css"; // 5. app overrides last
+```
+
+If you are fully replacing the default look, do **not** import `@proteus-ui/theme-default/tokens.css` or `theme.css` — otherwise you end up fighting two themes. For a partial skin, import the default theme first and override only the variables you care about in your own `tokens.css`.
+
+## 3. Write `tokens.css`
+
+Assign every contract variable your UI relies on. The easiest starting point is a copy of `@proteus-ui/tokens/tokens.css` or the values from `theme-default`, then change what you need:
+
+- **Neutrals** — `--pr-color-surface`, `--pr-color-text`, `--pr-color-text-muted`, `--pr-color-border`
+- **Semantic** — `--pr-color-action-primary`, `--pr-color-on-action-primary`, and the feedback pair
+- **Radius, space, and type** — `--pr-radius-*`, `--pr-space-*`, `--pr-font-*`
+- **Interaction** — `--pr-color-surface-hover`, `--pr-focus-ring-*`, `--pr-opacity-disabled`, `--pr-transition-control`
+- **Control icons** — `--pr-icon-*` (covered below)
+
+A short example:
+
+```css
+:root {
+  --pr-color-surface: #0f172a;
+  --pr-color-text: #f8fafc;
+  --pr-color-action-primary: #38bdf8;
+  --pr-color-on-action-primary: #0f172a;
+  --pr-transition-control:
+    border-color 200ms ease-out, background-color 200ms ease-out,
+    color 200ms ease-out, opacity 200ms ease-out, box-shadow 200ms ease-out;
+}
+```
+
+## 4. Write `theme.css`
+
+Target the documented slots. Prefer low-specificity selectors: a single `pr-*` class plus `data-*`, the same pattern `theme-default` uses.
+
+```css
+.pr-button[data-intent="primary"] {
+  background: var(--pr-color-action-primary);
+  color: var(--pr-color-on-action-primary);
+  border-color: transparent;
+}
+
+.pr-input:focus-within {
+  outline: none;
+  border-color: var(--pr-focus-ring-color);
+}
+```
+
+You can start from a copy of `@proteus-ui/theme-default/theme.css` and edit it, or write a thinner sheet that only covers the components you actually use.
+
+## 5. Swap control icons
+
+Select, SearchBar, NumberStepper, and CollapsibleSection draw their glyphs with CSS `content` and the tokens below.
+
+<table>
+  <thead>
+    <tr>
+      <th>Token</th>
+      <th>Used by</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>--pr-icon-select-toggle</code>
+      </td>
+      <td>Select open/close</td>
+      <td>
+        <code>"▾"</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>--pr-icon-select-clear</code>
+      </td>
+      <td>Select clear</td>
+      <td>
+        <code>"×"</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>--pr-icon-search-clear</code>
+      </td>
+      <td>SearchBar clear</td>
+      <td>
+        <code>"×"</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>--pr-icon-stepper-decrease</code>
+      </td>
+      <td>NumberStepper −</td>
+      <td>
+        <code>"−"</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>--pr-icon-stepper-increase</code>
+      </td>
+      <td>NumberStepper +</td>
+      <td>
+        <code>"+"</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>--pr-icon-collapse-chevron</code>
+      </td>
+      <td>CollapsibleSection</td>
+      <td>
+        <code>"▾"</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+To change the Unicode glyphs, override the tokens in your `tokens.css`:
+
+```css
+:root {
+  --pr-icon-select-toggle: "∨";
+  --pr-icon-search-clear: "✕";
+  --pr-icon-collapse-chevron: "›";
+}
+```
+
+For SVG or image icons, clear the glyph tokens and paint the pseudo-elements in `theme.css`. Accessible names stay on the buttons via `aria-label` from core.
+
+```css
+/* tokens.css — turn off Unicode glyphs */
+:root {
+  --pr-icon-select-toggle: "";
+  --pr-icon-select-clear: "";
+  --pr-icon-search-clear: "";
+  --pr-icon-stepper-decrease: "";
+  --pr-icon-stepper-increase: "";
+  --pr-icon-collapse-chevron: "";
+}
+
+/* theme.css — SVG as mask so currentColor / muted text still works */
+.pr-select__toggle::before,
+.pr-select__clear::before,
+.pr-search__clear::before,
+.pr-stepper__dec::before,
+.pr-stepper__inc::before,
+.pr-collapse__trigger::after {
+  content: "";
+  display: block;
+  width: 1em;
+  height: 1em;
+  background-color: currentColor;
+  -webkit-mask: center / contain no-repeat;
+  mask: center / contain no-repeat;
+}
+
+.pr-select__toggle::before {
+  -webkit-mask-image: url("./icons/chevron-down.svg");
+  mask-image: url("./icons/chevron-down.svg");
+}
+.pr-select__clear::before,
+.pr-search__clear::before {
+  -webkit-mask-image: url("./icons/x.svg");
+  mask-image: url("./icons/x.svg");
+}
+.pr-stepper__dec::before {
+  -webkit-mask-image: url("./icons/minus.svg");
+  mask-image: url("./icons/minus.svg");
+}
+.pr-stepper__inc::before {
+  -webkit-mask-image: url("./icons/plus.svg");
+  mask-image: url("./icons/plus.svg");
+}
+.pr-collapse__trigger::after {
+  -webkit-mask-image: url("./icons/chevron-down.svg");
+  mask-image: url("./icons/chevron-down.svg");
+}
+```
+
+If the asset is already colored and should not follow `currentColor`, use `background-image: url(...)` instead of a mask.
+
+`Button`, `IconButton`, and `Toolbar` are different: pass a React node with the `icon` prop. Those are not theme CSS glyphs.
+
+## 6. Checklist
+
+Before you ship a theme, confirm:
+
+1. Every `--pr-*` name you rely on exists in `@proteus-ui/tokens` — see `TOKEN_VARS`.
+2. Import order is contract → your tokens → core styles → your theme → app.
+3. Theme selectors use `pr-*` and `data-*` only (no forked components).
+4. Icon glyphs are overridden via `--pr-icon-*` or `::before` / `::after` rules.
+5. No theme React provider is required.
+
+When a `theme-material-like` package (or your own brand package) ships later, it will still be the same two CSS files — a drop-in for steps 2 through 5.

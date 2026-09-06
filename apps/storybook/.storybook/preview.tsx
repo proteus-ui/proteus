@@ -2,6 +2,7 @@ import "@proteus-ui/tokens/tokens.css";
 import "@proteus-ui/theme-default/tokens.css";
 import "@proteus-ui/core/styles.css";
 import "@proteus-ui/theme-default/theme.css";
+import "./docs.css";
 import {
   ArgTypes,
   Description,
@@ -17,7 +18,7 @@ const preview: Preview = {
   parameters: {
     options: {
       storySort: {
-        order: ["Getting started", "Components"],
+        order: ["Getting started", ["Welcome", "Theme customization"], "Components"],
       },
     },
     docs: {

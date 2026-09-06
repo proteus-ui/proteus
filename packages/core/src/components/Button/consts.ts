@@ -1,4 +1,9 @@
-import type { ButtonIntent, ButtonSize, ButtonVariant } from "./types";
+import type {
+  ButtonIconPlacement,
+  ButtonIntent,
+  ButtonSize,
+  ButtonVariant,
+} from "./types";
 
 export const BUTTON_INTENT = {
   Neutral: "neutral",
@@ -14,7 +19,13 @@ export const BUTTON_SIZE = {
 export const BUTTON_VARIANT = {
   Solid: "solid",
   Outline: "outline",
+  Text: "text",
 } as const satisfies Record<string, ButtonVariant>;
+
+export const BUTTON_ICON_PLACEMENT = {
+  Prefix: "prefix",
+  Suffix: "suffix",
+} as const satisfies Record<string, ButtonIconPlacement>;
 
 export const BUTTON_CLASS = {
   root: "pr-button",
@@ -25,6 +36,7 @@ export const BUTTON_DEFAULT = {
   intent: BUTTON_INTENT.Neutral,
   size: BUTTON_SIZE.Md,
   variant: BUTTON_VARIANT.Solid,
+  iconPlacement: BUTTON_ICON_PLACEMENT.Prefix,
 } as const;
 
 export const BUTTON_DISPLAY_NAME = {
