@@ -14,6 +14,8 @@ describe("@proteus-ui/theme-default", () => {
     expect(css).toMatch(/--pr-color-border-hover:\s*[^;]+;/);
     expect(css).toMatch(/--pr-transition-control:\s*[^;]+;/);
     expect(css).toMatch(/--pr-focus-ring-width:\s*[^;]+;/);
+    expect(css).toMatch(/--pr-color-feedback-success:\s*[^;]+;/);
+    expect(css).toMatch(/--pr-color-feedback-warning:\s*[^;]+;/);
     expect(css).toMatch(/--pr-icon-select-toggle:\s*[^;]+;/);
     expect(css).toMatch(/--pr-icon-collapse-chevron:\s*[^;]+;/);
   });
@@ -47,6 +49,11 @@ describe("@proteus-ui/theme-default", () => {
     expect(css).toContain('.pr-dialog[data-state="open"]');
     expect(css).toContain("prefers-reduced-motion");
     expect(css).toContain(".pr-badge");
+    expect(css).toContain('.pr-badge[data-intent="success"]');
+    expect(css).toContain('.pr-badge[data-intent="warning"]');
+    expect(css).toContain(".pr-field");
+    expect(css).toContain(".pr-field__label");
+    expect(css).toContain(".pr-field__error");
     expect(css).toContain(".pr-card");
     expect(css).toContain(".pr-section");
     expect(css).toContain(".pr-link-card");
@@ -79,6 +86,9 @@ describe("@proteus-ui/theme-default", () => {
     expect(css).toContain(".pr-tooltip");
     expect(css).toContain(".pr-text {");
     expect(css).toContain('.pr-text[data-tag="h1"]');
+    expect(css).toContain(".pr-semantic");
+    expect(css).toContain('.pr-semantic[data-tag="details"]');
+    expect(css).toContain('.pr-semantic[data-tag="summary"]');
     // guardrail: no !important, no descendant nesting of pr- classes
     expect(css).not.toContain("!important");
   });

@@ -7,6 +7,10 @@
   --pr-color-on-action-primary: #ffffff;
   --pr-color-feedback-error: #dc2626;
   --pr-color-on-feedback-error: #ffffff;
+  --pr-color-feedback-success: #16a34a;
+  --pr-color-on-feedback-success: #ffffff;
+  --pr-color-feedback-warning: #d97706;
+  --pr-color-on-feedback-warning: #ffffff;
   --pr-radius-sm: 4px;
   --pr-radius-md: 8px;
   --pr-space-1: 4px;

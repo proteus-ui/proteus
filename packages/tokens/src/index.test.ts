@@ -17,7 +17,11 @@ describe("@proteus-ui/tokens", () => {
     expect(TOKEN_VARS).toContain("--pr-focus-ring-offset");
     expect(TOKEN_VARS).toContain("--pr-opacity-disabled");
     expect(TOKEN_VARS).toContain("--pr-transition-control");
-    expect(TOKEN_VARS).toContain("--pr-icon-select-toggle");
+    expect(TOKEN_VARS).toContain("--pr-color-feedback-error");
+    expect(TOKEN_VARS).toContain("--pr-color-feedback-success");
+    expect(TOKEN_VARS).toContain("--pr-color-feedback-warning");
+    expect(TOKEN_VARS).toContain("--pr-color-on-feedback-success");
+    expect(TOKEN_VARS).toContain("--pr-color-on-feedback-warning");
     expect(TOKEN_VARS).toContain("--pr-icon-collapse-chevron");
     // every token var name is namespaced
     expect(TOKEN_VARS.every((v) => v.startsWith("--pr-"))).toBe(true);

@@ -18,7 +18,24 @@ const preview: Preview = {
   parameters: {
     options: {
       storySort: {
-        order: ["Getting started", ["Welcome", "Theme customization"], "Components"],
+        order: [
+          "Getting started",
+          ["Welcome", "Theme customization"],
+          "Semantic",
+          [
+            "Composition",
+            "Main",
+            "Header",
+            "Nav",
+            "Aside",
+            "Section",
+            "Article",
+            "Footer",
+            "Details",
+            "Summary",
+          ],
+          "Components",
+        ],
       },
     },
     docs: {

@@ -29,6 +29,8 @@ export { Textarea } from "./components/Textarea";
 export type { TextareaProps, TextareaSlot } from "./components/Textarea";
 export { Checkbox } from "./components/Checkbox";
 export type { CheckboxProps, CheckboxSlot } from "./components/Checkbox";
+export { Field } from "./components/Field";
+export type { FieldProps, FieldSlot } from "./components/Field";
 export { NumberStepper } from "./components/NumberStepper";
 export type { NumberStepperProps, NumberStepperSlot } from "./components/NumberStepper";
 export { TimeInput } from "./components/TimeInput";
@@ -191,4 +193,30 @@ export type {
   TextVarProps,
   TextWbrProps,
 } from "./components/Text";
+export {
+  Semantic,
+  SemanticArticle,
+  SemanticAside,
+  SemanticDetails,
+  SemanticFooter,
+  SemanticHeader,
+  SemanticMain,
+  SemanticNav,
+  SemanticSection,
+  SemanticSummary,
+} from "./components/Semantic";
+export type {
+  SemanticArticleProps,
+  SemanticAsideProps,
+  SemanticDetailsProps,
+  SemanticFooterProps,
+  SemanticHeaderProps,
+  SemanticMainProps,
+  SemanticNavProps,
+  SemanticProps,
+  SemanticSectionProps,
+  SemanticSlot,
+  SemanticSummaryProps,
+  SemanticTag,
+} from "./components/Semantic";
 

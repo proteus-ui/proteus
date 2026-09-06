@@ -22,4 +22,11 @@ describe("Badge", () => {
     expect(el).toHaveAttribute("data-variant", "pill");
     expect(el).toHaveAttribute("data-intent", "primary");
   });
+
+  it("supports success and warning intents from feedback tokens", () => {
+    const { rerender } = render(<Badge intent="success">Ok</Badge>);
+    expect(screen.getByText("Ok")).toHaveAttribute("data-intent", "success");
+    rerender(<Badge intent="warning">Wait</Badge>);
+    expect(screen.getByText("Wait")).toHaveAttribute("data-intent", "warning");
+  });
 });

@@ -4,6 +4,8 @@ export const BADGE_INTENT = {
   Neutral: "neutral",
   Primary: "primary",
   Danger: "danger",
+  Success: "success",
+  Warning: "warning",
 } as const satisfies Record<string, BadgeIntent>;
 
 export const BADGE_VARIANT = {

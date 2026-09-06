@@ -15,6 +15,10 @@
   --pr-color-on-action-primary: #ffffff;
   --pr-color-feedback-error: #ef4444;
   --pr-color-on-feedback-error: #ffffff;
+  --pr-color-feedback-success: #22c55e;
+  --pr-color-on-feedback-success: #052e16;
+  --pr-color-feedback-warning: #f59e0b;
+  --pr-color-on-feedback-warning: #451a03;
 
   /* Radius */
   --pr-radius-sm: 6px;
