@@ -89,6 +89,9 @@ describe("@proteus-ui/theme-default", () => {
     expect(css).toContain(".pr-semantic");
     expect(css).toContain('.pr-semantic[data-tag="details"]');
     expect(css).toContain('.pr-semantic[data-tag="summary"]');
+    expect(css).toContain(
+      '.pr-semantic[data-tag="details"] > :not(summary):not([data-tag="summary"])',
+    );
     // guardrail: no !important, no descendant nesting of pr- classes
     expect(css).not.toContain("!important");
   });

@@ -961,10 +961,14 @@
 .pr-semantic[data-tag="summary"] {
   cursor: pointer;
   font-weight: var(--pr-font-weight-semibold);
+  padding: var(--pr-space-2) var(--pr-space-3);
 }
 .pr-semantic[data-tag="details"] {
   border: 1px solid var(--pr-color-border);
   border-radius: var(--pr-radius-sm);
   background: var(--pr-color-surface);
-  padding: var(--pr-space-2) var(--pr-space-3);
+  padding: 0;
+}
+.pr-semantic[data-tag="details"] > :not(summary):not([data-tag="summary"]) {
+  padding: var(--pr-space-3);
 }
