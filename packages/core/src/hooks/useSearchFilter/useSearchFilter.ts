@@ -1,3 +1,5 @@
+"use client";
+
 import { useMemo } from "react";
 import type { SearchHaystack } from "./types";
 import { matchesHaystack, normalizeQuery } from "./utils";

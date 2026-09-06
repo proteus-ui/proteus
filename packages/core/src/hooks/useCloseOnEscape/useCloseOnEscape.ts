@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect } from "react";
 import { KEYBOARD_KEYS } from "../../utils/keyboard";
 import { KEYDOWN_EVENT } from "./consts";

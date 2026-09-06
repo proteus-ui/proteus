@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext, useContext, useEffect, useRef } from "react";
 import type { SlotClassNames } from "@proteus-ui/tokens";
 import { cn } from "../../utils/cn";

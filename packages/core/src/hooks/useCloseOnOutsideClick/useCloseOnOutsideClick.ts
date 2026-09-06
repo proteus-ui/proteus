@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, type RefObject } from "react";
 import { AUTO_CLOSE_DEFAULT, CLICK_EVENT } from "./consts";
 import type { UseCloseOnOutsideClickOptions } from "./types";

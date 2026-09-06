@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useRef, useState } from "react";
 import { ASYNC_STATUS } from "./consts";
 import type { AsyncOperationStatus, UseAsyncOperationReturn } from "./types";

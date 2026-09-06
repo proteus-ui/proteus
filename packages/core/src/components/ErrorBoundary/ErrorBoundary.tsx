@@ -1,3 +1,5 @@
+"use client";
+
 import { Component } from "react";
 import { ERROR_BOUNDARY_CLASS, ERROR_BOUNDARY_MESSAGE } from "./consts";
 import type { ErrorBoundaryProps, ErrorBoundaryState } from "./types";

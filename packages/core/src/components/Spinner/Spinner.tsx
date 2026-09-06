@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef, useId } from "react";
 import { cn } from "../../utils/cn";
 import { PAGE_LOADER_CLASS, SPINNER_CLASS, SPINNER_DEFAULT } from "./consts";

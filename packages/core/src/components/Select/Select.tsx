@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useEffect, useId, useRef, useState, type FocusEvent, type KeyboardEvent } from "react";
 import { useCloseOnEscape } from "../../hooks/useCloseOnEscape";
 import { useCloseOnOutsideClick } from "../../hooks/useCloseOnOutsideClick";

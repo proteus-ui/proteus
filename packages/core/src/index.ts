@@ -1,5 +1,3 @@
-"use client";
-
 export { cn } from "./utils/cn";
 export type { CompoundChildren, ProteusElement, SlotComponent } from "./utils/compound";
 export { asSlot } from "./utils/compound";

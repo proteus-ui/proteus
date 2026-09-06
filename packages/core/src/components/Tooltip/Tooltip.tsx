@@ -1,3 +1,5 @@
+"use client";
+
 import { cloneElement, isValidElement, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { flip, offset, shift, useFloating } from "@floating-ui/react";
 import { useTooltip, useTooltipTrigger } from "@react-aria/tooltip";

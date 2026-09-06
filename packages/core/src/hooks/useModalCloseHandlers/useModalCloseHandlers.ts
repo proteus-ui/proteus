@@ -1,3 +1,5 @@
+"use client";
+
 import type { RefObject } from "react";
 import { useCloseOnEscape } from "../useCloseOnEscape";
 import { useCloseOnOutsideClick } from "../useCloseOnOutsideClick";
