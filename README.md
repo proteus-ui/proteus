@@ -92,7 +92,12 @@ apps/
 - [Harden RSC + compound-slot ergonomics](./docs/rsc-compound-slots.md)
 - Support for popular form libraries with smooth integration
 - [Testing pyramid](./docs/roadmap/architecture-and-testing-specification.md#3-the-3-tier-testing-pyramid) as documented
-- Home / showcase page — aesthetic presentation of Proteus components (e.g. example dashboard), with a live theme-generator UI that defaults to the page theme and updates the UI as controls change
+- Cross-browser testing
+- Responsiveness testing
+- a11y audit
+- Analyze and support loading states across components (e.g. Button spinner replacing label)
+- Light / dark mode for the default theme
+- Home / showcase page — aesthetic presentation of Proteus components (e.g. example dashboard), with a live theme-generator UI in the spirit of [Ant Design Theme Editor](https://ant.design/theme-editor/) that defaults to the page theme and updates the UI as controls change
 - npm publish cutover beyond early `0.x`
 
 ## License
