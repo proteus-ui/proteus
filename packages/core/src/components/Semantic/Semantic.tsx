@@ -1,3 +1,5 @@
+"use client";
+
 import { createElement, forwardRef } from "react";
 import { cn } from "../../utils/cn";
 import { SEMANTIC_CLASS, SEMANTIC_DISPLAY_NAME } from "./consts";

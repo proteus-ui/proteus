@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "../../utils/cn";
 import { Button } from "../Button";
 import { INLINE_EDIT_CLASS, INLINE_EDIT_LABEL } from "./consts";

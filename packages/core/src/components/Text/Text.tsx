@@ -1,3 +1,5 @@
+"use client";
+
 import { createElement, forwardRef } from "react";
 import { cn } from "../../utils/cn";
 import { TEXT_CLASS, TEXT_DISPLAY_NAME, TEXT_VOID } from "./consts";

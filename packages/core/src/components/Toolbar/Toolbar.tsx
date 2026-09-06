@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef } from "react";
 import { cn } from "../../utils/cn";
 import { DATA_TRUE, TOOLBAR_CLASS, TOOLBAR_DEFAULT, TOOLBAR_DISPLAY_NAME } from "./consts";

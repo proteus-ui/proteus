@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef } from "react";
 import { cn } from "../../utils/cn";
 import { BADGE_CLASS, BADGE_DEFAULT, BADGE_DISPLAY_NAME, BADGE_VARIANT } from "./consts";
