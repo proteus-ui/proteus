@@ -10,15 +10,11 @@ export const SELECT_CLASS = {
   announcer: "pr-select__announcer",
   list: "pr-select__list",
   option: "pr-select__option",
+  status: "pr-select__status",
 } as const;
 
 export const SELECT_DEFAULT = {
   value: "",
-} as const;
-
-export const SELECT_SYMBOL = {
-  Toggle: "▾",
-  Clear: "×",
 } as const;
 
 export const SELECT_STATE = {

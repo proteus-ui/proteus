@@ -8,7 +8,6 @@ import {
   NUMBER_STEPPER_CLASS,
   NUMBER_STEPPER_DEFAULT,
   NUMBER_STEPPER_LABEL,
-  NUMBER_STEPPER_SYMBOL,
 } from "./consts";
 import type { NumberStepperProps } from "./types";
 import { add, parseDraft } from "./utils";
@@ -98,9 +97,7 @@ export const NumberStepper = forwardRef<HTMLInputElement, NumberStepperProps>(fu
         disabled={disabled}
         onPointerDown={(e) => e.preventDefault()}
         onClick={() => commit(add(liveValue(), -step, step))}
-      >
-        {NUMBER_STEPPER_SYMBOL.Decrease}
-      </button>
+      />
       <input
         ref={ref}
         type="text"
@@ -135,9 +132,7 @@ export const NumberStepper = forwardRef<HTMLInputElement, NumberStepperProps>(fu
         disabled={disabled}
         onPointerDown={(e) => e.preventDefault()}
         onClick={() => commit(add(liveValue(), step, step))}
-      >
-        {NUMBER_STEPPER_SYMBOL.Increase}
-      </button>
+      />
     </div>
   );
 });

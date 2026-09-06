@@ -42,6 +42,33 @@ describe("Button", () => {
     expect(screen.getByRole("button", { name: "Outline" })).toHaveAttribute("data-variant", "outline");
   });
 
+  it("supports text variant", () => {
+    render(<Button variant="text">Text</Button>);
+    expect(screen.getByRole("button", { name: "Text" })).toHaveAttribute("data-variant", "text");
+  });
+
+  it("places icon before the label by default", () => {
+    render(
+      <Button icon={<svg data-testid="i" />}>
+        Go
+      </Button>,
+    );
+    const btn = screen.getByRole("button", { name: "Go" });
+    expect(btn).toHaveAttribute("data-icon-placement", "prefix");
+    expect(btn.firstElementChild).toContainElement(screen.getByTestId("i"));
+  });
+
+  it("places icon after the label when iconPlacement is suffix", () => {
+    render(
+      <Button icon={<svg data-testid="i" />} iconPlacement="suffix">
+        Next
+      </Button>,
+    );
+    const btn = screen.getByRole("button", { name: "Next" });
+    expect(btn).toHaveAttribute("data-icon-placement", "suffix");
+    expect(btn.lastElementChild).toContainElement(screen.getByTestId("i"));
+  });
+
   it("IconButton renders the root slot", () => {
     render(<IconButton aria-label="star" icon={<svg />} />);
     expect(screen.getByRole("button", { name: "star" })).toHaveClass("pr-button");

@@ -1,3 +1,155 @@
+/* --- Interaction recipes (shared hover / focus / transition / disabled) --- */
+
+.pr-input,
+.pr-search,
+.pr-textarea,
+.pr-stepper,
+.pr-select,
+.pr-time,
+.pr-otp,
+.pr-button,
+.pr-toolbar__button,
+.pr-collapse__trigger,
+.pr-collapse__panel,
+.pr-link-card,
+.pr-search__clear,
+.pr-select__clear,
+.pr-select__toggle,
+.pr-stepper__dec,
+.pr-stepper__inc,
+.pr-otp__cell,
+.pr-time__field,
+.pr-select__option {
+  transition: var(--pr-transition-control);
+}
+
+.pr-input,
+.pr-search,
+.pr-textarea,
+.pr-stepper {
+  border: 1px solid var(--pr-color-border);
+  border-radius: var(--pr-radius-sm);
+  background: var(--pr-color-surface);
+}
+
+.pr-input:hover:not([data-disabled]):not([data-invalid]),
+.pr-search:hover:not([data-disabled]):not([data-invalid]),
+.pr-textarea:hover:not([data-disabled]):not([data-invalid]),
+.pr-stepper:hover:not([data-disabled]):not([data-invalid]),
+.pr-link-card:hover {
+  background: var(--pr-color-surface-hover);
+}
+
+.pr-select:hover:not([data-disabled]):not([data-invalid]) {
+  --pr-select-surface: var(--pr-color-surface-hover);
+}
+
+.pr-time:hover:not([data-disabled]):not([data-invalid]) {
+  --pr-time-surface: var(--pr-color-surface-hover);
+}
+
+.pr-otp__cell:hover:not(:disabled) {
+  background: var(--pr-color-surface-hover);
+}
+
+/* Focus marker: border color only — no outline ring */
+.pr-input:focus-within,
+.pr-search:focus-within,
+.pr-textarea:focus-within,
+.pr-stepper:focus-within,
+.pr-button:focus-visible,
+.pr-toolbar__button:focus-visible,
+.pr-collapse__trigger:focus-visible,
+.pr-link-card:focus-visible {
+  outline: none;
+  border-color: var(--pr-focus-ring-color);
+}
+
+.pr-select:focus-within,
+.pr-select[data-state="open"] {
+  outline: none;
+  --pr-select-border: var(--pr-focus-ring-color);
+}
+
+.pr-time__field:focus-visible {
+  outline: none;
+  --pr-time-border: var(--pr-focus-ring-color);
+}
+
+.pr-otp__cell:focus-visible:not(:disabled) {
+  outline: none;
+  --pr-otp-border: var(--pr-focus-ring-color);
+}
+
+/* Native checkbox has no themeable border — ring kept for a11y */
+.pr-checkbox__input:focus-visible {
+  outline: var(--pr-focus-ring-width) solid var(--pr-focus-ring-color);
+  outline-offset: var(--pr-focus-ring-offset);
+}
+
+.pr-search__clear:hover:not(:disabled),
+.pr-select__clear:hover:not(:disabled),
+.pr-select__toggle:hover:not(:disabled),
+.pr-stepper__dec:hover:not(:disabled),
+.pr-stepper__inc:hover:not(:disabled) {
+  background: var(--pr-color-surface-hover);
+}
+
+.pr-button[data-intent="neutral"]:hover:not([data-disabled]):not([data-variant="outline"]):not([data-variant="text"]),
+.pr-toolbar__button:hover:not([data-disabled]):not([data-intent="primary"]):not([data-intent="danger"]):not([data-pressed]) {
+  background: var(--pr-color-surface-hover);
+}
+.pr-button[data-intent="primary"]:hover:not([data-disabled]):not([data-variant="outline"]):not([data-variant="text"]),
+.pr-toolbar__button[data-intent="primary"]:hover:not([data-disabled]):not([data-pressed]) {
+  background: color-mix(in srgb, var(--pr-color-action-primary) 82%, black);
+}
+.pr-button[data-intent="danger"]:hover:not([data-disabled]):not([data-variant="outline"]):not([data-variant="text"]),
+.pr-toolbar__button[data-intent="danger"]:hover:not([data-disabled]):not([data-pressed]) {
+  background: color-mix(in srgb, var(--pr-color-feedback-error) 82%, black);
+}
+.pr-button[data-variant="outline"]:hover:not([data-disabled]) {
+  background: var(--pr-color-surface-hover);
+}
+.pr-button[data-variant="outline"][data-intent="primary"]:hover:not([data-disabled]) {
+  background: color-mix(in srgb, var(--pr-color-action-primary) 14%, transparent);
+}
+.pr-button[data-variant="outline"][data-intent="danger"]:hover:not([data-disabled]) {
+  background: color-mix(in srgb, var(--pr-color-feedback-error) 14%, transparent);
+}
+
+.pr-checkbox:not([data-disabled]) {
+  cursor: pointer;
+}
+.pr-checkbox[data-disabled] {
+  cursor: not-allowed;
+}
+.pr-checkbox__input:disabled {
+  cursor: not-allowed;
+}
+
+.pr-collapse__trigger:hover:not(:disabled) {
+  background: var(--pr-color-surface-hover);
+}
+.pr-collapse__trigger::after {
+  content: var(--pr-icon-collapse-chevron);
+  display: inline-block;
+  transition: var(--pr-transition-control);
+  transition-property: transform;
+}
+.pr-collapse__trigger[aria-expanded="true"]::after {
+  transform: rotate(180deg);
+}
+
+.pr-button[data-disabled],
+.pr-checkbox[data-disabled],
+.pr-toolbar__button[data-disabled],
+.pr-select[data-disabled],
+.pr-stepper[data-disabled],
+.pr-time[data-disabled],
+.pr-otp[data-disabled] {
+  opacity: var(--pr-opacity-disabled);
+}
+
 .pr-button {
   display: inline-flex;
   align-items: center;
@@ -33,33 +185,41 @@
   color: var(--pr-color-feedback-error);
   border-color: var(--pr-color-feedback-error);
 }
+.pr-button[data-variant="text"] {
+  background: transparent;
+  border-color: transparent;
+}
+.pr-button[data-variant="text"][data-intent="primary"] {
+  color: var(--pr-color-action-primary);
+}
+.pr-button[data-variant="text"][data-intent="danger"] {
+  color: var(--pr-color-feedback-error);
+}
+.pr-button[data-variant="text"]:hover:not([data-disabled]) {
+  background: var(--pr-color-surface-hover);
+}
+.pr-button[data-variant="text"][data-intent="primary"]:hover:not([data-disabled]) {
+  background: var(--pr-color-action-primary);
+  color: #ffffff;
+}
+.pr-button[data-variant="text"][data-intent="danger"]:hover:not([data-disabled]) {
+  background: var(--pr-color-feedback-error);
+  color: #ffffff;
+}
 .pr-button[data-size="sm"] {
   padding: var(--pr-space-1) var(--pr-space-2);
   font-size: var(--pr-font-size-sm);
 }
-.pr-button[data-disabled] {
-  opacity: 0.5;
-}
-.pr-button:focus-visible {
-  outline: 2px solid var(--pr-color-action-primary);
-  outline-offset: 2px;
-}
-
 .pr-input,
 .pr-search {
   display: inline-flex;
   align-items: center;
-  border: 1px solid var(--pr-color-border);
-  border-radius: var(--pr-radius-sm);
-  background: var(--pr-color-surface);
+}
+.pr-search {
+  position: relative;
 }
 .pr-input[data-invalid] {
   border-color: var(--pr-color-feedback-error);
-}
-.pr-input:focus-within,
-.pr-search:focus-within {
-  outline: 2px solid var(--pr-color-action-primary);
-  outline-offset: 2px;
 }
 .pr-input__field,
 .pr-search__field {
@@ -71,26 +231,47 @@
   background: transparent;
   color: var(--pr-color-text);
 }
+.pr-search__field {
+  position: relative;
+  z-index: 0;
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  /* Match clear button width so text→× gap equals ×→border (button side padding) */
+  padding-right: calc(1em + var(--pr-space-2) * 2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .pr-search__clear {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: calc(1em + var(--pr-space-2) * 2);
   border: 0;
+  border-radius: 0 var(--pr-radius-sm) var(--pr-radius-sm) 0;
   background: transparent;
   color: var(--pr-color-text-muted);
   cursor: pointer;
   padding: 0 var(--pr-space-2);
 }
+.pr-search__clear::before {
+  content: var(--pr-icon-search-clear);
+  display: block;
+  line-height: 1;
+}
 
 .pr-textarea {
   display: inline-flex;
-  border: 1px solid var(--pr-color-border);
-  border-radius: var(--pr-radius-sm);
-  background: var(--pr-color-surface);
 }
 .pr-textarea[data-invalid] {
   border-color: var(--pr-color-feedback-error);
-}
-.pr-textarea:focus-within {
-  outline: 2px solid var(--pr-color-action-primary);
-  outline-offset: 2px;
 }
 .pr-textarea__field {
   display: block;
@@ -115,9 +296,6 @@
   font-size: var(--pr-font-size-md);
   color: var(--pr-color-text);
 }
-.pr-checkbox[data-disabled] {
-  opacity: 0.5;
-}
 .pr-checkbox[data-invalid] {
   color: var(--pr-color-feedback-error);
 }
@@ -125,10 +303,7 @@
   width: 1em;
   height: 1em;
   accent-color: var(--pr-color-action-primary);
-}
-.pr-checkbox__input:focus-visible {
-  outline: 2px solid var(--pr-color-action-primary);
-  outline-offset: 2px;
+  cursor: pointer;
 }
 .pr-checkbox__label {
   color: inherit;
@@ -168,8 +343,14 @@
   transform: none;
 }
 @media (prefers-reduced-motion: reduce) {
-  .pr-dialog-overlay,
-  .pr-dialog {
+  :root {
+    --pr-transition-control: none;
+  }
+  .pr-spinner {
+    animation: none;
+  }
+  .pr-dialog,
+  .pr-dialog-overlay {
     transition: none;
   }
 }
@@ -252,10 +433,6 @@
   font-size: var(--pr-font-size-md);
   text-decoration: none;
 }
-.pr-link-card:focus-visible {
-  outline: 2px solid var(--pr-color-action-primary);
-  outline-offset: 2px;
-}
 .pr-link-card__title {
   font-weight: 600;
   margin-bottom: var(--pr-space-2);
@@ -307,25 +484,20 @@
   justify-content: space-between;
   width: 100%;
   padding: var(--pr-space-2) var(--pr-space-3);
-  border: 0;
+  border: 1px solid transparent;
   background: transparent;
   color: var(--pr-color-text);
   font-family: var(--pr-font-sans);
   font-size: var(--pr-font-size-md);
   cursor: pointer;
 }
-.pr-collapse__trigger:focus-visible {
-  outline: 2px solid var(--pr-color-action-primary);
-  outline-offset: 2px;
-}
 .pr-collapse__panel {
-  padding: 0 var(--pr-space-3);
-}
-.pr-collapse__panel[data-state="open"] {
-  padding-bottom: var(--pr-space-3);
+  padding: var(--pr-space-3);
+  transition: var(--pr-transition-control);
+  transition-property: padding;
 }
 .pr-collapse__panel[data-state="closed"] {
-  padding-bottom: 0;
+  padding: 0 var(--pr-space-3);
 }
 
 .pr-toolbar {
@@ -365,14 +537,6 @@
   padding: var(--pr-space-1) var(--pr-space-2);
   font-size: var(--pr-font-size-sm);
 }
-.pr-toolbar__button[data-disabled] {
-  opacity: 0.5;
-}
-.pr-toolbar__button:focus-visible {
-  outline: 2px solid var(--pr-color-action-primary);
-  outline-offset: 2px;
-}
-
 .pr-inline-edit {
   display: inline-flex;
   align-items: center;
@@ -401,12 +565,6 @@
 .pr-spinner[data-size="md"] {
   font-size: var(--pr-font-size-md);
 }
-@media (prefers-reduced-motion: reduce) {
-  .pr-spinner {
-    animation: none;
-  }
-}
-
 .pr-page-loader {
   display: flex;
   flex-direction: column;
@@ -434,31 +592,24 @@
 .pr-select {
   position: relative;
   display: inline-flex;
-  flex-wrap: wrap;
-  align-items: center;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
   gap: 0;
   font-family: var(--pr-font-sans);
   font-size: var(--pr-font-size-md);
   color: var(--pr-color-text);
   --pr-select-border: var(--pr-color-border);
+  --pr-select-surface: var(--pr-color-surface);
   --pr-select-field-color: var(--pr-color-text);
+  --pr-select-affix: 1em;
+  --pr-select-affix-gap: var(--pr-space-2);
 }
 .pr-select[data-invalid] {
   --pr-select-border: var(--pr-color-feedback-error);
 }
 .pr-select[data-empty] {
   --pr-select-field-color: var(--pr-color-text-muted);
-}
-.pr-select[data-disabled] {
-  opacity: 0.5;
-}
-.pr-select[data-state="open"] {
-  outline: 2px solid var(--pr-color-action-primary);
-  outline-offset: 2px;
-}
-.pr-select:focus-within {
-  outline: 2px solid var(--pr-color-action-primary);
-  outline-offset: 2px;
 }
 .pr-select__label {
   width: 100%;
@@ -470,16 +621,30 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  flex: 1 1 100%;
-  min-width: 0;
-}
-.pr-select__field {
-  flex: 1 1 auto;
+  box-sizing: border-box;
   min-width: 0;
   border: 1px solid var(--pr-select-border);
   border-radius: var(--pr-radius-sm);
-  background: var(--pr-color-surface);
+  background: var(--pr-select-surface);
+}
+.pr-select__field {
+  position: relative;
+  z-index: 0;
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
   padding: var(--pr-space-2);
+  /* pad | × | pad | ▾ | pad — equal gaps around glyphs */
+  padding-right: calc(
+    var(--pr-select-affix) * 2 + var(--pr-select-affix-gap) * 3
+  );
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-family: var(--pr-font-sans);
   font-size: var(--pr-font-size-md);
   color: var(--pr-select-field-color);
@@ -487,13 +652,50 @@
 }
 .pr-select__clear,
 .pr-select__toggle {
+  position: absolute;
+  inset-block: 0;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--pr-select-affix);
+  min-width: var(--pr-select-affix);
   border: 0;
   background: transparent;
   color: var(--pr-color-text-muted);
   cursor: pointer;
-  padding: 0 var(--pr-space-2);
+  padding: 0;
   font-family: var(--pr-font-sans);
   font-size: var(--pr-font-size-md);
+}
+.pr-select__toggle {
+  inset-inline-end: var(--pr-select-affix-gap);
+  border-radius: 0 var(--pr-radius-sm) var(--pr-radius-sm) 0;
+}
+.pr-select__clear {
+  inset-inline-end: calc(
+    var(--pr-select-affix) + var(--pr-select-affix-gap) * 2
+  );
+}
+.pr-select__clear::before {
+  content: var(--pr-icon-select-clear);
+  display: block;
+  line-height: 1;
+}
+.pr-select__toggle::before {
+  content: var(--pr-icon-select-toggle);
+  display: block;
+  line-height: 1;
+}
+.pr-select__status {
+  /* Contribute no intrinsic width — long copy must not widen the field */
+  width: 0;
+  min-width: 100%;
+  box-sizing: border-box;
+  margin-top: var(--pr-space-1);
+  color: var(--pr-color-text-muted);
+  font-size: var(--pr-font-size-sm);
 }
 .pr-select__announcer {
   position: absolute;
@@ -507,9 +709,9 @@
   top: 100%;
   left: 0;
   width: 100%;
-  z-index: 1;
+  z-index: 2;
   margin: var(--pr-space-1) 0 0;
-  padding: var(--pr-space-1) 0;
+  padding: 0;
   list-style: none;
   border: 1px solid var(--pr-color-border);
   border-radius: var(--pr-radius-sm);
@@ -520,29 +722,27 @@
   padding: var(--pr-space-2) var(--pr-space-3);
   cursor: pointer;
   color: var(--pr-color-text);
+  background: transparent;
+}
+.pr-select__option:hover {
+  background: var(--pr-color-surface-hover);
 }
 .pr-select__option[data-highlighted="true"] {
+  background: var(--pr-color-action-primary);
+  color: var(--pr-color-on-action-primary);
+}
+.pr-select__option[data-highlighted="true"]:hover {
   background: var(--pr-color-action-primary);
   color: var(--pr-color-on-action-primary);
 }
 .pr-stepper {
   display: inline-flex;
   align-items: center;
-  border: 1px solid var(--pr-color-border);
-  border-radius: var(--pr-radius-sm);
-  background: var(--pr-color-surface);
   font-family: var(--pr-font-sans);
   font-size: var(--pr-font-size-md);
 }
 .pr-stepper[data-invalid] {
   border-color: var(--pr-color-feedback-error);
-}
-.pr-stepper[data-disabled] {
-  opacity: 0.5;
-}
-.pr-stepper:focus-within {
-  outline: 2px solid var(--pr-color-action-primary);
-  outline-offset: 2px;
 }
 .pr-stepper__dec,
 .pr-stepper__inc {
@@ -556,6 +756,12 @@
   cursor: pointer;
   font-family: var(--pr-font-sans);
   font-size: var(--pr-font-size-md);
+}
+.pr-stepper__dec::before {
+  content: var(--pr-icon-stepper-decrease);
+}
+.pr-stepper__inc::before {
+  content: var(--pr-icon-stepper-increase);
 }
 .pr-stepper__field {
   border: 0;
@@ -578,6 +784,7 @@
   font-family: var(--pr-font-sans);
   font-size: var(--pr-font-size-md);
   --pr-time-border: var(--pr-color-border);
+  --pr-time-surface: var(--pr-color-surface);
   --pr-time-field-color: var(--pr-color-text);
 }
 .pr-time[data-invalid] {
@@ -586,22 +793,15 @@
 .pr-time[data-empty] {
   --pr-time-field-color: var(--pr-color-text-muted);
 }
-.pr-time[data-disabled] {
-  opacity: 0.5;
-}
 .pr-time__field {
   border: 1px solid var(--pr-time-border);
   border-radius: var(--pr-radius-sm);
-  background: var(--pr-color-surface);
+  background: var(--pr-time-surface);
   padding: var(--pr-space-2);
   font-family: var(--pr-font-sans);
   font-size: var(--pr-font-size-md);
   color: var(--pr-time-field-color);
   outline: 0;
-}
-.pr-time__field:focus-visible {
-  outline: 2px solid var(--pr-color-action-primary);
-  outline-offset: 2px;
 }
 .pr-time__error {
   color: var(--pr-color-feedback-error);
@@ -619,9 +819,6 @@
 .pr-otp[data-invalid] {
   --pr-otp-border: var(--pr-color-feedback-error);
 }
-.pr-otp[data-disabled] {
-  opacity: 0.5;
-}
 .pr-otp__cell {
   width: 2.5em;
   height: 2.5em;
@@ -634,10 +831,6 @@
   font-size: var(--pr-font-size-md);
   color: var(--pr-color-text);
   outline: 0;
-}
-.pr-otp__cell:focus-visible {
-  outline: 2px solid var(--pr-color-action-primary);
-  outline-offset: 2px;
 }
 .pr-otp__error {
   width: 100%;

@@ -20,4 +20,19 @@
   --pr-font-size-2xl: 32px;
   --pr-font-weight-semibold: 600;
   --pr-font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --pr-color-border-hover: #71717a;
+  --pr-color-surface-hover: color-mix(in srgb, #d4d4d8 55%, #ffffff);
+  --pr-focus-ring-color: var(--pr-color-action-primary);
+  --pr-focus-ring-width: 2px;
+  --pr-focus-ring-offset: 2px;
+  --pr-opacity-disabled: 0.5;
+  --pr-transition-control: border-color 150ms ease-out, background-color 150ms ease-out, color 150ms ease-out, opacity 150ms ease-out, box-shadow 150ms ease-out;
+
+  /* Control icons — override in a theme to swap glyphs without TS */
+  --pr-icon-select-toggle: "▾";
+  --pr-icon-select-clear: "×";
+  --pr-icon-search-clear: "×";
+  --pr-icon-stepper-decrease: "−";
+  --pr-icon-stepper-increase: "+";
+  --pr-icon-collapse-chevron: "▾";
 }

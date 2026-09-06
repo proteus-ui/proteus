@@ -8,7 +8,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Triggers an action. Use for labeled actions, optionally with a leading icon. Icon-only actions should use IconButton.",
+          "Triggers an action. Use for labeled actions, optionally with a prefix or suffix icon. Icon-only actions should use IconButton.",
       },
     },
   },
@@ -22,10 +22,11 @@ const meta = {
   argTypes: {
     intent: { control: "select", options: ["neutral", "primary", "danger"] },
     size: { control: "select", options: ["sm", "md"] },
-    variant: { control: "select", options: ["solid", "outline"] },
+    variant: { control: "select", options: ["solid", "outline", "text"] },
     disabled: { control: "boolean" },
     children: { control: "text" },
     icon: { control: false },
+    iconPlacement: { control: "select", options: ["prefix", "suffix"] },
   },
 } satisfies Meta<typeof Button>;
 
@@ -51,6 +52,18 @@ export const Outline: Story = {
   args: { variant: "outline" },
 };
 
+export const Text: Story = {
+  args: { variant: "text", intent: "primary" },
+};
+
 export const WithIcon: Story = {
   args: { icon: <span>★</span>, children: "With icon" },
+};
+
+export const WithSuffixIcon: Story = {
+  args: {
+    icon: <span>→</span>,
+    iconPlacement: "suffix",
+    children: "Continue",
+  },
 };

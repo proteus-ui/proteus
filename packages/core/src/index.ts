@@ -20,6 +20,7 @@ export type {
   ButtonIntent,
   ButtonSize,
   ButtonVariant,
+  ButtonIconPlacement,
   ButtonSlot,
 } from "./components/Button";
 export { TextInput } from "./components/TextInput";
