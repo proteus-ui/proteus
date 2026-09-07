@@ -947,6 +947,13 @@
   background: #fef3c7;
 }
 
+.pr-button .pr-text,
+.pr-toolbar__button .pr-text {
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+}
+
 .pr-semantic {
   box-sizing: border-box;
   margin: 0;

@@ -86,6 +86,8 @@ describe("@proteus-ui/theme-default", () => {
     expect(css).toContain(".pr-tooltip");
     expect(css).toContain(".pr-text {");
     expect(css).toContain('.pr-text[data-tag="h1"]');
+    expect(css).toContain(".pr-button .pr-text");
+    expect(css).toContain(".pr-toolbar__button .pr-text");
     expect(css).toContain(".pr-semantic");
     expect(css).toContain('.pr-semantic[data-tag="details"]');
     expect(css).toContain('.pr-semantic[data-tag="summary"]');
